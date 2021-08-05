@@ -1,68 +1,217 @@
 <template>
   <ion-page>
-    <ion-header :translucent="true">
-      <ion-toolbar>
-        <ion-title>Blank</ion-title>
-      </ion-toolbar>
-    </ion-header>
-    
     <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Blank</ion-title>
-        </ion-toolbar>
-      </ion-header>
-    
-      <div id="container">
-        <strong>Ready to create an app?</strong>
-        <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+      <div
+        class="flex flex-col justify-center h-screen bg-secondary item-center"
+      >
+        <img
+          class="object-contain h-20 xsheight:h-32"
+          src="assets/icon/icon.png"
+          alt="logo"
+        />
+        <div class="flex overflow-x-scroll no_bar">
+          <div
+            v-for="(team, index) in game.teams"
+            :key="team.uuid"
+            class="flex-none w-10/12 md:w-1/2"
+            :class="{
+              ' ml-8 md:ml-0': index === 0,
+              'pr-3 md:m-0 ': index + 1 === game.teams.length,
+            }"
+          >
+            <div
+              class="relative flex flex-col items-center pt-10 pb-4 mx-3 my-5 border xs:my-10 md:mx-10 border-primary bg-light rounded-xl"
+            >
+              <p class="absolute top-0 left-0 p-2 text-primary">
+                {{ $t("team") }} {{ index + 1 }}
+              </p>
+              <ion-input
+                class="w-2/3 mx-auto mb-6 text-5xl text-center border-b-2 bg-light border-primary text-primary"
+                :value="team.name"
+              ></ion-input>
+              <div class="mb-5 overflow-y-scroll no_bar h-28 xs:h-48">
+                <div>
+                <div
+                  v-for="(player, index) in team.players"
+                  class="flex items-center"
+                  :key="player.uuid"
+                >
+                  <ion-input
+                    class="my-1 text-lg text-center border rounded-lg text-primary bg-light border-primary"
+                    :value="player.name"
+                  ></ion-input>
+                  <button
+                    v-if="team.players.length > 2"
+                    class="text-primary"
+                    type="button"
+                    @click="team.players.splice(index, 1)"
+                  >
+                    <vue-feather type="trash"></vue-feather>
+                  </button>
+                </div>
+              </div>
+              <div className="flex flex-col items-end">
+                <button
+                  className="text-primary"
+                  type="button"
+                  @click="team.players.push(randomPlayer())"
+                >
+                  <vue-feather type="plus-circle"></vue-feather>
+                </button>
+              </div>
+              </div>
+            <button
+              v-if="game.teams.length > 2"
+              class="text-primary"
+              type="button"
+              @click="game.teams.splice(index, 1)"
+            >
+              <vue-feather type="trash"></vue-feather>
+            </button>
+            </div>
+          </div>
+          <div className="fixed w-full px-5 text-right">
+            <button
+              @click="game.teams.push(randomTeam())"
+              class="w-12 h-12 rounded-full xs:mt-5 bg-primary text-light active:bg-secondary"
+            >
+              <vue-feather type="plus"></vue-feather>
+            </button>
+          </div>
+        </div>
+        <div class="flex justify-center text-5xl text-primary">
+          <button
+            @click="saveTeam()"
+            class="w-1/2 px-5 py-2 overflow-hidden border-2 xs:mt-2 md:w-1/3 bg-light border-primary rounded-xl"
+          >
+            <div class="relative flex items-center justify-center">
+              <vue-feather type="play"></vue-feather>
+              <p>{{ $t("play") }}</p>
+            </div>
+          </button>
+        </div>
+        <div class="flex flex-colunm">
+          <a
+            v-if="$i18n.availableLocales.length > 1"
+            href="/home#lang"
+            class="mx-auto mt-6"
+          >
+            <vue-feather
+              type="flag"
+              class="mx-auto mt-6 text-primary"
+            ></vue-feather>
+          </a>
+          <div id="lang" class="modal">
+            <div class="modal-box bg-secondary border-2 border-primary">
+              <h2 class="card-title">{{ $t("langTitle") }}</h2>
+              <div class="flex flex-col">
+                <button
+                  v-for="l in $i18n.availableLocales"
+                  class="p-2 my-2 font-medium rounded-lg"
+                  :class="{ 'bg-primary': $i18n.locale === l }"
+                  :key="`locale-${l}`"
+                  @click="$i18n.locale = l"
+                >
+                  {{ $t(l) }}
+                </button>
+              </div>
+              <div class="modal-action">
+                <a href="/home#" class="btn btn-primary">{{ $t("accept") }}</a>
+                <a href="/home#" class="btn">{{ $t("close") }}</a>
+              </div>
+            </div>
+          </div>
+          <a href="/home#rules" class="mx-auto mt-6">
+            <vue-feather type="help-circle" class="text-primary"></vue-feather>
+          </a>
+          <div id="rules" class="modal">
+            <div class="modal-box bg-secondary border-2 border-primary">
+              <h2 class="card-title capitalize-first">{{ $t("ruleTitle") }}</h2>
+              <div>
+                <p className="my-1">
+                  - {{ $t("rule010") }} <strong>{{ $t("rule011") }}</strong>
+                  {{ $t("rule012") }}
+                </p>
+                <p className="my-1">
+                  - {{ $t("rule020") }} <strong>{{ $t("rule021") }}</strong
+                  >.
+                </p>
+                <p className="my-1">- {{ $t("rule030") }}</p>
+                <p className="my-1">- {{ $t("rule040") }}</p>
+                <p className="my-1">
+                  <strong>{{ $t("rule050") }}:</strong> {{ $t("rule051") }}
+                </p>
+              </div>
+              <div class="modal-action">
+                <a href="/home#" class="btn btn-primary">{{ $t("accept") }}</a>
+                <a href="/home#" class="btn">{{ $t("close") }}</a>
+              </div>
+            </div>
+          </div>
+          <a href="/home#chat" class="mx-auto mt-6" @click="openChat()">
+            <vue-feather
+              type="message-circle"
+              class="text-primary"
+            ></vue-feather>
+          </a>
+        </div>
       </div>
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
-import { defineComponent } from 'vue';
+import { IonContent, IonPage, IonInput } from "@ionic/vue";
+import { defineComponent } from "vue";
+import { useRouter } from "vue-router";
+import { defaultGame, getStorage, Game, randomPlayer, randomTeam, setStorage } from "../services/game";
 
 export default defineComponent({
-  name: 'Home',
+  name: "Home",
   components: {
     IonContent,
-    IonHeader,
+    IonInput,
     IonPage,
-    IonTitle,
-    IonToolbar
-  }
+  },
+  data() {
+    return {
+      game: defaultGame,
+      langs: [],
+      lang: "",
+    };
+  },
+  async mounted() {
+    this.game = (await getStorage("game", defaultGame)) as Game;
+  },
+  methods: {
+    randomPlayer() {
+      return randomPlayer();
+    },
+    randomTeam() {
+      return randomTeam();
+    },
+    openChat() {
+      window.$crisp.push(["do", "chat:show"]);
+      window.$crisp.push(["do", "chat:open"]);
+    },
+    async saveTeam() {
+      let teamLength = -1;
+      this.game.teams.forEach((element) => {
+        if (teamLength === -1) {
+          teamLength = element.players.length;
+        }
+        if (teamLength !== element.players.length) {
+          this.game.mode = 1;
+          console.log("random mode");
+        }
+      });
+      await setStorage("game", this.game);
+      this.router.push("/theme");
+    },
+  },
+  setup() {
+    const router = useRouter();
+    return { router };
+  },
 });
 </script>
-
-<style scoped>
-#container {
-  text-align: center;
-  
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
-}
-
-#container p {
-  font-size: 16px;
-  line-height: 22px;
-  
-  color: #8c8c8c;
-  
-  margin: 0;
-}
-
-#container a {
-  text-decoration: none;
-}
-</style>

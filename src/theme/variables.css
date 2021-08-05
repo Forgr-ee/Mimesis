@@ -1,5 +1,8 @@
 /* Ionic Variables and Theming. For more info, please see:
 http://ionicframework.com/docs/theming/ */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /** Ionic CSS Variables **/
 :root {
@@ -233,4 +236,16 @@ http://ionicframework.com/docs/theming/ */
 
     --ion-card-background: #1e1e1e;
   }
+}
+
+.svg_icon {
+  filter: invert(57%) sepia(21%) saturate(1692%) hue-rotate(339deg) brightness(99%) contrast(81%);
+}
+
+.no_bar {
+  overflow: -moz-scrollbars-none;
+}
+
+.no_bar::-webkit-scrollbar {
+  display: none;
 }

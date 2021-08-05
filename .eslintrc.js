@@ -15,6 +15,7 @@ module.exports = {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'vue/no-deprecated-slot-attribute': 'off',
+    "@typescript-eslint/camelcase": ["warn"],
     '@typescript-eslint/no-explicit-any': 'off',
   },
   overrides: [
