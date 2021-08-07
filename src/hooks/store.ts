@@ -1,10 +1,12 @@
 import { toRefs, reactive, ref, readonly } from "vue";
+import { isPlatform } from "@ionic/vue";
+import { RateApp } from "capacitor-rate-app";
 import firebase from "firebase/app";
 // Required for side-effects
 import "firebase/firestore";
 
 import FIREBASE_CONFIG from "./.env.firebase";
-import { setStorage, getStorage } from '@/services/game';
+import { setStorage, getStorage, Game } from '@/services/game';
 
 // initialize firebase, this is directly from the firebase documentation
 // regarding getting started for the web
@@ -153,13 +155,42 @@ export const useStore = () => {
     }
     console.log('themes', value);
     value.forEach((v) => {
-      // console.log('v', v);
       themes.push(v);
     });
-    // themes.value = value;
     state.loading = false;
     return themes;
   };
+
+  const clearData = (theme: string, lang: string, game: any, guess: any) => {
+    delete guess.guess;
+    delete guess.pastGuess;
+    delete guess.pastGuess;
+    delete game.pastTeams;
+    delete game.pastTeams;
+    for (let index = 0; index < game.teams.length; index++) {
+      delete game.teams[index].pastPlayers;
+    }
+    return {
+        createdAd: new Date().toISOString(),
+        guess,
+        theme,
+        lang,
+        game
+    };
+  }
+
+  const saveGame = async (userId: string, theme: string, lang: string, game: Game) => {
+    const refGames = firebase.firestore().collection(`users/${userId}/games`);
+    const refUser = firebase.firestore().collection(`users`).doc(userId);
+    await refGames.add(clearData(theme, lang, game, guess));
+    const games = await refGames.get();
+    if (isPlatform("capacitor") && games.docs.length > 2) {
+        RateApp.requestReview();
+    }
+    await refUser.set({
+        games: games.docs.length,
+    });
+  }
 
   const reload = async () => {
     await getlangMessages();
@@ -173,6 +204,7 @@ export const useStore = () => {
     offline: readonly(offline),
     lang: readonly(lang),
     langsMessages: readonly(langsMessages),
-    guess: readonly(guess),
+    guess: guess,
+    saveGame,
   };
 }

@@ -91,7 +91,7 @@ export default defineComponent({
     },
   },
   setup() {
-    const { themes, offline, reload } = useStore(); 
+    const { themes, offline, reload } = useStore();
     const router = useRouter();
     return { router, reload, themes, offline };
   },

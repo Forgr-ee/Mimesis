@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import { uniqueNamesGenerator, colors, animals } from "unique-names-generator";
 import { Storage } from "@capacitor/storage";
+import { Guess } from '@/hooks/store';
 
 export const randomName = () =>
   uniqueNamesGenerator({
@@ -33,12 +34,16 @@ export interface Team {
   players: Player[];
   pastPlayers: string[];
 }
-
+export interface PastGuess {
+  guess: Guess[];
+  pastGuess: string[];
+}
 export interface Game {
   mode: number;
   teams: Team[];
   pastTeams: string[];
   uuid: string;
+  guess?: PastGuess;
 }
 
 export const randomTeam = (): Team => ({

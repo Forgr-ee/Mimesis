@@ -69,10 +69,16 @@ const initApp = () => {
   if (isPlatform("capacitor")) {
     StatusBar.hide();
     NativeAudio.preload({
-      assetId: "sally",
-      assetPath: "sally_song.mp3",
+      assetPath: "tada.mp3",
+      assetId: "tada",
       audioChannelNum: 1,
       isUrl: false,
+    });
+    NativeAudio.preload({
+        assetPath: "horn.mp3",
+        assetId: "horn",
+        audioChannelNum: 1,
+        isUrl: false,
     });
     SplashScreen.hide();
   }
