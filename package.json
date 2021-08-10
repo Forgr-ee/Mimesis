@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@capacitor-community/native-audio": "^3.0.0",
-    "@capacitor/app": "1.0.2",
+    "@capacitor/app": "^1.0.2",
     "@capacitor/core": "3.1.2",
     "@capacitor/device": "^1.0.2",
     "@capacitor/haptics": "^1.0.2",

@@ -54,6 +54,7 @@ type LangMessages = {
 
 export const useStore = () => {
   const themes = reactive<Array<Theme>>([]);
+  const theme = ref<string>('');
   const guess = reactive<GuessDb>({});
   const offline = ref<boolean>(true);
   const lang = ref<string>('fr');
@@ -99,6 +100,13 @@ export const useStore = () => {
   };
 
   /**
+  * call this function to get the current theme
+  */
+   const getTheme = async () => {
+    theme.value =  await getStorage(`theme`) as string;
+  };
+
+  /**
   * call this function to get the list of guess in a theme
   */
   const getGuess = async (theme: string) => {
@@ -117,7 +125,7 @@ export const useStore = () => {
         values = await getStorage(`guess_${theme}_${lang.value}`) as Guess[];
       }
     }
-    guess[theme] = values;
+    guess[`${theme}_${lang.value}`] = values;
   };
 
   /**
@@ -161,10 +169,7 @@ export const useStore = () => {
     return themes;
   };
 
-  const clearData = (theme: string, lang: string, game: any, guess: any) => {
-    delete guess.guess;
-    delete guess.pastGuess;
-    delete guess.pastGuess;
+  const clearData = (theme: string, lang: string, game: any) => {
     delete game.pastTeams;
     delete game.pastTeams;
     for (let index = 0; index < game.teams.length; index++) {
@@ -172,7 +177,6 @@ export const useStore = () => {
     }
     return {
         createdAd: new Date().toISOString(),
-        guess,
         theme,
         lang,
         game
@@ -182,25 +186,28 @@ export const useStore = () => {
   const saveGame = async (userId: string, theme: string, lang: string, game: Game) => {
     const refGames = firebase.firestore().collection(`users/${userId}/games`);
     const refUser = firebase.firestore().collection(`users`).doc(userId);
-    await refGames.add(clearData(theme, lang, game, guess));
-    const games = await refGames.get();
-    if (isPlatform("capacitor") && games.docs.length > 2) {
+    await refGames.add(clearData(theme, lang, game));
+    const gamesRef = await refGames.get();
+    const games = gamesRef.docs.length;
+    if (isPlatform("capacitor") && games > 2) {
         RateApp.requestReview();
     }
     await refUser.set({
-        games: games.docs.length,
+        games,
     });
   }
 
   const reload = async () => {
     await getlangMessages();
     await getThemes();
+    await getTheme();
   }
 
   return {
     ...toRefs(state),
     reload,
     themes: readonly(themes),
+    theme: readonly(theme),
     offline: readonly(offline),
     lang: readonly(lang),
     langsMessages: readonly(langsMessages),

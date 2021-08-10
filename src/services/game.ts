@@ -34,16 +34,14 @@ export interface Team {
   players: Player[];
   pastPlayers: string[];
 }
-export interface PastGuess {
-  guess: Guess[];
-  pastGuess: string[];
-}
 export interface Game {
   mode: number;
   teams: Team[];
   pastTeams: string[];
   uuid: string;
-  guess?: PastGuess;
+  pastGuess: string[];
+  skipGuess: string[];
+  foundGuess: string[];
 }
 
 export const randomTeam = (): Team => ({
@@ -59,6 +57,9 @@ export const defaultGame: Game = {
   mode: 0,
   teams: [randomTeam(), randomTeam()],
   pastTeams: [],
+  pastGuess: [],
+  skipGuess: [],
+  foundGuess: [],
 };
 
 export const setStorage = async (key: string, value: any) => {
