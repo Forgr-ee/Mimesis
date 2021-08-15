@@ -25,10 +25,10 @@
         </h3>
         <div class="overflow-x-scroll no_bar md:w-1/2 md:mx-auto">
           <div
-            v-for="theme in themes"
+            v-for="theme in main.themes"
             :key="theme.id"
             class="flex items-center my-1 border border-primary bg-light rounded-xl"
-            @click="saveTheme(theme)"
+            @click="saveTheme(theme.id)"
           >
             <div
               class="relative w-20 h-20 mr-3 xs:w-24 xs:h-24 bg-primary rounded-l-xl"
@@ -64,8 +64,8 @@
 import { IonContent, IonPage, isPlatform } from "@ionic/vue";
 import { defineComponent } from "vue";
 import { useRouter } from "vue-router";
-import { setStorage } from "../services/game";
-import { useStore } from "../hooks/store";
+import { useMainStore } from "../store/main";
+import { useGameStore } from "../store/game";
 
 export default defineComponent({
   name: "Theme",
@@ -73,27 +73,24 @@ export default defineComponent({
     IonContent,
     IonPage,
   },
-
-  async mounted() {
-    await this.reload();
-  },
   methods: {
     restore() {
       console.log("restore");
     },
     async saveTheme(theme: string) {
-      console.log("saveTheme", theme);
-      await setStorage('theme', theme);
+      console.log('theme', theme);
+      this.game.theme = theme;
       this.router.push("/game");
     },
     isIos() {
       return isPlatform("ios");
     },
   },
-  setup() {
-    const { themes, offline, reload } = useStore();
+  async setup() {
+    const main = useMainStore();
+    const game = useGameStore();
     const router = useRouter();
-    return { router, reload, themes, offline };
+    return { router, main, game };
   },
 });
 </script>

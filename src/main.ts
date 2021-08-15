@@ -5,6 +5,7 @@ import router from './router';
 import { IonicVue } from '@ionic/vue';
 import VueFeather from 'vue-feather';
 import { createI18n } from 'vue-i18n';
+import { createPinia } from 'pinia';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/vue/css/core.css';
@@ -24,16 +25,27 @@ import '@ionic/vue/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
-import { useAuth } from "./hooks/auth";
-import { useStore } from "./hooks/store";
+import { useAuthStore } from "./store/auth";
+import { useMainStore } from "./store/main";
 import { isPlatform } from '@ionic/vue';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { StatusBar } from '@capacitor/status-bar';
 import {NativeAudio} from '@capacitor-community/native-audio';
+import { setStorage, getStorage } from './services/storage';
 
-const { authCheck } = useAuth();
+const pinia = createPinia();
+pinia.use(async (context) => {
+  // Save the whole store to storage to persist app state
+  context.store.$subscribe((mutation: any, state: any) => {
+    setStorage(`state_${context.store.$id}`, state)  
+  })
+  // Set the whole store from Storage
+  context.store.$state = await getStorage(`state_${context.store.$id}`, context.store.$state);
+})
 const app = createApp(App)
-  .use(IonicVue);
+  .use(IonicVue)
+  .use(pinia);
+
 app.component(VueFeather.name, VueFeather);
 
 const initCrisp = () => {
@@ -85,19 +97,20 @@ const initApp = () => {
 };
 
 const initI18n = async () => {
-    const { langsMessages, reload } = useStore();
-    await reload();
+    const main = useMainStore();
+    await main.initialize();
     const i18n = createI18n({
     legacy: false,
     globalInjection: true,
     locale: 'fr',
     fallbackLocale: 'fr',
-    messages: langsMessages.value,
+    messages: main.langsMessages,
   })
   app.use(i18n);
 }
+const auth = useAuthStore();
 
-authCheck()
+auth.authCheck()
   .then(async () => {
     initCrisp();
     await initI18n();

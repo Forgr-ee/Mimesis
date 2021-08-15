@@ -54,7 +54,7 @@
                 <button
                   className="text-primary"
                   type="button"
-                  @click="team.players.push(randomPlayer())"
+                  @click="team.players.push(randomPlayer(team.players.length))"
                 >
                   <vue-feather type="plus-circle"></vue-feather>
                 </button>
@@ -72,7 +72,7 @@
           </div>
           <div className="fixed w-full px-5 text-right">
             <button
-              @click="game.teams.push(randomTeam())"
+              @click="game.teams.push(randomTeam(game.teams.length))"
               class="w-12 h-12 rounded-full xs:mt-5 bg-primary text-light active:bg-secondary"
             >
               <vue-feather type="plus"></vue-feather>
@@ -102,7 +102,7 @@
             ></vue-feather>
           </a>
           <div id="lang" class="modal">
-            <div class="modal-box bg-secondary border-2 border-primary">
+            <div class="border-2 modal-box bg-secondary border-primary">
               <h2 class="card-title">{{ $t("langTitle") }}</h2>
               <div class="flex flex-col">
                 <button
@@ -110,7 +110,7 @@
                   class="p-2 my-2 font-medium rounded-lg"
                   :class="{ 'bg-primary': $i18n.locale === l }"
                   :key="`locale-${l}`"
-                  @click="$i18n.locale = l"
+                  @click="$i18n.locale = l; main.lang = l"
                 >
                   {{ $t(l) }}
                 </button>
@@ -125,7 +125,7 @@
             <vue-feather type="help-circle" class="text-primary"></vue-feather>
           </a>
           <div id="rules" class="modal">
-            <div class="modal-box bg-secondary border-2 border-primary">
+            <div class="border-2 modal-box bg-secondary border-primary">
               <h2 class="card-title capitalize-first">{{ $t("ruleTitle") }}</h2>
               <div>
                 <p className="my-1">
@@ -161,10 +161,12 @@
 </template>
 
 <script lang="ts">
+import { randomPlayer, randomTeam } from '@/store/game';
 import { IonContent, IonPage, IonInput } from "@ionic/vue";
 import { defineComponent } from "vue";
 import { useRouter } from "vue-router";
-import { defaultGame, getStorage, Game, randomPlayer, randomTeam, setStorage } from "../services/game";
+import { useGameStore } from "../store/game";
+import { useMainStore } from "../store/main";
 
 export default defineComponent({
   name: "Home",
@@ -173,45 +175,27 @@ export default defineComponent({
     IonInput,
     IonPage,
   },
-  data() {
-    return {
-      game: defaultGame,
-      langs: [],
-      lang: "",
-    };
-  },
-  async mounted() {
-    this.game = (await getStorage("game", defaultGame)) as Game;
-  },
   methods: {
-    randomPlayer() {
-      return randomPlayer();
+    randomPlayer(index: number) {
+      return randomPlayer(index);
     },
-    randomTeam() {
-      return randomTeam();
+    randomTeam(index: number) {
+      return randomTeam(index);
     },
     openChat() {
       window.$crisp.push(["do", "chat:show"]);
       window.$crisp.push(["do", "chat:open"]);
     },
     async saveTeam() {
-      let teamLength = -1;
-      this.game.teams.forEach((element) => {
-        if (teamLength === -1) {
-          teamLength = element.players.length;
-        }
-        if (teamLength !== element.players.length) {
-          this.game.mode = 1;
-          console.log("random mode");
-        }
-      });
-      await setStorage("game", this.game);
+      this.game.calcMode();
       this.router.push("/theme");
     },
   },
   setup() {
     const router = useRouter();
-    return { router };
+    const game = useGameStore();
+    const main = useMainStore();
+    return { router, game, main };
   },
 });
 </script>
