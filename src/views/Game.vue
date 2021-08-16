@@ -126,8 +126,7 @@ import { useRouter } from "vue-router";
 import { App } from "@capacitor/app";
 import { KeepAwake } from "@capacitor-community/keep-awake";
 import { NativeAudio } from "@capacitor-community/native-audio";
-import { useTimer } from "../timer";
-// import { useTimer } from "vue-timer-hook";
+import { useTimer } from "vue-timer-hook";
 import { useMainStore } from "../store/main";
 import { Team, useGameStore } from "../store/game";
 
