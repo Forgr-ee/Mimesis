@@ -1,4 +1,4 @@
-import { createApp } from 'vue'
+import { createApp, watch, reactive } from 'vue'
 import App from './App.vue'
 import router from './router';
 
@@ -35,12 +35,13 @@ import { setStorage, getStorage } from './services/storage';
 
 const pinia = createPinia();
 pinia.use(async (context) => {
-  // Save the whole store to storage to persist app state
-  context.store.$subscribe((mutation: any, state: any) => {
-    setStorage(`state_${context.store.$id}`, state)  
-  })
   // Set the whole store from Storage
-  context.store.$state = await getStorage(`state_${context.store.$id}`, context.store.$state);
+  const newState = await getStorage(`state_${context.store.$id}`, context.store.$state);
+  context.store.$patch(newState);
+  // Save the whole store to storage to persist app state
+  watch(context.store.$state, (state) => {
+    setStorage(`state_${context.store.$id}`, state)  
+  }, { deep: true })
 })
 const app = createApp(App)
   .use(IonicVue)
@@ -114,6 +115,11 @@ auth.authCheck()
   .then(async () => {
     initCrisp();
     await initI18n();
+    // save currentPath
+    // router.afterEach((to) => {
+    //   const main = useMainStore();
+    //   main.currentPath = to.fullPath;
+    // });
     app.use(router);
     return router.isReady();
   })

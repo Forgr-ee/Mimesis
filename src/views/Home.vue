@@ -9,6 +9,20 @@
           src="assets/icon/icon.png"
           alt="logo"
         />
+        <div id="inequal" class="modal">
+          <div class="border-2 modal-box bg-secondary border-primary">
+            <h2 class="card-title capitalize-first">{{ $t("beCarefull") }}</h2>
+            <p
+              class="px-5 mt-4 mb-2 text-xl leading-relaxed text-center md:text-2xl"
+            >
+              {{ $t("inequal") }}<br/> <strong>{{ $t("fairRule") }}</strong>
+            </p>
+            <div class="modal-action">
+              <router-link to="/theme#" class="btn btn-primary">{{ $t("go") }}</router-link>
+              <a href="/home#" class="btn">{{ $t("update") }} {{ $t("team") }}</a>
+            </div>
+          </div>
+        </div>
         <div class="flex overflow-x-scroll no_bar">
           <div
             v-for="(team, index) in game.teams"
@@ -91,16 +105,15 @@
           </button>
         </div>
         <div class="flex flex-colunm">
-          <a
+          <router-link to="/home#lang"
             v-if="$i18n.availableLocales.length > 1"
-            href="/home#lang"
             class="mx-auto mt-6"
           >
             <vue-feather
               type="flag"
               class="mx-auto mt-6 text-primary"
             ></vue-feather>
-          </a>
+          </router-link>
           <div id="lang" class="modal">
             <div class="border-2 modal-box bg-secondary border-primary">
               <h2 class="card-title">{{ $t("langTitle") }}</h2>
@@ -116,14 +129,13 @@
                 </button>
               </div>
               <div class="modal-action">
-                <a href="/home#" class="btn btn-primary">{{ $t("accept") }}</a>
-                <a href="/home#" class="btn">{{ $t("close") }}</a>
+                <router-link to="/home#" class="btn btn-primary">{{ $t("accept") }}</router-link>
               </div>
             </div>
           </div>
-          <a href="/home#rules" class="mx-auto mt-6">
+          <router-link to="/home#rules" class="mx-auto mt-6">
             <vue-feather type="help-circle" class="text-primary"></vue-feather>
-          </a>
+          </router-link>
           <div id="rules" class="modal">
             <div class="border-2 modal-box bg-secondary border-primary">
               <h2 class="card-title capitalize-first">{{ $t("ruleTitle") }}</h2>
@@ -143,17 +155,16 @@
                 </p>
               </div>
               <div class="modal-action">
-                <a href="/home#" class="btn btn-primary">{{ $t("accept") }}</a>
-                <a href="/home#" class="btn">{{ $t("close") }}</a>
+                <router-link to="/home#" class="btn btn-primary">{{ $t("accept") }}</router-link>
               </div>
             </div>
           </div>
-          <a href="/home#chat" class="mx-auto mt-6" @click="openChat()">
+          <router-link to="/home#chat" class="mx-auto mt-6" @click="openChat()">
             <vue-feather
               type="message-circle"
               class="text-primary"
             ></vue-feather>
-          </a>
+          </router-link>
         </div>
       </div>
     </ion-content>
@@ -186,9 +197,14 @@ export default defineComponent({
       window.$crisp.push(["do", "chat:show"]);
       window.$crisp.push(["do", "chat:open"]);
     },
-    async saveTeam() {
+    saveTeam() {
       this.game.calcMode();
-      this.router.push("/theme");
+      if (this.game.mode === 1) {
+        window.location.hash = 'inequal';
+      } else {
+        console.log('equal team');
+        this.router.push("/theme");        
+      }
     },
   },
   setup() {

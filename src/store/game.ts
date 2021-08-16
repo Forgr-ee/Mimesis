@@ -81,11 +81,10 @@ export type Guess = {
 
 const filterListByUUID = (list: any[], past: string[]) => {
   const filtered = list.filter((n) => {
-    return (
-      past.findIndex((b) => {
+    const index = past.findIndex((b) => {
         return b === n.uuid;
-      }) === -1
-    );
+      }) === -1;
+      return index;
   });
   return filtered;
 };
@@ -96,12 +95,13 @@ const randomSelect = (filtered: any[]) => {
 
 export const useGameStore = defineStore('game', {
   state: () => ({
+      loading: true,
       uuid:  uuidv4(),
       createdAt: new Date().toISOString(),
       mode: 0,
-      theme: '',
+      theme: 'improbable',
       teams: [randomTeam(0), randomTeam(1)] as Team[],
-      teamIndex: 0,
+      teamIndex: -1,
       playerIndex: 0,
       pastTeams: [] as string[],
       pastGuess: [] as string[],
@@ -109,6 +109,9 @@ export const useGameStore = defineStore('game', {
       foundGuess: [] as string[],
   }),
   getters: {
+    ready(): boolean {
+      return this.teamIndex !== -1;
+    },
     nextTeams(): Team[] {
       return filterListByUUID(this.teams, this.pastTeams) as Team[];
     },
@@ -118,15 +121,37 @@ export const useGameStore = defineStore('game', {
     team(): Team {
       return this.teams[this.teamIndex];
     },
-    player(): Player {
-      return this.team.players[this.playerIndex];
+    teamScore(): number {
+      try {
+        return this.teams[this.teamIndex].score;
+      } catch (err) {
+        console.error(`this.teams[${this.teamIndex}]`, this.teams[this.teamIndex]);
+        return 0
+      }     
+    },
+    teamName(): string {
+      try {
+        return this.teams[this.teamIndex].name;
+      } catch (err) {
+        console.error(`this.teams[${this.teamIndex}]`, this.teamIndex);
+        return ''
+      }     
+    },
+    playerName(): string {
+      try {
+        return this.teams[this.teamIndex].players[this.playerIndex].name;
+      } catch (err) {
+        console.error(`this.teams[${this.teamIndex}].players[${this.playerIndex}]`, this.teamIndex, this.playerIndex);
+        return ''
+      }
     },
   },
   actions: {
-    nextPlayer() {
+    nextPlayer(setLoading = true) {
+      this.loading = setLoading ? true : this.loading;
       let didReset = false;
-      if (this.team.players.length === this.team.pastPlayers.length) {
-        this.team.pastPlayers = [this.player.uuid];
+      if (this.team.players.length === this.team.pastPlayers.length && this.playerIndex !== -1) {
+        this.team.pastPlayers = [this.team.players[this.playerIndex].uuid];
         didReset = true;
       }
       let plr = null;
@@ -141,8 +166,13 @@ export const useGameStore = defineStore('game', {
       } else {
         this.team.pastPlayers.push(plr.uuid);
       }
+      this.loading = setLoading ? false : this.loading;
+    },
+    addScore() {
+      this.team.players[this.playerIndex].score++;
     },
     nextTeam() {
+      this.loading = true;
       let didReset = false;
       if (this.pastTeams.length === this.teams.length) {
         this.pastTeams = [this.team.uuid];
@@ -154,13 +184,14 @@ export const useGameStore = defineStore('game', {
       } else {
         newTeam = this.nextTeams.pop() as Team;
       }
-      this.nextPlayer();
       this.teamIndex = newTeam.index;
       if (didReset) {
         this.pastTeams = [newTeam.uuid];
       } else {
         this.pastTeams.push(newTeam.uuid);
       }
+      this.nextPlayer(false);
+      this.loading = false;
     },
     resetScore() {
       this.teams.forEach((t: Team) => {
@@ -178,7 +209,7 @@ export const useGameStore = defineStore('game', {
     },
     resetIndex() {
       this.playerIndex = 0;
-      this.teamIndex = 0;
+      this.teamIndex = -1;
     },
     reset() {
       this.resetScore();
@@ -186,15 +217,12 @@ export const useGameStore = defineStore('game', {
       this.resetIndex();
     },
     calcMode() {
-      let teamLength = -1;
+      const teamLength = this.teams[0].players.length;
+      let inequal = false;
       this.teams.forEach((t: Team) => {
-        if (teamLength === -1) {
-          teamLength = t.players.length;
-        }
-        if (teamLength !== t.players.length) {
-          this.mode = 1;
-        }
+          inequal = inequal || teamLength !== t.players.length ? true : false;
       });
+      this.mode = inequal ? 1 : 0;
     },
     async save() {
       const authStore = useAuthStore()

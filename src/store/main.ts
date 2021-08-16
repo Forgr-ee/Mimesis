@@ -76,7 +76,6 @@ export const useMainStore = defineStore('main', {
     },
     guesses(): Guess[] {
       const game = useGameStore();
-      console.log('`${game.theme}_${this.lang}`', `${game.theme}_${this.lang}`);
       return this.guessDb[`${game.theme}_${this.lang}`];
     },
     needUpdate(): boolean {
@@ -151,12 +150,11 @@ export const useMainStore = defineStore('main', {
       }
       this.langsMessages = value;
     },
-    async nextGuess(skip = false, found = false) {
+    nextGuess(skip = false, found = false) {
       const game = useGameStore();
       if (game.pastGuess.length === this.guess.length) {
         game.pastGuess = [];
       }
-      console.log('this.guesses', this.guesses);
       const result = randomSelect(
         filterListByTitle(this.guesses, game.pastGuess)
       );

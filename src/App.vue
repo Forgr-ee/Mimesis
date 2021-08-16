@@ -29,12 +29,12 @@ export default defineComponent({
     IonApp,
     IonRouterOutlet
   },
-  // mounted() {
+  mounted() {
     // restore path state
-    // if (this.router.path !== this.currentPath) {
-    //   this.router.path = this.currentPath;
+    // if (this.router.path !== this.main.currentPath) {
+    // window.location.href = this.main.currentPath;
     // }
-  // },
+  },
   setup() {
     const auth = useAuthStore();
     const main = useMainStore();

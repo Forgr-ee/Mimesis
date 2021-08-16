@@ -12,13 +12,13 @@
           {{ $t("themes") }}
         </h1>
         <h3
-          v-if="offline && themes.length > 0"
+          v-if="main.offline && main.themes.length > 0"
           class="mx-5 mb-5 font-bold text-center text-1xl text-primary"
         >
           {{ $t("noInternet") }}
         </h3>
         <h3
-          v-if="offline && themes.length === 0"
+          v-if="main.offline && main.themes.length === 0"
           class="mx-5 mb-5 font-bold text-center text-1xl text-primary"
         >
           {{ $t("noInternetFirst") }}
@@ -27,7 +27,7 @@
           <div
             v-for="theme in main.themes"
             :key="theme.id"
-            class="flex items-center my-1 border border-primary bg-light rounded-xl"
+            class="flex items-center my-1 border cursor-pointer border-primary bg-light rounded-xl"
             @click="saveTheme(theme.id)"
           >
             <div
@@ -78,9 +78,9 @@ export default defineComponent({
       console.log("restore");
     },
     async saveTheme(theme: string) {
-      console.log('theme', theme);
       this.game.theme = theme;
-      this.router.push("/game");
+      // this.router.push({path: "/game", hash: "#changeplayer"});
+      this.router.push({path: "/game"});
     },
     isIos() {
       return isPlatform("ios");
