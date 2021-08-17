@@ -9,7 +9,49 @@
           src="assets/icon/icon.png"
           alt="logo"
         />
-        <div id="inequal" class="modal">
+        <div class="modal" :class="{ 'active': showLang }">
+          <div class="border-2 modal-box bg-secondary border-primary">
+            <h2 class="card-title">{{ $t("langTitle") }}</h2>
+            <div class="flex flex-col">
+              <button
+                v-for="l in $i18n.availableLocales"
+                class="p-2 my-2 font-medium rounded-lg"
+                :class="{ 'bg-primary': $i18n.locale === l }"
+                :key="`locale-${l}`"
+                @click="$i18n.locale = l; main.lang = l"
+              >
+                {{ $t(l) }}
+              </button>
+            </div>
+            <div class="modal-action">
+              <button @click="showLang = false" class="btn btn-primary">{{ $t("accept") }}</button>
+            </div>
+          </div>
+        </div>
+        <div class="modal" :class="{ 'active': showRules }">
+          <div class="border-2 modal-box bg-secondary border-primary">
+            <h2 class="card-title capitalize-first">{{ $t("ruleTitle") }}</h2>
+            <div>
+              <p className="my-1">
+                - {{ $t("rule010") }} <strong>{{ $t("rule011") }}</strong>
+                {{ $t("rule012") }}
+              </p>
+              <p className="my-1">
+                - {{ $t("rule020") }} <strong>{{ $t("rule021") }}</strong
+                >.
+              </p>
+              <p className="my-1">- {{ $t("rule030") }}</p>
+              <p className="my-1">- {{ $t("rule040") }}</p>
+              <p className="my-1">
+                <strong>{{ $t("rule050") }}:</strong> {{ $t("rule051") }}
+              </p>
+            </div>
+            <div class="modal-action">
+              <button @click="showRules = false" class="btn btn-primary">{{ $t("accept") }}</button>
+            </div>
+          </div>
+        </div>
+        <div class="modal" :class="{ 'active': showInequal }">
           <div class="border-2 modal-box bg-secondary border-primary">
             <h2 class="card-title capitalize-first">{{ $t("beCarefull") }}</h2>
             <p
@@ -19,7 +61,7 @@
             </p>
             <div class="modal-action">
               <router-link to="/theme#" class="btn btn-primary">{{ $t("go") }}</router-link>
-              <a href="/home#" class="btn">{{ $t("update") }} {{ $t("team") }}</a>
+              <button  @click="showInequal = false" class="btn">{{ $t("update") }} {{ $t("team") }}</button>
             </div>
           </div>
         </div>
@@ -105,66 +147,24 @@
           </button>
         </div>
         <div class="flex flex-colunm">
-          <router-link to="/home#lang"
+          <button @click="showLang = true"
             v-if="$i18n.availableLocales.length > 1"
             class="mx-auto mt-6"
           >
             <vue-feather
               type="flag"
-              class="mx-auto mt-6 text-primary"
+              class="text-primary"
             ></vue-feather>
-          </router-link>
-          <div id="lang" class="modal">
-            <div class="border-2 modal-box bg-secondary border-primary">
-              <h2 class="card-title">{{ $t("langTitle") }}</h2>
-              <div class="flex flex-col">
-                <button
-                  v-for="l in $i18n.availableLocales"
-                  class="p-2 my-2 font-medium rounded-lg"
-                  :class="{ 'bg-primary': $i18n.locale === l }"
-                  :key="`locale-${l}`"
-                  @click="$i18n.locale = l; main.lang = l"
-                >
-                  {{ $t(l) }}
-                </button>
-              </div>
-              <div class="modal-action">
-                <router-link to="/home#" class="btn btn-primary">{{ $t("accept") }}</router-link>
-              </div>
-            </div>
-          </div>
-          <router-link to="/home#rules" class="mx-auto mt-6">
+          </button>
+          <button @click="showRules = true" class="mx-auto mt-6">
             <vue-feather type="help-circle" class="text-primary"></vue-feather>
-          </router-link>
-          <div id="rules" class="modal">
-            <div class="border-2 modal-box bg-secondary border-primary">
-              <h2 class="card-title capitalize-first">{{ $t("ruleTitle") }}</h2>
-              <div>
-                <p className="my-1">
-                  - {{ $t("rule010") }} <strong>{{ $t("rule011") }}</strong>
-                  {{ $t("rule012") }}
-                </p>
-                <p className="my-1">
-                  - {{ $t("rule020") }} <strong>{{ $t("rule021") }}</strong
-                  >.
-                </p>
-                <p className="my-1">- {{ $t("rule030") }}</p>
-                <p className="my-1">- {{ $t("rule040") }}</p>
-                <p className="my-1">
-                  <strong>{{ $t("rule050") }}:</strong> {{ $t("rule051") }}
-                </p>
-              </div>
-              <div class="modal-action">
-                <router-link to="/home#" class="btn btn-primary">{{ $t("accept") }}</router-link>
-              </div>
-            </div>
-          </div>
-          <router-link to="/home#chat" class="mx-auto mt-6" @click="openChat()">
+          </button>
+          <button class="mx-auto mt-6" @click="openChat()">
             <vue-feather
               type="message-circle"
               class="text-primary"
             ></vue-feather>
-          </router-link>
+          </button>
         </div>
       </div>
     </ion-content>
@@ -186,6 +186,13 @@ export default defineComponent({
     IonInput,
     IonPage,
   },
+  data() {
+    return {
+      showInequal: false,
+      showLang: false,
+      showRules: false,
+    }
+  },
   methods: {
     randomPlayer(index: number) {
       return randomPlayer(index);
@@ -200,7 +207,7 @@ export default defineComponent({
     saveTeam() {
       this.game.calcMode();
       if (this.game.mode === 1) {
-        window.location.hash = 'inequal';
+        this.showInequal = true;
       } else {
         console.log('equal team');
         this.router.push("/theme");        
