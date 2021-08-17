@@ -281,8 +281,3 @@ export default defineComponent({
   },
 });
 </script>
-<style>
-.modal.active {
-  @apply visible opacity-100 pointer-events-auto;
-}
-</style>

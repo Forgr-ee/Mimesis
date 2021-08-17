@@ -1,11 +1,14 @@
-import { createApp, watch, reactive } from 'vue'
+import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router';
-
 import { IonicVue } from '@ionic/vue';
 import VueFeather from 'vue-feather';
 import { createI18n } from 'vue-i18n';
-import { createPinia } from 'pinia';
+import { useAuthStore } from "./store/auth";
+import { useMainStore } from "./store/main";
+import { initCrisp } from './services/crips';
+import pinia from './services/pinia';
+import { initCapacitor } from './services/capacitor';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/vue/css/core.css';
@@ -25,77 +28,12 @@ import '@ionic/vue/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
-import { useAuthStore } from "./store/auth";
-import { useMainStore } from "./store/main";
-import { isPlatform } from '@ionic/vue';
-import { SplashScreen } from '@capacitor/splash-screen';
-import { StatusBar } from '@capacitor/status-bar';
-import {NativeAudio} from '@capacitor-community/native-audio';
-import { setStorage, getStorage } from './services/storage';
 
-const pinia = createPinia();
-pinia.use(async (context) => {
-  // Set the whole store from Storage
-  const newState = await getStorage(`state_${context.store.$id}`, context.store.$state);
-  context.store.$patch(newState);
-  // Save the whole store to storage to persist app state
-  watch(context.store.$state, (state) => {
-    setStorage(`state_${context.store.$id}`, state)  
-  }, { deep: true })
-})
 const app = createApp(App)
   .use(IonicVue)
   .use(pinia);
 
 app.component(VueFeather.name, VueFeather);
-
-const initCrisp = () => {
-  if (isPlatform("capacitor")) {
-    window.$crisp = [
-      ["do", "chat:hide"],
-      [
-        "on",
-        "chat:closed",
-        () => {
-          window.$crisp.push(["do", "chat:hide"]);
-        },
-      ],
-      [
-        "on",
-        "message:received",
-        () => {
-          window.$crisp.push(["do", "chat:show"]);
-        },
-      ],
-    ];
-  } else {
-    window.$crisp = [];
-  }
-  window.CRISP_WEBSITE_ID = "1f5d5a70-2622-4536-a454-996394feeaad";
-  const s = document.createElement("script");
-  s.src = "https://client.crisp.chat/l.js";
-  s.async = true;
-  document.getElementsByTagName("head")[0].appendChild(s);
-};
-
-const initApp = () => {
-  if (isPlatform("capacitor")) {
-    StatusBar.hide();
-    NativeAudio.preload({
-      assetPath: "tada.mp3",
-      assetId: "tada",
-      audioChannelNum: 1,
-      isUrl: false,
-    });
-    NativeAudio.preload({
-        assetPath: "horn.mp3",
-        assetId: "horn",
-        audioChannelNum: 1,
-        isUrl: false,
-    });
-    SplashScreen.hide();
-  }
-};
 
 const initI18n = async () => {
     const main = useMainStore();
@@ -125,7 +63,7 @@ auth.authCheck()
   })
   .then(() => {
     app.mount("#app");
-    initApp();
+    initCapacitor();
   });
 
 declare global {

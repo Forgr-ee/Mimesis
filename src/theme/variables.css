@@ -249,3 +249,7 @@ http://ionicframework.com/docs/theming/ */
 .no_bar::-webkit-scrollbar {
   display: none;
 }
+
+.modal.active {
+  @apply visible opacity-100 pointer-events-auto;
+}
