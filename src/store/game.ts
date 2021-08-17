@@ -125,7 +125,6 @@ export const useGameStore = defineStore('game', {
       try {
         return this.teams[this.teamIndex].score;
       } catch (err) {
-        console.error(`this.teams[${this.teamIndex}]`, this.teams[this.teamIndex]);
         return 0
       }     
     },
@@ -133,7 +132,6 @@ export const useGameStore = defineStore('game', {
       try {
         return this.teams[this.teamIndex].name;
       } catch (err) {
-        console.error(`this.teams[${this.teamIndex}]`, this.teamIndex);
         return ''
       }     
     },
@@ -141,7 +139,6 @@ export const useGameStore = defineStore('game', {
       try {
         return this.teams[this.teamIndex].players[this.playerIndex].name;
       } catch (err) {
-        console.error(`this.teams[${this.teamIndex}].players[${this.playerIndex}]`, this.teamIndex, this.playerIndex);
         return ''
       }
     },
