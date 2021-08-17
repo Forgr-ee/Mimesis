@@ -9,6 +9,7 @@ import { useMainStore } from "./store/main";
 import { initCrisp } from './services/crips';
 import pinia from './services/pinia';
 import { initCapacitor } from './services/capacitor';
+import { initPlausible } from './services/plausible';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/vue/css/core.css';
@@ -28,6 +29,8 @@ import '@ionic/vue/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+
+initPlausible();
 
 const app = createApp(App)
   .use(IonicVue)
@@ -65,7 +68,3 @@ auth.authCheck()
     app.mount("#app");
     initCapacitor();
   });
-
-declare global {
-  interface Window { $crisp: any[]; CRISP_WEBSITE_ID: string }
-}

@@ -1,5 +1,9 @@
 import { isPlatform } from '@ionic/vue';
 
+declare global {
+    interface Window { $crisp: any[]; CRISP_WEBSITE_ID: string }
+}
+
 export const initCrisp = () => {
     if (isPlatform("capacitor")) {
       window.$crisp = [
