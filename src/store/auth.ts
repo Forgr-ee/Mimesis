@@ -10,10 +10,6 @@ if (firebase.apps.length === 0) {
   firebase.initializeApp(FIREBASE_CONFIG);
 }
 
-// interface UserData {
-//   id: string;
-// }
-
 const promAuth = (): Promise<firebase.User | null>  => {
   return new Promise<firebase.User | null>((resolve, reject) => {
       firebase.auth().onAuthStateChanged(resolve, reject);
@@ -24,22 +20,11 @@ export const useAuthStore = defineStore('auth', {
   state: () => ({
       userId: '',
       user: {} as null | firebase.User,
-      // userData: {} as UserData | null,
       loading: true,
       error: null as Error | null,
       initialized: false,
   }),
   actions: {
-    // async getUserData() {
-    //   const resp  = await firebase
-    //     .firestore()
-    //     .collection('users')
-    //     .doc(this.user?.uid)
-    //     .get();
-    //   if (this.user && resp.exists) {
-    //     this.userData = resp.data()
-    //   }
-    // },
     async login() {
       this.loading = true;
       try {
@@ -78,7 +63,6 @@ export const useAuthStore = defineStore('auth', {
         if (!this.user) {
           await this.login();
         }
-        // await this.getUserData();
         this.error = null;
         this.loading = false;
         this.initialized = true;

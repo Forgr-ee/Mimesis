@@ -129,7 +129,7 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonPage, isPlatform } from "@ionic/vue";
+import { IonContent, IonPage, isPlatform, onIonViewWillEnter } from "@ionic/vue";
 import { defineComponent, onMounted, reactive, ref, watchEffect } from "vue";
 import { create as createConfetti } from "canvas-confetti";
 import { useRouter } from "vue-router";
@@ -184,12 +184,9 @@ export default defineComponent({
     IonContent,
     IonPage,
   },
-  ionViewDidEnter() {
-    this.initGameLoop();
-  },
   setup() {
     const appStateChange = ref();
-    const winners = ref([] as Team[]);
+    const winners = ref<Team[]>([]);
     const modals = reactive({
       changePlayer: false,
       winner: false,
@@ -274,7 +271,9 @@ export default defineComponent({
       game.nextTeam();
       modals.changePlayer = true;
     }
-    
+    onIonViewWillEnter(() => {
+      initGameLoop();
+    });
     onMounted(() => {
       watchEffect(async () => {
         if(timer.isExpired.value) {
