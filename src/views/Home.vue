@@ -216,7 +216,6 @@ export default defineComponent({
       if (game.mode === 1) {
         modals.inequal = true;
       } else {
-        console.log('equal team');
         router.push("/theme");        
       }
     };
