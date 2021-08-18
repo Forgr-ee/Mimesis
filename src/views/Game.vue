@@ -5,7 +5,7 @@
         class="relative flex flex-col justify-between h-screen p-5 pt-10 xs:p-10 bg-secondary"
       >
         <button
-          @click="timer.pause(); showPause = true"
+          @click="timer.pause(); modals.pause = true"
           class="top-0 h-8 mt-3 rounded-full md:h-14 md:border md:border-primary safe-mt bg-secondary text-primary w-14 left-3"
         >
           <vue-feather type="arrow-left" class="md:mx-auto"></vue-feather>
@@ -15,9 +15,10 @@
           src="assets/icon/icon.png"
           alt="logo"
         />
-        <div class="modal" :class="{ 'active': showChangePlayer }">
-          <div class="border-2 modal-box bg-secondary border-primary">
-            <h2 class="card-title capitalize-first">{{ $t("ready") }}</h2>
+        <Modal :open="modals.changePlayer" >
+          <template v-slot:icon><CheckIcon class="w-6 h-6 text-green-600" aria-hidden="true" /></template>
+          <template v-slot:title>{{ $t("ready") }} ?</template>
+          <template v-slot:content>
             <p
               class="px-5 mt-4 mb-2 text-xl leading-relaxed text-center md:text-2xl"
             >
@@ -26,28 +27,34 @@
             <p class="mb-4 text-xl leading-relaxed xs:px-5 md:text-2xl">
               {{ $t("turnOf") }} <strong>{{ game.playerName }}</strong>
             </p>
-            <div class="modal-action">
-              <a @click="nextRound(); showChangePlayer=false" class="btn btn-primary">{{ $t("go") }}</a>
-            </div>
-          </div>
-        </div>
-        <div class="modal" :class="{ 'active': showPause }">
-          <div class="border-2 modal-box bg-secondary border-primary">
-            <h2 class="card-title capitalize-first">{{ $t("beCarefull") }}</h2>
-            <p class="py-10 md:text-2xl">{{ $t("leave") }}</p>
-            <div class="modal-action">
-              <router-link to="/home" class="btn btn-primary">{{ $t("backHome") }}</router-link>
-              <a @click="timer.resume(); showPause=false"  class="btn">{{ $t("resume") }}</a>
-            </div>
-          </div>
-        </div>
-        <div class="modal" :class="{ 'active': showWinner }">
-          <div class="border-2 modal-box bg-secondary border-primary">
-            <h2 class="card-title capitalize-first">{{ $t("gameWin") }}</h2>
+          </template>
+          <template v-slot:buttons>
+              <button type="button" @click="nextRound(); modals.changePlayer=false" 
+              class="px-6 py-3 mb-1 mr-1 text-xs font-bold uppercase transition-all duration-150 ease-linear border rounded shadow outline-none bg-primary text-light border-light md:text-base hover:shadow-lg focus:outline-none">
+                {{ $t("go") }}
+              </button>
+          </template>
+        </Modal>
+        <Modal :open="modals.pause" >
+          <template v-slot:icon><ExclamationIcon class="w-6 h-6 text-red-600" aria-hidden="true" /></template>
+          <template v-slot:title>{{ $t("beCarefull") }}</template>
+          <template v-slot:content><p class="py-10 md:text-2xl">{{ $t("leave") }}</p></template>
+          <template v-slot:buttons>
+              <router-link to="/home" @click="modals.pause=false" class="px-6 py-3 mb-1 mr-1 text-xs font-bold uppercase transition-all duration-150 ease-linear border rounded shadow outline-none bg-light text-primary border-primary md:text-base hover:shadow-lg focus:outline-none">{{ $t("backHome") }}</router-link>
+              <button type="button" @click="timer.resume(); modals.pause=false" 
+              class="px-6 py-3 mb-1 mr-1 text-xs font-bold uppercase transition-all duration-150 ease-linear border rounded shadow outline-none bg-primary text-light border-light md:text-base hover:shadow-lg focus:outline-none">
+                {{ $t("resume") }}
+              </button>
+          </template>
+        </Modal>
+        <Modal :open="modals.winner" >
+          <template v-slot:icon><CheckIcon class="w-6 h-6 text-red-600" aria-hidden="true" /></template>
+          <template v-slot:title>{{ $t("gameWin") }}</template>
+          <template v-slot:content>
             <div
-              v-for="(t, index) in winner"
+              v-for="(t, index) in winners"
               :key="index"
-              class="py-2 md:text-3xl"
+              class="py-2 md:text-3xl capitalize-first"
             >
               {{ $t("team") }} {{ t.name }}
               <strong v-if="index === 0">{{ $t("win") }}</strong>
@@ -56,12 +63,15 @@
               >
               !
             </div>
-            <div class="modal-action">
-              <router-link to="/home" class="btn btn-primary">{{ $t("backHome") }}</router-link>
-              <a @click="initGameLoop(); showWinner=false"  class="btn">{{ $t("restart") }}</a>
-            </div>
-          </div>
-        </div>
+          </template>
+          <template v-slot:buttons>
+              <router-link to="/home" @click="modals.winner=false" class="px-6 py-3 mb-1 mr-1 text-xs font-bold uppercase transition-all duration-150 ease-linear border rounded shadow outline-none bg-light text-primary border-primary md:text-base hover:shadow-lg focus:outline-none">{{ $t("backHome") }}</router-link>
+              <button type="button" @click="initGameLoop(); modals.winner=false" 
+              class="px-6 py-3 mb-1 mr-1 text-xs font-bold uppercase transition-all duration-150 ease-linear border rounded shadow outline-none bg-primary text-light border-light md:text-base hover:shadow-lg focus:outline-none">
+                {{ $t("restart") }}
+              </button>
+          </template>
+        </Modal>
         <div class="flex items-center justify-between pt-3 md:pt-10 safe-pt">
           <div>
             <p class="text-md md:text-xl text-primary">{{ $t("team") }} :</p>
@@ -111,7 +121,7 @@
         </div>
         <canvas
           ref="canvas"
-          class="fixed top-0 left-0 w-screen h-screen pointer-events-none z-60"
+          class="fixed top-0 left-0 z-50 w-screen h-screen pointer-events-none"
         />
       </div>
     </ion-content> 
@@ -120,7 +130,7 @@
 
 <script lang="ts">
 import { IonContent, IonPage, isPlatform } from "@ionic/vue";
-import { defineComponent, ref, watch } from "vue";
+import { defineComponent, onMounted, reactive, ref, watchEffect } from "vue";
 import { create as createConfetti } from "canvas-confetti";
 import { useRouter } from "vue-router";
 import { App } from "@capacitor/app";
@@ -129,6 +139,8 @@ import { NativeAudio } from "@capacitor-community/native-audio";
 import { useTimer } from "vue-timer-hook";
 import { useMainStore } from "../store/main";
 import { Team, useGameStore } from "../store/game";
+import Modal from "./Modal.vue";
+import { CheckIcon, ExclamationIcon } from '@heroicons/vue/outline'
 
 const audios: any = {};
 
@@ -151,8 +163,8 @@ if (isPlatform("capacitor")) {
   };
   KeepAwake.keepAwake();
 } else {
-  audios["tada"] = new Audio("assets/icon/tada.mp3");
-  audios["horn"] = new Audio("assets/icon/horn.mp3");
+  audios["tada"] = new Audio("assets/tada.mp3");
+  audios["horn"] = new Audio("assets/horn.mp3");
 }
 
 const makeSound = (name: string) => {
@@ -166,77 +178,83 @@ const makeSound = (name: string) => {
 export default defineComponent({
   name: "Game",
   components: {
+    CheckIcon,
+    ExclamationIcon,
+    Modal,
     IonContent,
     IonPage,
   },
-  data() {
-    return {
-      showWinner: false,
-      showPause: false,
-      showChangePlayer: false,
-      appStateChange: null as any,
-      confetti: null as any,
-      winner: [] as Team[],
-    };
-  },
-  mounted() {
-    watch(this.timer.isExpired, async (isExpired) => {
-        if(isExpired) {
-            makeSound("horn");
-            await this.game.nextTeam();
-            this.showChangePlayer = true;
-        }
-    });
-    this.setupCanvas();
+  ionViewDidEnter() {
     this.initGameLoop();
   },
-  methods: {
-    createTime() {
+  setup() {
+    const appStateChange = ref();
+    const winners = ref([] as Team[]);
+    const modals = reactive({
+      changePlayer: false,
+      winner: false,
+      pause: false,
+    });
+    const router = useRouter();
+    const game = useGameStore();
+    const main = useMainStore();
+    const timer = useTimer(0, false);
+    const canvas = ref<HTMLCanvasElement>();
+    let confetti: confetti.CreateTypes;
+
+    const createTime = () => {
       const expiryTimestamp = new Date();
       expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + 45);
       return expiryTimestamp.getTime();
-    },
-    nextRound() {
-      this.main.nextGuess();
-      this.timer.restart(this.createTime());
-    },
-    skipGuess() {
-      this.main.nextGuess(true);
-    },
-    validGuess() {
-      this.main.nextGuess(false, true);
-      this.addScore();
-    },
-    async addScore() {
-      if (this.game.team.score < 10) {
-        this.game.team.score += 1;
-        this.game.addScore();
-        if (this.game.team.score >= 10) {
-          this.timer.pause();
-          this.winner = this.createLadder();
-          this.showWinner = true;
-          // window.location.hash = '#winner';
-          makeSound("tada");
-          await this.game.save();
-          await this.playConfetti();
-        }
-      }
-    },
-    playConfetti() {
-      return this.confetti({
+    };
+
+    const nextRound = () => {
+      main.nextGuess();
+      timer.restart(createTime());
+    };
+
+    const skipGuess = () => {
+      main.nextGuess(true);
+    };
+
+    const createLadder = (): Team[] => {
+      const sorted = game.teams.sort((a: Team, b: Team) => {
+        return a.score > b.score ? -1 : 1;
+      });
+      return sorted;
+    };
+
+    const playConfetti = () => {
+      return confetti({
         angle: 90,
         spread: 60,
         particleCount: 350,
         ticks: 400,
       });
-    },
-    createLadder(): Team[] {
-      const sorted = this.game.teams.sort((a: Team, b: Team) => {
-        return a.score > b.score ? -1 : 1;
-      });
-      return sorted;
-    },
-    setupCanvas() {
+    };
+
+    const addScore = async () => {
+      if (game.team.score < 10) {
+        game.team.score += 1;
+        game.addScore();
+        if (game.team.score >= 10) {
+          timer.pause();
+          winners.value = createLadder();
+          modals.winner = true;
+          // window.location.hash = '#winner';
+          makeSound("tada");
+          await game.save();
+          await playConfetti();
+        }
+      }
+    };
+
+    const validGuess = () => {
+      main.nextGuess(false, true);
+      addScore();
+    };
+
+    const setupCanvas = () => {
       const options = {
         useWorker: true,
         resize: true,
@@ -244,34 +262,44 @@ export default defineComponent({
       if (isPlatform("android") && isPlatform("capacitor")) {
         options.resize = false;
       }
-      if (this.canvas) {
-        this.confetti = createConfetti(this.canvas, options);
+      if (canvas.value) {
+        confetti = createConfetti(canvas.value, options);
       }
-    },
-    initGameLoop() {
-      this.game.resetScore();
-      this.winner = [];
-      this.main.nextGuess();
-      this.game.nextTeam();
-      if (!this.appStateChange) {
-        this.appStateChange = App.addListener("appStateChange", (state) => {
+    };
+
+    const initGameLoop = () => {
+      game.resetScore();
+      winners.value = [];
+      main.nextGuess();
+      game.nextTeam();
+      modals.changePlayer = true;
+    }
+    
+    onMounted(() => {
+      watchEffect(async () => {
+        if(timer.isExpired.value) {
+            makeSound("horn");
+            await game.nextTeam();
+            modals.changePlayer = true;
+        }
+      })
+        appStateChange.value = App.addListener("appStateChange", (state) => {
           if (!state.isActive) {
-            this.timer.pause();
+            timer.pause();
           } else {
-            this.timer.resume();
+            timer.resume();
           }
         });
-      }
-      this.showChangePlayer = true;
-    },
-  },
-  async setup() {
-    const router = useRouter();
-    const game = useGameStore();
-    const main = useMainStore();
-    const timer = useTimer(0, false);
-    const canvas = ref<HTMLCanvasElement>();
+      setupCanvas();
+    });
+
     return {
+      winners,
+      initGameLoop,
+      validGuess,
+      skipGuess,
+      nextRound,
+      modals,
       router,
       canvas,
       main,

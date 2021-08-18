@@ -9,10 +9,11 @@
           src="assets/icon/icon.png"
           alt="logo"
         />
-        <div class="modal" :class="{ 'active': showLang }">
-          <div class="border-2 modal-box bg-secondary border-primary">
-            <h2 class="card-title">{{ $t("langTitle") }}</h2>
-            <div class="flex flex-col">
+        <Modal :open="modals.lang" >
+          <template v-slot:icon><TranslateIcon class="w-6 h-6 text-red-600" aria-hidden="true" /></template>
+          <template v-slot:title>{{ $t("langTitle") }}</template>
+          <template v-slot:content>
+              <div>
               <button
                 v-for="l in $i18n.availableLocales"
                 class="p-2 my-2 font-medium rounded-lg"
@@ -22,49 +23,54 @@
               >
                 {{ $t(l) }}
               </button>
-            </div>
-            <div class="modal-action">
-              <button @click="showLang = false" class="btn btn-primary">{{ $t("accept") }}</button>
-            </div>
-          </div>
-        </div>
-        <div class="modal" :class="{ 'active': showRules }">
-          <div class="border-2 modal-box bg-secondary border-primary">
-            <h2 class="card-title capitalize-first">{{ $t("ruleTitle") }}</h2>
-            <div>
-              <p className="my-1">
-                - {{ $t("rule010") }} <strong>{{ $t("rule011") }}</strong>
-                {{ $t("rule012") }}
-              </p>
-              <p className="my-1">
-                - {{ $t("rule020") }} <strong>{{ $t("rule021") }}</strong
-                >.
-              </p>
-              <p className="my-1">- {{ $t("rule030") }}</p>
-              <p className="my-1">- {{ $t("rule040") }}</p>
-              <p className="my-1">
-                <strong>{{ $t("rule050") }}:</strong> {{ $t("rule051") }}
-              </p>
-            </div>
-            <div class="modal-action">
-              <button @click="showRules = false" class="btn btn-primary">{{ $t("accept") }}</button>
-            </div>
-          </div>
-        </div>
-        <div class="modal" :class="{ 'active': showInequal }">
-          <div class="border-2 modal-box bg-secondary border-primary">
-            <h2 class="card-title capitalize-first">{{ $t("beCarefull") }}</h2>
-            <p
-              class="px-5 mt-4 mb-2 text-xl leading-relaxed text-center md:text-2xl"
-            >
-              {{ $t("inequal") }}<br/> <strong>{{ $t("fairRule") }}</strong>
-            </p>
-            <div class="modal-action">
-              <router-link to="/theme#" class="btn btn-primary">{{ $t("go") }}</router-link>
-              <button  @click="showInequal = false" class="btn">{{ $t("update") }} {{ $t("team") }}</button>
-            </div>
-          </div>
-        </div>
+              </div>
+          </template>
+          <template v-slot:buttons>
+              <button type="button" @click="modals.lang = false" 
+              class="px-6 py-3 mb-1 mr-1 text-xs font-bold uppercase transition-all duration-150 ease-linear border rounded shadow outline-none bg-primary text-light border-light md:text-base hover:shadow-lg focus:outline-none">
+                {{ $t("accept") }}
+              </button>
+          </template>
+        </Modal>
+        <Modal :open="modals.rules" >
+          <template v-slot:icon><ClipboardListIcon class="w-6 h-6 text-red-600" aria-hidden="true" /></template>
+          <template v-slot:title>{{ $t("ruleTitle") }}</template>
+          <template v-slot:content>
+            <div class="text-left">
+                <p className="my-1">
+                  - {{ $t("rule010") }} <strong>{{ $t("rule011") }}</strong>
+                  {{ $t("rule012") }}
+                </p>
+                <p className="my-1">
+                  - {{ $t("rule020") }} <strong>{{ $t("rule021") }}</strong
+                  >.
+                </p>
+                <p className="my-1">- {{ $t("rule030") }}</p>
+                <p className="my-1">- {{ $t("rule040") }}</p>
+                <p className="my-1 pt-5">
+                  <strong>{{ $t("rule050") }}:</strong> {{ $t("rule051") }}
+                </p>
+              </div>
+          </template>
+          <template v-slot:buttons>
+              <button type="button" @click="modals.rules = false" 
+              class="px-6 py-3 mb-1 mr-1 text-xs font-bold uppercase transition-all duration-150 ease-linear border rounded shadow outline-none bg-primary text-light border-light md:text-base hover:shadow-lg focus:outline-none">
+                {{ $t("accept") }}
+              </button>
+          </template>
+        </Modal>
+        <Modal :open="modals.inequal" >
+          <template v-slot:icon><ExclamationIcon class="w-6 h-6 text-red-600" aria-hidden="true" /></template>
+          <template v-slot:title>{{ $t("beCarefull") }}</template>
+          <template v-slot:content>{{ $t("inequal") }}<br/> <strong>{{ $t("fairRule") }}</strong></template>
+          <template v-slot:buttons>
+              <button @click="modals.inequal=false" class="px-6 py-3 mb-1 mr-1 text-xs font-bold uppercase transition-all duration-150 ease-linear border rounded shadow outline-none bg-light text-primary border-primary md:text-base hover:shadow-lg focus:outline-none">{{ $t("update") }} {{ $t("team") }}</button>
+              <router-link to="/theme" type="button" @click="modals.inequal=false" 
+              class="px-6 py-3 mb-1 mr-1 text-xs font-bold uppercase transition-all duration-150 ease-linear border rounded shadow outline-none bg-primary text-light border-light md:text-base hover:shadow-lg focus:outline-none">
+                {{ $t("go") }}
+              </router-link>
+          </template>
+        </Modal>
         <div class="flex overflow-x-scroll no_bar">
           <div
             v-for="(team, index) in game.teams"
@@ -147,7 +153,7 @@
           </button>
         </div>
         <div class="flex flex-colunm">
-          <button @click="showLang = true"
+          <button @click="modals.lang = true"
             v-if="$i18n.availableLocales.length > 1"
             class="mx-auto mt-6"
           >
@@ -156,7 +162,7 @@
               class="text-primary"
             ></vue-feather>
           </button>
-          <button @click="showRules = true" class="mx-auto mt-6">
+          <button @click="modals.rules = true" class="mx-auto mt-6">
             <vue-feather type="help-circle" class="text-primary"></vue-feather>
           </button>
           <button class="mx-auto mt-6" @click="openChat()">
@@ -174,51 +180,47 @@
 <script lang="ts">
 import { randomPlayer, randomTeam } from '@/store/game';
 import { IonContent, IonPage, IonInput } from "@ionic/vue";
-import { defineComponent } from "vue";
+import { defineComponent, reactive } from "vue";
 import { useRouter } from "vue-router";
 import { useGameStore } from "../store/game";
 import { useMainStore } from "../store/main";
+import Modal from "./Modal.vue";
+import { TranslateIcon, ClipboardListIcon, ExclamationIcon } from '@heroicons/vue/outline'
 
 export default defineComponent({
   name: "Home",
   components: {
+    Modal,
+    ClipboardListIcon,
+    ExclamationIcon,
+    TranslateIcon,
     IonContent,
     IonInput,
     IonPage,
   },
-  data() {
-    return {
-      showInequal: false,
-      showLang: false,
-      showRules: false,
-    }
-  },
-  methods: {
-    randomPlayer(index: number) {
-      return randomPlayer(index);
-    },
-    randomTeam(index: number) {
-      return randomTeam(index);
-    },
-    openChat() {
-      window.$crisp.push(["do", "chat:show"]);
-      window.$crisp.push(["do", "chat:open"]);
-    },
-    saveTeam() {
-      this.game.calcMode();
-      if (this.game.mode === 1) {
-        this.showInequal = true;
-      } else {
-        console.log('equal team');
-        this.router.push("/theme");        
-      }
-    },
-  },
   setup() {
+    const modals = reactive({
+      inequal: false,
+      lang: false,
+      rules: false,
+    });
     const router = useRouter();
     const game = useGameStore();
     const main = useMainStore();
-    return { router, game, main };
+    const openChat = () => {
+      window.$crisp.push(["do", "chat:show"]);
+      window.$crisp.push(["do", "chat:open"]);
+    };
+    const saveTeam = () => {
+      game.calcMode();
+      if (game.mode === 1) {
+        modals.inequal = true;
+      } else {
+        console.log('equal team');
+        router.push("/theme");        
+      }
+    };
+    return { router, game, main, modals, randomPlayer, randomTeam, openChat, saveTeam };
   },
 });
 </script>

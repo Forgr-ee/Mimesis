@@ -7,8 +7,12 @@ import { defineStore } from 'pinia'
 import { useAuthStore } from './auth'
 import { useMainStore } from './main'
 import { v4 as uuidv4 } from "uuid";
-import { uniqueNamesGenerator, colors, animals } from "unique-names-generator";
 import FIREBASE_CONFIG from "./.env.firebase";
+// import Fakerator from "fakerator";
+import faker from 'faker';
+
+// const fakerator = Fakerator("fr-FR");
+faker.locale = 'fr';
 
 // initialize firebase, this is directly from the firebase documentation
 // regarding getting started for the web
@@ -16,24 +20,14 @@ if (firebase.apps.length === 0) {
   firebase.initializeApp(FIREBASE_CONFIG);
 }
 
-export const randomName = () =>
-  uniqueNamesGenerator({
-    dictionaries: [animals],
-    separator: " ",
-  });
-
-  export const randomPlayer = (index: number): Player => ({
+export const randomPlayer = (index: number): Player => ({
   index,
   score: 0,
-  name: randomName(),
+  name: faker.name.firstName(),
   uuid: uuidv4(),
 });
 
-export const randomTeamName = () =>
-  uniqueNamesGenerator({
-    dictionaries: [colors],
-    separator: " ",
-  });
+export const randomTeamName = () => faker.commerce.color()
 
 export interface Player {
   index: number;

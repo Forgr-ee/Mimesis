@@ -73,24 +73,22 @@ export default defineComponent({
     IonContent,
     IonPage,
   },
-  methods: {
-    restore() {
-      console.log("restore");
-    },
-    async saveTheme(theme: string) {
-      this.game.theme = theme;
-      // this.router.push({path: "/game", hash: "#changeplayer"});
-      this.router.push({path: "/game"});
-    },
-    isIos() {
-      return isPlatform("ios");
-    },
-  },
   async setup() {
     const main = useMainStore();
     const game = useGameStore();
     const router = useRouter();
-    return { router, main, game };
+    const isIos = () => {
+      return isPlatform("ios");
+    };
+    const saveTheme = async(theme: string) => {
+      game.theme = theme;
+      router.push({path: "/game"});
+    };
+    const restore = () => {
+      console.log("restore");
+
+    }
+    return { router, main, game, isIos, saveTheme, restore };
   },
 });
 </script>
