@@ -8,10 +8,8 @@ import { useAuthStore } from './auth'
 import { useMainStore } from './main'
 import { v4 as uuidv4 } from "uuid";
 import FIREBASE_CONFIG from "./.env.firebase";
-// import Fakerator from "fakerator";
 import faker from 'faker';
 
-// const fakerator = Fakerator("fr-FR");
 faker.locale = 'fr';
 
 // initialize firebase, this is directly from the firebase documentation
