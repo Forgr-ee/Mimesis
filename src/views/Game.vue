@@ -198,7 +198,7 @@ export default defineComponent({
     const router = useRouter();
     const game = useGameStore();
     const main = useMainStore();
-    const timer = useTimer(0, false);
+    const timer = useTimer(1, false);
     const canvas = ref<HTMLCanvasElement>();
     let confetti: confetti.CreateTypes;
 
