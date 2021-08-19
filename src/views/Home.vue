@@ -7,6 +7,7 @@
         <img
           class="object-contain h-20 xsheight:h-32"
           src="assets/icon/icon.png"
+          @click="main.reset();game.reset()"
           alt="logo"
         />
         <div class="mx-auto text-4xl font-semibold leading-6 text-gray-50 capitalize-first">{{ $t("createTeam") }}</div>
@@ -117,7 +118,7 @@
                 <button
                   className="text-primary"
                   type="button"
-                  @click="team.players.push(randomPlayer(team.players.length))"
+                  @click="team.players.push(randomPlayer())"
                 >
                   <vue-feather type="plus-circle"></vue-feather>
                 </button>
@@ -135,7 +136,7 @@
           </div>
           <div className="fixed w-full px-5 text-right">
             <button
-              @click="game.teams.push(randomTeam(game.teams.length))"
+              @click="game.teams.push(randomTeam())"
               class="w-12 h-12 rounded-full xs:mt-5 bg-primary text-light active:bg-secondary"
             >
               <vue-feather type="plus"></vue-feather>

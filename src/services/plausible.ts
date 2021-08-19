@@ -5,6 +5,7 @@ declare global {
 }
 
 export const initPlausible = () => {
+  try {
     const s = document.createElement("script");
     s.src = "https://plausible.io/js/plausible.js";
     s.async = true;
@@ -14,4 +15,7 @@ export const initPlausible = () => {
       s.src = "https://plausible.io/js/plausible.local.js";
     }
     document.getElementsByTagName("head")[0].appendChild(s);
+  } catch (e) {
+    console.error('Plausible cannot be init', e);
+  }
   };

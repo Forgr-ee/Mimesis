@@ -18,8 +18,7 @@ if (firebase.apps.length === 0) {
   firebase.initializeApp(FIREBASE_CONFIG);
 }
 
-export const randomPlayer = (index: number): Player => ({
-  index,
+export const randomPlayer = (): Player => ({
   score: 0,
   name: faker.name.firstName(),
   uuid: uuidv4(),
@@ -28,14 +27,14 @@ export const randomPlayer = (index: number): Player => ({
 export const randomTeamName = () => faker.commerce.color()
 
 export interface Player {
-  index: number;
+  // index: number;
   uuid: string;
   score: number;
   name: string;
 }
 
 export interface Team {
-  index: number;
+  // index: number;
   uuid: string;
   score: number;
   name: string;
@@ -43,11 +42,10 @@ export interface Team {
   pastPlayers: string[];
 }
 
-export const randomTeam = (index: number): Team => ({
-  index,
+export const randomTeam = (): Team => ({
   uuid: uuidv4(),
   name: randomTeamName(),
-  players: [randomPlayer(0), randomPlayer(1)],
+  players: [randomPlayer(), randomPlayer()],
   pastPlayers: [],
   score: 0,
 });
@@ -71,6 +69,11 @@ export type Guess = {
     title: string;
 };
 
+// function find by uuid in array
+const findByUUID = (list: any[], uuid: string) => {
+  return list.find(item => item.uuid === uuid);
+};
+
 const filterListByUUID = (list: any[], past: string[]) => {
   const filtered = list.filter((n) => {
     const index = past.findIndex((b) => {
@@ -92,9 +95,9 @@ export const useGameStore = defineStore('game', {
       createdAt: new Date().toISOString(),
       mode: 0,
       theme: 'improbable',
-      teams: [randomTeam(0), randomTeam(1)] as Team[],
-      teamIndex: -1,
-      playerIndex: 0,
+      teams: [randomTeam(), randomTeam()] as Team[],
+      teamUUID: "-1",
+      playerUUID: "-1",
       pastTeams: [] as string[],
       pastGuess: [] as string[],
       skipGuess: [] as string[],
@@ -102,7 +105,7 @@ export const useGameStore = defineStore('game', {
   }),
   getters: {
     ready(): boolean {
-      return this.teamIndex !== -1;
+      return this.teamUUID !== "-1";
     },
     nextTeams(): Team[] {
       return filterListByUUID(this.teams, this.pastTeams) as Team[];
@@ -111,25 +114,28 @@ export const useGameStore = defineStore('game', {
       return filterListByUUID(this.team.players, this.team.pastPlayers) as Player[];
     },
     team(): Team {
-      return this.teams[this.teamIndex];
+      return findByUUID(this.teams, this.teamUUID);
+    },
+    player(): Player {
+      return findByUUID(this.team.players, this.playerUUID);
     },
     teamScore(): number {
       try {
-        return this.teams[this.teamIndex].score;
+        return this.team.score;
       } catch (err) {
         return 0
       }     
     },
     teamName(): string {
       try {
-        return this.teams[this.teamIndex].name;
+        return this.team.name;
       } catch (err) {
         return ''
       }     
     },
     playerName(): string {
       try {
-        return this.teams[this.teamIndex].players[this.playerIndex].name;
+        return this.player.name;
       } catch (err) {
         return ''
       }
@@ -139,8 +145,8 @@ export const useGameStore = defineStore('game', {
     nextPlayer(setLoading = true) {
       this.loading = setLoading ? true : this.loading;
       let didReset = false;
-      if (this.team.players.length === this.team.pastPlayers.length && this.playerIndex !== -1) {
-        this.team.pastPlayers = [this.team.players[this.playerIndex].uuid];
+      if (this.team && this.team.players.length === this.team.pastPlayers.length) {
+        this.team.pastPlayers = [this.player.uuid];
         didReset = true;
       }
       let plr = null;
@@ -149,7 +155,7 @@ export const useGameStore = defineStore('game', {
       } else {
         plr = this.nextPlayers.pop() as Player;
       }
-      this.playerIndex = plr.index;
+      this.playerUUID = plr.uuid;
       if (didReset) {
         this.team.pastPlayers = [plr.uuid];
       } else {
@@ -158,12 +164,12 @@ export const useGameStore = defineStore('game', {
       this.loading = setLoading ? false : this.loading;
     },
     addScore() {
-      this.team.players[this.playerIndex].score++;
+      this.player.score++;
     },
     nextTeam() {
       this.loading = true;
       let didReset = false;
-      if (this.pastTeams.length === this.teams.length) {
+      if (this.team && this.pastTeams.length === this.teams.length) {
         this.pastTeams = [this.team.uuid];
         didReset = true;
       }
@@ -173,7 +179,7 @@ export const useGameStore = defineStore('game', {
       } else {
         newTeam = this.nextTeams.pop() as Team;
       }
-      this.teamIndex = newTeam.index;
+      this.teamUUID = newTeam.uuid;
       if (didReset) {
         this.pastTeams = [newTeam.uuid];
       } else {
@@ -197,8 +203,8 @@ export const useGameStore = defineStore('game', {
       this.foundGuess = [];
     },
     resetIndex() {
-      this.playerIndex = 0;
-      this.teamIndex = -1;
+      this.playerUUID = "-1";
+      this.teamUUID = "-1";
     },
     reset() {
       this.resetScore();

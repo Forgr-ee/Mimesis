@@ -5,8 +5,10 @@ declare global {
 }
 
 export const initCrisp = () => {
+  try {
     if (isPlatform("capacitor")) {
       window.$crisp = [
+        ["safe", true],
         ["do", "chat:hide"],
         [
           "on",
@@ -31,4 +33,7 @@ export const initCrisp = () => {
     s.src = "https://client.crisp.chat/l.js";
     s.async = true;
     document.getElementsByTagName("head")[0].appendChild(s);
-  };
+  } catch (e) {
+    console.error('Plausible cannot be init', e);
+  }
+};

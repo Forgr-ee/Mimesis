@@ -12,6 +12,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@capacitor-community/keep-awake": "^2.1.0",
     "@capacitor-community/native-audio": "^3.0.0",
     "@capacitor/android": "^3.1.2",
     "@capacitor/app": "^1.0.2",
@@ -43,7 +44,7 @@
     "vue": "^3.2.0",
     "vue-i18n": "^9.1.7",
     "vue-router": "^4.0.0-0",
-    "vue-timer-hook": "0.0.11"
+    "vue-timer-hook": "0.0.18"
   },
   "devDependencies": {
     "@capacitor/cli": "3.1.2",

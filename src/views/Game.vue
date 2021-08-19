@@ -196,6 +196,7 @@ export default defineComponent({
     const game = useGameStore();
     const main = useMainStore();
     const timer = useTimer(1, false);
+    timer.pause(); // TODO: fix for timer starting alone
     const canvas = ref<HTMLCanvasElement>();
     let confetti: confetti.CreateTypes;
 
@@ -265,7 +266,7 @@ export default defineComponent({
     };
 
     const initGameLoop = () => {
-      game.resetScore();
+      game.reset();
       winners.value = [];
       main.nextGuess();
       game.nextTeam();
@@ -275,6 +276,7 @@ export default defineComponent({
       initGameLoop();
     });
     onMounted(() => {
+      console.log('game.$state', game.$state);
       watchEffect(async () => {
         if(timer.isExpired.value) {
             makeSound("horn");
