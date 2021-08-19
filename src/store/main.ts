@@ -122,7 +122,7 @@ export const useMainStore = defineStore('main', {
         const snapshot = await firebase.firestore()
           .collection('mode')
           .where('active', '==', true)
-          .orderBy('order', 'desc').get();
+          .orderBy('order', 'asc').get();
         snapshot.docs.map(doc => {
             const theme = doc.data() as Theme;
             value.push(theme);

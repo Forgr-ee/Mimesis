@@ -9,6 +9,7 @@
           src="assets/icon/icon.png"
           alt="logo"
         />
+        <div class="mx-auto text-4xl font-semibold leading-6 text-gray-50 capitalize-first">{{ $t("createTeam") }}</div>
         <Modal :open="modals.lang" >
           <template v-slot:icon><TranslateIcon class="w-6 h-6 text-red-600" aria-hidden="true" /></template>
           <template v-slot:title>{{ $t("langTitle") }}</template>
