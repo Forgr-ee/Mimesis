@@ -44,7 +44,7 @@
     "vue": "^3.2.0",
     "vue-i18n": "^9.1.7",
     "vue-router": "^4.0.0-0",
-    "vue-timer-hook": "0.0.18"
+    "vue-timer-hook": "^0.0.20"
   },
   "devDependencies": {
     "@capacitor/cli": "3.1.2",
