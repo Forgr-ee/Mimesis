@@ -36,7 +36,7 @@ const app = createApp(App)
   .use(IonicVue)
   .use(pinia);
 
-app.component(VueFeather.name, VueFeather);
+app.component(VueFeather.name || 'VueFeather', VueFeather);
 
 const initI18n = async () => {
     const main = useMainStore();
