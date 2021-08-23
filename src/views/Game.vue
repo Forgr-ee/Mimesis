@@ -4,12 +4,12 @@
       <div
         class="relative flex flex-col justify-between h-screen p-5 pt-10 xs:p-10 bg-secondary"
       >
-        <button
+        <a
           @click="timer.pause(); modals.pause = true"
           class="top-0 h-8 mt-3 rounded-full md:h-14 md:border md:border-primary safe-mt bg-secondary text-primary w-14 left-3"
         >
           <vue-feather type="arrow-left" class="md:mx-auto"></vue-feather>
-        </button>
+        </a>
         <img
           class="absolute left-0 right-0 hidden object-contain h-20 m-auto xs:block"
           src="assets/icon/icon.png"
@@ -105,24 +105,20 @@
           <div
             class="flex justify-between mt-10 text-4xl md:justify-around md:text-5xl text-primary"
           >
-            <button
+            <a
               class="px-4 py-2 border-2 md:py-3 md:px-5 bg-light border-primary rounded-xl"
               @click="skipGuess()"
             >
               {{ $t("pass") }}
-            </button>
-            <button
+            </a>
+            <a
               class="px-4 py-2 border-2 md:py-3 md:px-5 bg-light border-primary rounded-xl"
               @click="validGuess()"
             >
               {{ $t("validate") }}
-            </button>
+            </a>
           </div>
         </div>
-        <canvas
-          ref="canvas"
-          class="fixed top-0 left-0 z-50 w-screen h-screen pointer-events-none"
-        />
       </div>
     </ion-content> 
   </ion-page>
@@ -139,7 +135,7 @@ import { NativeAudio } from "@capacitor-community/native-audio";
 import { useTimer } from "vue-timer-hook";
 import { useMainStore } from "../store/main";
 import { Team, useGameStore } from "../store/game";
-import Modal from "./Modal.vue";
+import Modal from "../components/Modal.vue";
 import { CheckIcon, ExclamationIcon } from '@heroicons/vue/outline'
 
 const audios: any = {};
@@ -197,7 +193,6 @@ export default defineComponent({
     const main = useMainStore();
     const timer = useTimer(1, false);
     timer.pause(); // TODO: fix for timer starting alone
-    const canvas = ref<HTMLCanvasElement>();
     let confetti: confetti.CreateTypes;
 
     const createTime = () => {
@@ -260,9 +255,7 @@ export default defineComponent({
       if (isPlatform("android") && isPlatform("capacitor")) {
         options.resize = false;
       }
-      if (canvas.value) {
-        confetti = createConfetti(canvas.value, options);
-      }
+      confetti = createConfetti(null as unknown as HTMLCanvasElement, options);
     };
 
     const initGameLoop = () => {
@@ -302,7 +295,6 @@ export default defineComponent({
       nextRound,
       modals,
       router,
-      canvas,
       main,
       timer,
       game,

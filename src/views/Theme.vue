@@ -1,14 +1,15 @@
 <template>
   <ion-page>
+    <ion-header>
+      <ion-toolbar color="secondary">
+        <ion-buttons slot="start">
+          <ion-button color="primary" @click="router.push('/')"><vue-feather type="arrow-left" class="md:mx-auto"></vue-feather></ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
     <ion-content :fullscreen="true">
-      <div class="flex flex-col justify-center h-screen p-10 bg-secondary">
-        <button
-          @click="router.push('/')"
-          class="absolute top-0 h-8 mt-3 rounded-full md:h-14 md:border md:border-primary safe-mt bg-secondary text-primary w-14 left-3"
-        >
-          <vue-feather type="arrow-left" class="md:mx-auto"></vue-feather>
-        </button>
-        <h1 class="my-5 text-5xl font-bold text-center xs:my-10 text-primary">
+      <div class="flex flex-col justify-start h-screen p-10 bg-secondary">
+        <h1 class="mb-5 text-5xl font-bold text-center xs:mb-10 text-primary">
           {{ $t("themes") }}
         </h1>
         <h3
@@ -92,3 +93,8 @@ export default defineComponent({
   },
 });
 </script>
+<style scoped>
+ion-toolbar {
+  --border-style: none;
+}
+</style>

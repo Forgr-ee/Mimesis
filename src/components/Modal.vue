@@ -1,67 +1,101 @@
 <template>
-  <ion-header>
-    <ion-toolbar>
-      <ion-title>{{ title }}</ion-title>
-    </ion-toolbar>
-  </ion-header>
-  <ion-content class="ion-padding">
-    <div
-      class="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none"
+  <TransitionRoot as="template" :show="open">
+    <Dialog
+      as="div"
+      auto-reopen="true"
+      class="fixed inset-0 z-10 overflow-y-auto"
+      @close="$emit('close')"
     >
-      <div class="relative w-auto max-w-3xl mx-auto my-6">
-        <div
-          class="relative flex flex-col border-2 rounded-lg shadow-lg outline-none border-primary text-primary bg-secondary focus:outline-none"
+      <div
+        class="flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0"
+      >
+        <TransitionChild
+          as="template"
+          enter="ease-out duration-300"
+          enter-from="opacity-0"
+          enter-to="opacity-100"
+          leave="ease-in duration-200"
+          leave-from="opacity-100"
+          leave-to="opacity-0"
+        >
+          <DialogOverlay
+            class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"
+          />
+        </TransitionChild>
+
+        <!-- This element is to trick the browser into centering the modal contents. -->
+        <span
+          class="hidden sm:inline-block sm:align-middle sm:h-screen"
+          aria-hidden="true"
+          >&#8203;</span
+        >
+        <TransitionChild
+          as="template"
+          enter="ease-out duration-300"
+          enter-from="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+          enter-to="opacity-100 translate-y-0 sm:scale-100"
+          leave="ease-in duration-200"
+          leave-from="opacity-100 translate-y-0 sm:scale-100"
+          leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
         >
           <div
-            class="flex items-start justify-between p-5 border-b rounded-t border-primary"
+            class="inline-block px-4 pt-5 pb-4 overflow-hidden align-bottom transition-all transform border-2 rounded-lg shadow-xl border-primary text-primary bg-secondary sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6"
           >
-            <h3 class="text-4xl font-semibold animate-bounce">
-              {{ head }}
-            </h3>
-          </div>
-          <div class="relative flex-auto p-6">
-            {{ body }}
-          </div>
-          <div
-            class="flex items-center justify-end p-6 border-t rounded-b border-primary"
-          >
-            <button
-              v-if="left"
-              class="px-6 py-3 mb-1 mr-1 text-xs font-bold uppercase transition-all duration-150 ease-linear border rounded shadow outline-none bg-primary text-light border-light md:text-base hover:shadow-lg focus:outline-none"
-              type="button"
-              @click="leftClick()"
+            <div>
+              <div
+                class="flex items-center justify-center w-12 h-12 mx-auto bg-green-100 rounded-full"
+              >
+                <slot name="icon"></slot>
+              </div>
+              <div class="mt-3 text-center sm:mt-5">
+                <DialogTitle
+                    as="h3"
+                    class="text-4xl font-semibold text-gray-50 capitalize-first"
+                >
+                    <slot name="title"></slot>
+                    </DialogTitle>
+                    <div class="mt-2">
+                        <p class="pt-5 text-sm text-yellow-200">
+                            <slot name="content"></slot>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div
+                class="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense"
             >
-              {{ leftText }}
-            </button>
-            <button
-              v-if="right"
-              class="px-6 py-3 mb-1 mr-1 text-xs font-bold uppercase transition-all duration-150 ease-linear border rounded shadow outline-none bg-light text-primary border-primary md:text-base hover:shadow-lg focus:outline-none"
-              type="button"
-              @click="rightClick()"
-            >
-              {{ rightText }}
-            </button>
+                <slot name="buttons"></slot>
+            </div>
           </div>
-        </div>
+        </TransitionChild>
       </div>
-    </div>
-  </ion-content>
+    </Dialog>
+  </TransitionRoot>
 </template>
 
-<script>
-import { IonContent, IonHeader, IonTitle, IonToolbar } from "@ionic/vue";
+<script lang="ts">
+import {
+  Dialog,
+  DialogOverlay,
+  DialogTitle,
+  TransitionChild,
+  TransitionRoot,
+} from "@headlessui/vue";
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: "Modal",
+  components: {
+    Dialog,
+    DialogOverlay,
+    DialogTitle,
+    TransitionChild,
+    TransitionRoot,
+  },
   props: {
-    title: { type: String, default: "Super Modal" },
+    open: {
+      type: Boolean,
+      require: true,
+    },
   },
-  data() {
-    return {
-      content: "Content",
-    };
-  },
-  components: { IonContent, IonHeader, IonTitle, IonToolbar },
 });
 </script>
