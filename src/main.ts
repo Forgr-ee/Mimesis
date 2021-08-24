@@ -2,7 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router';
 import { IonicVue } from '@ionic/vue';
-import VueFeather from 'vue-feather';
+// import VueFeather from 'vue-feather';
 import { createI18n } from 'vue-i18n';
 import { useAuthStore } from "./store/auth";
 import { useMainStore } from "./store/main";
@@ -36,7 +36,7 @@ const app = createApp(App)
   .use(IonicVue)
   .use(pinia);
 
-app.component(VueFeather.name || 'VueFeather', VueFeather);
+// app.component(VueFeather.name || 'VueFeather', VueFeather);
 
 const initI18n = async () => {
     const main = useMainStore();

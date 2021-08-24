@@ -227,7 +227,7 @@ export const useGameStore = defineStore('game', {
       }
       const refGames = firebase.firestore().collection(`users/${authStore?.user?.uid}/games`);
       const refUser = firebase.firestore().collection(`users`).doc(authStore?.user?.uid);
-      await refGames.add({lang: mainStore.lang, ...this.$state});
+      await refGames.add({lang: mainStore.lang, ...this.$state, doneAt: new Date().toISOString()});
       const gamesRef = await refGames.get();
       const games = gamesRef.docs.length;
       if (isPlatform("capacitor") && games > 2) {

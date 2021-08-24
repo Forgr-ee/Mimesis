@@ -1,15 +1,15 @@
 <template>
   <ion-page>
-    <ion-content :fullscreen="true">
+    <ion-header>
+      <ion-toolbar color="secondary">
+          <ArrowLeftIcon @click="timer.pause(); modals.pause = true" class="w-1/12 text-primary"/>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content :fullscreen="true" :scroll-y="false">
       <div
-        class="relative flex flex-col justify-between h-screen p-5 pt-10 xs:p-10 bg-secondary"
+        class="relative flex flex-col justify-between h-screen px-5 pb-10 xs:px-10 bg-secondary"
       >
-        <a
-          @click="timer.pause(); modals.pause = true"
-          class="top-0 h-8 mt-3 rounded-full md:h-14 md:border md:border-primary safe-mt bg-secondary text-primary w-14 left-3"
-        >
-          <vue-feather type="arrow-left" class="md:mx-auto"></vue-feather>
-        </a>
+      
         <img
           class="absolute left-0 right-0 hidden object-contain h-20 m-auto xs:block"
           src="assets/icon/icon.png"
@@ -136,7 +136,7 @@ import { useTimer } from "vue-timer-hook";
 import { useMainStore } from "../store/main";
 import { Team, useGameStore } from "../store/game";
 import Modal from "../components/Modal.vue";
-import { CheckIcon, ExclamationIcon } from '@heroicons/vue/outline'
+import { CheckIcon, ExclamationIcon, ArrowLeftIcon } from '@heroicons/vue/outline'
 
 const audios: any = {};
 
@@ -175,6 +175,7 @@ export default defineComponent({
   name: "Game",
   components: {
     CheckIcon,
+    ArrowLeftIcon,
     ExclamationIcon,
     Modal,
     IonContent,
@@ -192,7 +193,6 @@ export default defineComponent({
     const game = useGameStore();
     const main = useMainStore();
     const timer = useTimer(1, false);
-    timer.pause(); // TODO: fix for timer starting alone
     let confetti: confetti.CreateTypes;
 
     const createTime = () => {
@@ -302,3 +302,8 @@ export default defineComponent({
   },
 });
 </script>
+<style scoped>
+ion-toolbar {
+  --border-style: none;
+}
+</style>

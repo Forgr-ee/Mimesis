@@ -2,12 +2,10 @@
   <ion-page>
     <ion-header>
       <ion-toolbar color="secondary">
-        <ion-buttons slot="start">
-          <ion-button color="primary" @click="router.push('/')"><vue-feather type="arrow-left" class="md:mx-auto"></vue-feather></ion-button>
-        </ion-buttons>
+          <ArrowLeftIcon @click="router.push('/')" class="w-1/12 text-primary"/>
       </ion-toolbar>
     </ion-header>
-    <ion-content :fullscreen="true">
+    <ion-content :fullscreen="true" :scroll-y="false" >
       <div class="flex flex-col justify-start h-screen p-10 bg-secondary">
         <h1 class="mb-5 text-5xl font-bold text-center xs:mb-10 text-primary">
           {{ $t("themes") }}
@@ -38,7 +36,7 @@
                 v-if="theme.status === 'paid'"
                 class="absolute inset-0 z-20 flex items-center justify-center bg-black text-light bg-opacity-40 rounded-l-xl"
               >
-                <vue-feather type="lock"></vue-feather>
+                <LockClosedIcon/>
               </div>
               <img
                 alt="test"
@@ -67,12 +65,16 @@ import { defineComponent } from "vue";
 import { useRouter } from "vue-router";
 import { useMainStore } from "../store/main";
 import { useGameStore } from "../store/game";
+// import { LockClosedIcon } from '@heroicons/vue/outline'
+import { LockClosedIcon, ArrowLeftIcon } from '@heroicons/vue/outline'
 
 export default defineComponent({
   name: "Theme",
   components: {
     IonContent,
     IonPage,
+    LockClosedIcon,
+    ArrowLeftIcon,
   },
   async setup() {
     const main = useMainStore();

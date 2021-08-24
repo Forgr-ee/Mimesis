@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <ion-content :fullscreen="true">
+    <ion-content :fullscreen="true" :scroll-y="false">
       <div
         class="flex flex-col justify-center h-screen bg-secondary item-center"
       >
@@ -113,14 +113,13 @@
             :key="team.uuid"
             class="flex-none w-10/12 md:w-1/2"
             :class="{
-              ' ml-8 md:ml-0': index === 0,
-              'pr-3 md:m-0 ': index + 1 === game.teams.length,
+              'ml-8 md:ml-0': index === 0,
             }"
           >
             <div
               class="relative flex flex-col items-center pt-10 pb-4 mx-3 my-5 border xs:my-10 md:mx-10 border-primary bg-light rounded-xl"
             >
-              <p class="absolute top-0 left-0 p-2 text-primary">
+              <p class="absolute top-0 left-0 p-3 text-primary">
                 {{ $t("team") }} {{ index + 1 }}
               </p>
               <ion-input
@@ -130,7 +129,7 @@
               <div class="mb-5 overflow-y-scroll no_bar h-28 xs:h-48">
                 <div class="px-3">
                   <div
-                    v-for="(player, index) in team.players"
+                    v-for="(player, idx) in team.players"
                     class="flex items-center"
                     :key="player.uuid"
                   >
@@ -140,41 +139,50 @@
                     ></ion-input>
                     <button
                       v-if="team.players.length > 2"
-                      class="text-primary"
+                      class="w-2/12 p-2 text-primary"
                       type="button"
-                      @click="team.players.splice(index, 1)"
+                      @click="team.players.splice(idx, 1)"
                     >
-                      <vue-feather type="trash"></vue-feather>
+                      <TrashIcon/>
                     </button>
                   </div>
                 </div>
                 <div class="flex flex-col items-end pr-3">
                   <a
-                    class="text-primary"
+                    class="w-2/12 p-2 text-primary"
                     type="button"
                     @click="team.players.push(randomPlayer())"
                   >
-                    <vue-feather class="pt-1" type="plus-circle"></vue-feather>
+                    <PlusCircleIcon/>
                   </a>
                 </div>
               </div>
               <button
+                class="w-2/12 p-2 text-primary"
                 v-if="game.teams.length > 2"
-                class="text-primary"
                 type="button"
                 @click="game.teams.splice(index, 1)"
               >
-                <vue-feather type="trash"></vue-feather>
+                <TrashIcon/>
               </button>
             </div>
           </div>
-          <div class="fixed w-full px-5 text-right">
-            <button
-              @click="game.teams.push(randomTeam())"
-              class="w-12 h-12 rounded-full xs:mt-5 bg-primary text-light active:bg-secondary"
+          <div
+            class="flex w-10/12 md:w-1/2 md:m-0"
+          >
+            <div
+              class="relative flex items-center mx-3 my-5 border xs:my-10 md:mx-10 border-primary bg-light rounded-xl"
             >
-              <vue-feather class="pt-1" type="plus"></vue-feather>
-            </button>
+                <div class="w-12 h-12 p-2 m-2 rounded-full bg-primary active:bg-secondary">
+                  <a
+                    class="w-6/12"
+                    type="button"
+                    @click="game.teams.push(randomTeam())"
+                  >
+                    <PlusIcon class="text-light"/>
+                  </a>
+              </div>
+            </div>
           </div>
         </div>
         <div class="flex justify-center text-5xl text-primary">
@@ -183,7 +191,7 @@
             class="w-1/2 px-5 py-2 overflow-hidden border-2 xs:mt-2 md:w-1/3 bg-light border-primary rounded-xl"
           >
             <div class="relative flex items-center justify-center">
-              <vue-feather type="play"></vue-feather>
+              <PlayIcon/>
               <p>{{ $t("play") }}</p>
             </div>
           </a>
@@ -192,18 +200,15 @@
           <button
             @click="modals.lang = true"
             v-if="$i18n.availableLocales.length > 1"
-            class="mx-auto mt-6"
+            class="w-1/3 mx-auto mt-6"
           >
-            <vue-feather type="flag" class="text-primary"></vue-feather>
+            <FlagIcon class="w-1/3 mx-auto text-primary"/>
           </button>
-          <button @click="modals.rules = true" class="mx-auto mt-6">
-            <vue-feather type="help-circle" class="text-primary"></vue-feather>
+          <button @click="modals.rules = true" class="w-1/3 mx-auto mt-6">
+            <InformationCircleIcon class="w-1/3 mx-auto text-primary"/>
           </button>
-          <button class="mx-auto mt-6" @click="openChat()">
-            <vue-feather
-              type="message-circle"
-              class="text-primary"
-            ></vue-feather>
+          <button class="w-1/3 mx-auto mt-6" @click="openChat()">
+            <ChatIcon class="w-1/3 mx-auto text-primary"/>
           </button>
         </div>
       </div>
@@ -221,6 +226,13 @@ import { useMainStore } from "../store/main";
 import Modal from "../components/Modal.vue";
 import {
   TranslateIcon,
+  PlayIcon,
+  PlusCircleIcon,
+  PlusIcon,
+  FlagIcon,
+  TrashIcon,
+  InformationCircleIcon,
+  ChatIcon,
   ClipboardListIcon,
   ExclamationIcon,
 } from "@heroicons/vue/outline";
@@ -230,8 +242,15 @@ export default defineComponent({
   components: {
     Modal,
     ClipboardListIcon,
+    PlayIcon,
+    PlusCircleIcon,
+    PlusIcon,
     ExclamationIcon,
+    TrashIcon,
+    ChatIcon,
+    InformationCircleIcon,
     TranslateIcon,
+    FlagIcon,
     IonContent,
     IonInput,
     IonPage,
