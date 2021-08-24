@@ -7,35 +7,31 @@
         <img
           class="object-contain h-20 xsheight:h-32"
           src="assets/icon/icon.png"
-          @click="
-            main.reset();
-            game.reset();
-          "
           alt="logo"
         />
         <div
           class="mx-auto text-4xl font-semibold leading-6 text-center text-gray-50 capitalize-first"
         >
-          {{ $t("createTeam") }}
+          {{ t("createTeam") }}
         </div>
         <Modal :open="modals.lang">
           <template v-slot:icon
             ><TranslateIcon class="w-6 h-6 text-red-600" aria-hidden="true"
           /></template>
-          <template v-slot:title>{{ $t("langTitle") }}</template>
+          <template v-slot:title>{{ t("langTitle") }}</template>
           <template v-slot:content>
             <div>
               <button
-                v-for="l in $i18n.availableLocales"
+                v-for="l in availableLocales"
                 class="p-2 my-2 font-medium rounded-lg"
-                :class="{ 'bg-primary': $i18n.locale === l }"
+                :class="{ 'bg-primary': locale === l }"
                 :key="`locale-${l}`"
                 @click="
-                  $i18n.locale = l;
+                  locale = l;
                   main.lang = l;
                 "
               >
-                {{ $t(l) }}
+                {{ t(l) }}
               </button>
             </div>
           </template>
@@ -45,7 +41,7 @@
               @click="modals.lang = false"
               class="px-6 py-3 mb-1 mr-1 text-xs font-bold uppercase transition-all duration-150 ease-linear border rounded shadow outline-none bg-primary text-light border-light md:text-base hover:shadow-lg focus:outline-none"
             >
-              {{ $t("accept") }}
+              {{ t("accept") }}
             </button>
           </template>
         </Modal>
@@ -53,21 +49,21 @@
           <template v-slot:icon
             ><ClipboardListIcon class="w-6 h-6 text-red-600" aria-hidden="true"
           /></template>
-          <template v-slot:title>{{ $t("ruleTitle") }}</template>
+          <template v-slot:title>{{ t("ruleTitle") }}</template>
           <template v-slot:content>
             <div class="text-left">
               <p class="my-1">
-                - {{ $t("rule010") }} <strong>{{ $t("rule011") }}</strong>
-                {{ $t("rule012") }}
+                - {{ t("rule010") }} <strong>{{ t("rule011") }}</strong>
+                {{ t("rule012") }}
               </p>
               <p class="my-1">
-                - {{ $t("rule020") }} <strong>{{ $t("rule021") }}</strong
+                - {{ t("rule020") }} <strong>{{ t("rule021") }}</strong
                 >.
               </p>
-              <p class="my-1">- {{ $t("rule030") }}</p>
-              <p class="my-1">- {{ $t("rule040") }}</p>
+              <p class="my-1">- {{ t("rule030") }}</p>
+              <p class="my-1">- {{ t("rule040") }}</p>
               <p class="pt-5 my-1">
-                <strong>{{ $t("rule050") }}:</strong> {{ $t("rule051") }}
+                <strong>{{ t("rule050") }}:</strong> {{ t("rule051") }}
               </p>
             </div>
           </template>
@@ -77,7 +73,7 @@
               @click="modals.rules = false"
               class="px-6 py-3 mb-1 mr-1 text-xs font-bold uppercase transition-all duration-150 ease-linear border rounded shadow outline-none bg-primary text-light border-light md:text-base hover:shadow-lg focus:outline-none"
             >
-              {{ $t("accept") }}
+              {{ t("accept") }}
             </button>
           </template>
         </Modal>
@@ -85,17 +81,17 @@
           <template v-slot:icon
             ><ExclamationIcon class="w-6 h-6 text-red-600" aria-hidden="true"
           /></template>
-          <template v-slot:title>{{ $t("beCarefull") }}</template>
+          <template v-slot:title>{{ t("beCarefull") }}</template>
           <template v-slot:content
-            >{{ $t("inequal") }}<br />
-            <strong>{{ $t("fairRule") }}</strong></template
+            >{{ t("inequal") }}<br />
+            <strong>{{ t("fairRule") }}</strong></template
           >
           <template v-slot:buttons>
             <button
               @click="modals.inequal = false"
               class="px-6 py-3 mb-1 mr-1 text-xs font-bold uppercase transition-all duration-150 ease-linear border rounded shadow outline-none bg-light text-primary border-primary md:text-base hover:shadow-lg focus:outline-none"
             >
-              {{ $t("update") }} {{ $t("team") }}
+              {{ t("update") }} {{ t("team") }}
             </button>
             <router-link
               to="/theme"
@@ -103,7 +99,7 @@
               @click="modals.inequal = false"
               class="px-6 py-3 mb-1 mr-1 text-xs font-bold uppercase transition-all duration-150 ease-linear border rounded shadow outline-none bg-primary text-light border-light md:text-base hover:shadow-lg focus:outline-none"
             >
-              {{ $t("go") }}
+              {{ t("go") }}
             </router-link>
           </template>
         </Modal>
@@ -120,7 +116,7 @@
               class="relative flex flex-col items-center pt-10 pb-4 mx-3 my-5 border border-primary bg-light rounded-xl"
             >
               <p class="absolute top-0 left-0 p-3 text-primary">
-                {{ $t("team") }} {{ index + 1 }}
+                {{ t("team") }} {{ index + 1 }}
               </p>
               <ion-input
                 class="w-2/3 mx-auto mb-6 text-5xl text-center border-b-2 bg-light border-primary text-primary"
@@ -171,16 +167,10 @@
             class="flex-none w-3/12 md:w-1/12"
           >
             <div
-              class="relative flex flex-col items-center w-full mx-3 my-10 border h-60 xs:h-80 md:h-96 md:mx-5 border-primary bg-light rounded-xl"
+              class="relative flex items-center justify-center w-full mx-3 my-10 border h-60 xs:h-80 md:h-96 md:mx-5 border-primary bg-light rounded-xl"
             >
-                <div class="w-12 h-12 p-2 m-2 mx-auto my-auto rounded-full bg-primary active:bg-secondary">
-                  <a
-                    class="w-6/12"
-                    type="button"
-                    @click="game.teams.push(randomTeam())"
-                  >
-                    <PlusIcon class="w-8 h-8 text-light"/>
-                  </a>
+                <div @click="game.teams.push(randomTeam())" class="flex items-center justify-center w-12 h-12 rounded-full cursor-pointer bg-primary active:bg-secondary">
+                  <PlusIcon class="w-8 h-8 text-light"/>
               </div>
             </div>
           </div>
@@ -192,23 +182,26 @@
           >
             <div class="relative flex items-center justify-center">
               <PlayIcon class="w-12 h-12" />
-              <p>{{ $t("play") }}</p>
+              <p>{{ t("play") }}</p>
             </div>
           </a>
         </div>
         <div class="flex flex-colunm">
           <button
             @click="modals.lang = true"
-            v-if="$i18n.availableLocales.length > 1"
-            class="w-1/3 mx-auto mt-6"
+            v-if="availableLocales.length > 1"
+            class="w-1/4 mx-auto mt-6"
           >
             <FlagIcon class="w-12 h-12 mx-auto text-primary"/>
           </button>
-          <button @click="modals.rules = true" class="w-1/3 mx-auto mt-6">
+          <button @click="modals.rules = true" class="w-1/4 mx-auto mt-6">
             <InformationCircleIcon class="w-12 h-12 mx-auto text-primary"/>
           </button>
-          <button class="w-1/3 mx-auto mt-6" @click="openChat()">
+          <button class="w-1/4 mx-auto mt-6" @click="openChat()">
             <ChatIcon class="w-12 h-12 mx-auto text-primary"/>
+          </button>
+          <button class="w-1/4 mx-auto mt-6" @click="openChat()">
+            <DotsVerticalIcon class="w-12 h-12 mx-auto text-primary"/>
           </button>
         </div>
       </div>
@@ -216,10 +209,11 @@
   </ion-page>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n';
 import { randomPlayer, randomTeam } from "@/store/game";
 import { IonContent, IonPage, IonInput } from "@ionic/vue";
-import { defineComponent, reactive } from "vue";
+import { reactive } from "vue";
 import { useRouter } from "vue-router";
 import { useGameStore } from "../store/game";
 import { useMainStore } from "../store/main";
@@ -232,60 +226,32 @@ import {
   FlagIcon,
   TrashIcon,
   InformationCircleIcon,
+  DotsVerticalIcon,
   ChatIcon,
   ClipboardListIcon,
   ExclamationIcon,
 } from "@heroicons/vue/outline";
 
-export default defineComponent({
-  name: "Home",
-  components: {
-    Modal,
-    ClipboardListIcon,
-    PlayIcon,
-    PlusCircleIcon,
-    PlusIcon,
-    ExclamationIcon,
-    TrashIcon,
-    ChatIcon,
-    InformationCircleIcon,
-    TranslateIcon,
-    FlagIcon,
-    IonContent,
-    IonInput,
-    IonPage,
-  },
-  setup() {
-    const modals = reactive({
-      inequal: false,
-      lang: false,
-      rules: false,
-    });
-    const router = useRouter();
-    const game = useGameStore();
-    const main = useMainStore();
-    const openChat = () => {
-      window.$crisp.push(["do", "chat:show"]);
-      window.$crisp.push(["do", "chat:open"]);
-    };
-    const saveTeam = () => {
-      game.calcMode();
-      if (game.mode === 1) {
-        modals.inequal = true;
-      } else {
-        router.push("/theme");
-      }
-    };
-    return {
-      router,
-      game,
-      main,
-      modals,
-      randomPlayer,
-      randomTeam,
-      openChat,
-      saveTeam,
-    };
-  },
+const { t, availableLocales, locale } = useI18n();
+
+const modals = reactive({
+  inequal: false,
+  lang: false,
+  rules: false,
 });
+const router = useRouter();
+const game = useGameStore();
+const main = useMainStore();
+const openChat = () => {
+  window.$crisp.push(["do", "chat:show"]);
+  window.$crisp.push(["do", "chat:open"]);
+};
+const saveTeam = () => {
+  game.calcMode();
+  if (game.mode === 1) {
+    modals.inequal = true;
+  } else {
+    router.push("/theme");
+  }
+};
 </script>

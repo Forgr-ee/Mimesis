@@ -43,7 +43,7 @@ const initI18n = async () => {
     await main.initialize();
     const i18n = createI18n({
     legacy: false,
-    globalInjection: true,
+    globalInjection: false,
     locale: 'fr',
     fallbackLocale: 'fr',
     messages: main.langsMessages,

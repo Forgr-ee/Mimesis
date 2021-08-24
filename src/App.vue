@@ -16,34 +16,11 @@
   </ion-app>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { IonApp, IonRouterOutlet } from '@ionic/vue';
-import { defineComponent } from 'vue';
-import { useRouter } from 'vue-router';
 import { useAuthStore } from "./store/auth";
 import { useMainStore } from "./store/main";
 
-export default defineComponent({
-  name: 'App',
-  components: {
-    IonApp,
-    IonRouterOutlet
-  },
-  mounted() {
-    // restore path state
-    // if (this.router.path !== this.main.currentPath) {
-    // window.location.href = this.main.currentPath;
-    // }
-  },
-  setup() {
-    const auth = useAuthStore();
-    const main = useMainStore();
-    const router = useRouter();
-    return {
-      auth,
-      main,
-      router,
-    };
-  },
-});
+const auth = useAuthStore();
+const main = useMainStore();
 </script>

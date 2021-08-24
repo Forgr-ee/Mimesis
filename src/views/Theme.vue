@@ -8,19 +8,19 @@
     <ion-content :fullscreen="true" :scroll-y="false" >
       <div class="flex flex-col justify-start h-screen p-10 bg-secondary">
         <h1 class="mb-5 text-5xl font-bold text-center xs:mb-10 text-primary">
-          {{ $t("themes") }}
+          {{ t("themes") }}
         </h1>
         <h3
           v-if="main.offline && main.themes.length > 0"
           class="mx-5 mb-5 font-bold text-center text-1xl text-primary"
         >
-          {{ $t("noInternet") }}
+          {{ t("noInternet") }}
         </h3>
         <h3
           v-if="main.offline && main.themes.length === 0"
           class="mx-5 mb-5 font-bold text-center text-1xl text-primary"
         >
-          {{ $t("noInternetFirst") }}
+          {{ t("noInternetFirst") }}
         </h3>
         <div class="overflow-x-scroll no_bar md:w-1/2 md:mx-auto">
           <div
@@ -44,56 +44,47 @@
                 :src="theme.icon"
               />
             </div>
-            <p class="xs:text-2xl text-primary">{{theme[$i18n.locale]}}</p>
+            <p class="xs:text-2xl text-primary">{{langName(theme)}}</p>
           </div>
         </div>
         <button
-          v-if="isIos('ios')"
+          v-if="isIos()"
           class="px-3 py-1 mx-auto mt-1 text-sm border xs:mt-2 md:w-1/4 bg-light border-primary text-primary rounded-xl"
           @click="restore()"
         >
-          {{ $t("restore") }}
+          {{ t("restore") }}
         </button>
       </div>
     </ion-content>
   </ion-page>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n';
 import { IonContent, IonPage, isPlatform } from "@ionic/vue";
-import { defineComponent } from "vue";
 import { useRouter } from "vue-router";
-import { useMainStore } from "../store/main";
+import { Theme, useMainStore } from "../store/main";
 import { useGameStore } from "../store/game";
-// import { LockClosedIcon } from '@heroicons/vue/outline'
 import { LockClosedIcon, ArrowLeftIcon } from '@heroicons/vue/outline'
 
-export default defineComponent({
-  name: "Theme",
-  components: {
-    IonContent,
-    IonPage,
-    LockClosedIcon,
-    ArrowLeftIcon,
-  },
-  async setup() {
-    const main = useMainStore();
-    const game = useGameStore();
-    const router = useRouter();
-    const isIos = () => {
-      return isPlatform("ios");
-    };
-    const saveTheme = async(theme: string) => {
-      game.theme = theme;
-      router.push({path: "/game"});
-    };
-    const restore = () => {
-      console.log("restore");
+const { t, locale } = useI18n();
+const main = useMainStore();
+const game = useGameStore();
+const router = useRouter();
+const isIos = () => {
+  return isPlatform("ios");
+};
+const langName = (theme: Theme): string => {
+  return (theme as any)[locale.value]
+}
+const saveTheme = async(theme: string) => {
+  game.theme = theme;
+  router.push({path: "/game"});
+};
+const restore = () => {
+  console.log("restore");
 
-    }
-    return { router, main, game, isIos, saveTheme, restore };
-  },
-});
+}
 </script>
 <style scoped>
 ion-toolbar {
