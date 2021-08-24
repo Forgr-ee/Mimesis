@@ -111,13 +111,13 @@
           <div
             v-for="(team, index) in game.teams"
             :key="team.uuid"
-            class="flex-none w-10/12 md:w-1/2"
+            class="flex-none w-10/12 md:w-5/12"
             :class="{
-              'ml-8 md:ml-0': index === 0,
+              'ml-8': index === 0,
             }"
           >
             <div
-              class="relative flex flex-col items-center pt-10 pb-4 mx-3 my-5 border xs:my-10 md:mx-10 border-primary bg-light rounded-xl"
+              class="relative flex flex-col items-center pt-10 pb-4 mx-3 my-5 border border-primary bg-light rounded-xl"
             >
               <p class="absolute top-0 left-0 p-3 text-primary">
                 {{ $t("team") }} {{ index + 1 }}
@@ -126,7 +126,7 @@
                 class="w-2/3 mx-auto mb-6 text-5xl text-center border-b-2 bg-light border-primary text-primary"
                 :value="team.name"
               ></ion-input>
-              <div class="mb-5 overflow-y-scroll no_bar h-28 xs:h-48">
+              <div class="mb-5 overflow-y-scroll no_bar h-28 xs:h-48 md:h-60">
                 <div class="px-3">
                   <div
                     v-for="(player, idx) in team.players"
@@ -143,7 +143,7 @@
                       type="button"
                       @click="team.players.splice(idx, 1)"
                     >
-                      <TrashIcon/>
+                      <TrashIcon class="w-8 h-8"/>
                     </button>
                   </div>
                 </div>
@@ -153,7 +153,7 @@
                     type="button"
                     @click="team.players.push(randomPlayer())"
                   >
-                    <PlusCircleIcon/>
+                    <PlusCircleIcon class="w-8 h-8"/>
                   </a>
                 </div>
               </div>
@@ -163,23 +163,23 @@
                 type="button"
                 @click="game.teams.splice(index, 1)"
               >
-                <TrashIcon/>
+                <TrashIcon class="w-8 h-8"/>
               </button>
             </div>
           </div>
           <div
-            class="flex w-10/12 md:w-1/2 md:m-0"
+            class="flex-none w-3/12 md:w-1/12"
           >
             <div
-              class="relative flex items-center mx-3 my-5 border xs:my-10 md:mx-10 border-primary bg-light rounded-xl"
+              class="relative flex flex-col items-center w-full mx-3 my-10 border h-60 xs:h-80 md:h-96 md:mx-5 border-primary bg-light rounded-xl"
             >
-                <div class="w-12 h-12 p-2 m-2 rounded-full bg-primary active:bg-secondary">
+                <div class="w-12 h-12 p-2 m-2 mx-auto my-auto rounded-full bg-primary active:bg-secondary">
                   <a
                     class="w-6/12"
                     type="button"
                     @click="game.teams.push(randomTeam())"
                   >
-                    <PlusIcon class="text-light"/>
+                    <PlusIcon class="w-8 h-8 text-light"/>
                   </a>
               </div>
             </div>
@@ -191,7 +191,7 @@
             class="w-1/2 px-5 py-2 overflow-hidden border-2 xs:mt-2 md:w-1/3 bg-light border-primary rounded-xl"
           >
             <div class="relative flex items-center justify-center">
-              <PlayIcon/>
+              <PlayIcon class="w-12 h-12" />
               <p>{{ $t("play") }}</p>
             </div>
           </a>
@@ -202,13 +202,13 @@
             v-if="$i18n.availableLocales.length > 1"
             class="w-1/3 mx-auto mt-6"
           >
-            <FlagIcon class="w-1/3 mx-auto text-primary"/>
+            <FlagIcon class="w-12 h-12 mx-auto text-primary"/>
           </button>
           <button @click="modals.rules = true" class="w-1/3 mx-auto mt-6">
-            <InformationCircleIcon class="w-1/3 mx-auto text-primary"/>
+            <InformationCircleIcon class="w-12 h-12 mx-auto text-primary"/>
           </button>
           <button class="w-1/3 mx-auto mt-6" @click="openChat()">
-            <ChatIcon class="w-1/3 mx-auto text-primary"/>
+            <ChatIcon class="w-12 h-12 mx-auto text-primary"/>
           </button>
         </div>
       </div>

@@ -1,8 +1,8 @@
 <template>
   <ion-page>
-    <ion-header>
+    <ion-header mode="ios">
       <ion-toolbar color="secondary">
-          <ArrowLeftIcon @click="timer.pause(); modals.pause = true" class="w-1/12 text-primary"/>
+          <ArrowLeftIcon @click="timer.pause(); modals.pause = true" class="w-1/12 pr-3 text-primary"/>
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true" :scroll-y="false">

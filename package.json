@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "sync": "npx cap syc",
     "resources": "cordova-res --skip-config --copy",
     "serve": "vue-cli-service serve",
     "serve:prod": "vue-cli-service serve --mode production",

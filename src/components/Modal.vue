@@ -62,7 +62,7 @@
                 </div>
             </div>
             <div
-                class="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense"
+                class="grid mt-5 justify-items-center"
             >
                 <slot name="buttons"></slot>
             </div>

@@ -1,8 +1,8 @@
 <template>
   <ion-page>
-    <ion-header>
+    <ion-header mode="ios">
       <ion-toolbar color="secondary">
-          <ArrowLeftIcon @click="router.push('/')" class="w-1/12 text-primary"/>
+          <ArrowLeftIcon @click="router.push('/')" class="w-1/12 mr-3 text-primary"/>
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true" :scroll-y="false" >
@@ -26,7 +26,7 @@
           <div
             v-for="theme in main.themes"
             :key="theme.id"
-            class="flex items-center my-1 border cursor-pointer border-primary bg-light rounded-xl"
+            class="flex items-center my-1 border cursor-pointer xs:my-3 md:my-5 border-primary bg-light rounded-xl"
             @click="saveTheme(theme.id)"
           >
             <div
