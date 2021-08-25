@@ -200,7 +200,7 @@
           <button class="w-1/4 mx-auto mt-6" @click="openChat()">
             <ChatIcon class="w-12 h-12 mx-auto text-primary"/>
           </button>
-          <button class="w-1/4 mx-auto mt-6" @click="openChat()">
+          <button class="w-1/4 mx-auto mt-6" @click="presentActionSheet()">
             <DotsVerticalIcon class="w-12 h-12 mx-auto text-primary"/>
           </button>
         </div>
@@ -212,7 +212,8 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
 import { randomPlayer, randomTeam } from "@/store/game";
-import { IonContent, IonPage, IonInput } from "@ionic/vue";
+import { RateApp } from "capacitor-rate-app";
+import { IonContent, isPlatform, IonPage, IonInput, actionSheetController } from "@ionic/vue";
 import { reactive } from "vue";
 import { useRouter } from "vue-router";
 import { useGameStore } from "../store/game";
@@ -254,4 +255,40 @@ const saveTeam = () => {
     router.push("/theme");
   }
 };
+const presentActionSheet = async () => {
+      const actionSheet = await actionSheetController
+        .create({
+          header: t('more'),
+          buttons: [
+            {
+              text: t('openSource'),
+              handler: () => {
+                window.open("https://github.com/Forgr-ee/Mimesis", "_blank");
+              },
+            },
+            {
+              text: t('rate'),
+              handler: () => {
+                if (isPlatform("capacitor")) {
+                    RateApp.requestReview();
+                }
+              },
+            },
+            {
+              text: `${t('by')} Martin Donadieu`,
+              handler: () => {
+                window.open("https://martindonadieu.com", "_blank");
+              },
+            },
+            {
+              text: t('close'),
+              role: 'cancel',
+            },
+          ],
+        });
+      await actionSheet.present();
+
+      const { role } = await actionSheet.onDidDismiss();
+      console.log('onDidDismiss resolved with role', role);
+    }
 </script>
