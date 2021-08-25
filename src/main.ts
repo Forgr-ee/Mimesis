@@ -34,7 +34,7 @@ initPlausible();
 
 const app = createApp(App)
   .use(IonicVue)
-  .use(pinia);
+  .use(pinia());
 
 // app.component(VueFeather.name || 'VueFeather', VueFeather);
 

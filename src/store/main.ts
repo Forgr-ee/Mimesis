@@ -36,13 +36,13 @@ type Message = {
   [key: string]: string;
 }
 
-type LangMessage = Message & {
+export type LangMessage = Message & {
   id: string;
   active: boolean;
 }
 
 
-type LangMessages = {
+export type LangMessages = {
   [key: string]: LangMessage;
 }
 
@@ -56,7 +56,7 @@ export const useMainStore = defineStore('main', {
   state: () => ({
       error: false,
       loading: false,
-      lastUpdate: '',
+      lastUpdate: new Date().toISOString(),
       initialized: false,
       currentPath: '/home',
       themes: [] as Theme[],
@@ -81,9 +81,13 @@ export const useMainStore = defineStore('main', {
     needUpdate(): boolean {
       const lastUpdate = new Date(this.lastUpdate);
       const today = new Date();
-      return lastUpdate.getDate() !== today.getDate() &&
-        lastUpdate.getMonth() !== today.getMonth() &&
+      return lastUpdate.getDate() !== today.getDate() ||
+        lastUpdate.getMonth() !== today.getMonth() ||
         lastUpdate.getFullYear() !== today.getFullYear()
+    },
+    nextGuesses(): Guess[] {
+      const game = useGameStore();
+      return filterListByTitle(this.guesses, game.pastGuess)
     }
   },
   actions: {
@@ -150,24 +154,20 @@ export const useMainStore = defineStore('main', {
       }
       this.langsMessages = value;
     },
-    nextGuess(skip = false, found = false) {
+    nextGuess(found = false) {
       const game = useGameStore();
-      if (game.pastGuess.length === this.guess.length) {
-        game.pastGuess = [];
+      if (this.guess) {
+        if (found) {
+          game.foundGuess.push(this.guess);
+        } else {
+          game.skipGuess.push(this.guess);
+        }   
       }
-      const result = randomSelect(
-        filterListByTitle(this.guesses, game.pastGuess)
-      );
-      if (!skip) {
-        game.pastGuess.push(result.title);
+      if (game.pastGuess.length === this.guesses.length) {
+        game.skipGuess = game.skipGuess.length > 1 ? [game.skipGuess[game.skipGuess.length - 1]] : [];
       }
-      if (skip) {
-        game.skipGuess.push(result.title);
-      }
-      if (found) {
-        game.foundGuess.push(result.title);
-      }
-      this.guess = result.title;
+      const result = randomSelect(this.nextGuesses)
+      this.guess = result ? result.title : 'Error';
     },
   }
 })

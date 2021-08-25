@@ -248,7 +248,6 @@ const openChat = () => {
   window.$crisp.push(["do", "chat:open"]);
 };
 const saveTeam = () => {
-  game.calcMode();
   if (game.mode === 1) {
     modals.inequal = true;
   } else {

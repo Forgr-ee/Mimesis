@@ -8,7 +8,7 @@
     "serve": "vue-cli-service serve",
     "serve:prod": "vue-cli-service serve --mode production",
     "build": "vue-cli-service build",
-    "test:unit": "vue-cli-service test:unit",
+    "test:unit": "vue-cli-service test:unit --coverage",
     "test:e2e": "vue-cli-service test:e2e",
     "lint": "vue-cli-service lint"
   },
@@ -69,6 +69,8 @@
     "cordova-res": "^0.15.3",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^7.0.0-0",
+    "firebase-mock": "^2.3.2",
+    "jest-mock-random": "^1.1.1",
     "typescript": "^4.3.5",
     "vue-jest": "^5.0.0-0"
   },

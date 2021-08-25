@@ -52,7 +52,7 @@
           <template v-slot:title>{{ t("gameWin") }}</template>
           <template v-slot:content>
             <div
-              v-for="(w, index) in winners"
+              v-for="(w, index) in game.ladder"
               :key="index"
               class="py-2 md:text-3xl capitalize-first"
             >
@@ -174,7 +174,6 @@ const makeSound = (name: string) => {
 };
 
 const appStateChange = ref();
-const winners = ref<Team[]>([]);
 const modals = reactive({
   changePlayer: false,
   winner: false,
@@ -191,20 +190,13 @@ const createTime = () => {
   return expiryTimestamp.getTime();
 };
 
-const nextRound = () => {
-  main.nextGuess();
-  timer.restart(createTime());
-};
-
 const skipGuess = () => {
-  main.nextGuess(true);
+  main.nextGuess();
 };
 
-const createLadder = (): Team[] => {
-  const sorted = game.teams.sort((a: Team, b: Team) => {
-    return a.score > b.score ? -1 : 1;
-  });
-  return sorted;
+const nextRound = () => {
+  skipGuess();
+  timer.restart(createTime());
 };
 
 const playConfetti = () => {
@@ -216,25 +208,9 @@ const playConfetti = () => {
   });
 };
 
-const addScore = async () => {
-  if (game.team.score < 10) {
-    game.team.score += 1;
-    game.addScore();
-    if (game.team.score >= 10) {
-      timer.pause();
-      winners.value = createLadder();
-      modals.winner = true;
-      // window.location.hash = '#winner';
-      makeSound("tada");
-      await game.save();
-      await playConfetti();
-    }
-  }
-};
-
 const validGuess = () => {
-  main.nextGuess(false, true);
-  addScore();
+  main.nextGuess(true);
+  game.addScore();
 };
 
 const setupCanvas = () => {
@@ -250,7 +226,6 @@ const setupCanvas = () => {
 
 const initGameLoop = () => {
   game.reset();
-  winners.value = [];
   main.nextGuess();
   game.nextTeam();
   modals.changePlayer = true;
@@ -269,13 +244,22 @@ onMounted(() => {
         modals.changePlayer = true;
     }
   })
-    appStateChange.value = App.addListener("appStateChange", (state) => {
-      if (!state.isActive) {
-        timer.pause();
-      } else {
-        timer.resume();
-      }
-    });
+  watchEffect(async () => {
+    if (game.winned) {
+      await playConfetti();
+      timer.pause();
+      modals.winner = true;
+      makeSound("tada");
+      await game.save();
+    }
+  })
+  appStateChange.value = App.addListener("appStateChange", (state) => {
+    if (!state.isActive) {
+      timer.pause();
+    } else {
+      timer.resume();
+    }
+  });
   setupCanvas();
 });
 </script>
