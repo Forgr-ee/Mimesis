@@ -66,7 +66,7 @@
           </template>
           <template v-slot:buttons>
               <router-link to="/home" @click="modals.winner=false" class="px-6 py-3 mb-1 mr-1 text-xs font-bold uppercase transition-all duration-150 ease-linear border rounded shadow outline-none bg-light text-primary border-primary md:text-base hover:shadow-lg focus:outline-none">{{ t("backHome") }}</router-link>
-              <button type="button" @click="initGameLoop(); modals.winner=false" 
+              <button type="button" @click="initGameLoop()" 
               class="px-6 py-3 mb-1 mr-1 text-xs font-bold uppercase transition-all duration-150 ease-linear border rounded shadow outline-none bg-primary text-light border-light md:text-base hover:shadow-lg focus:outline-none">
                 {{ t("restart") }}
               </button>
@@ -126,7 +126,7 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
-import { IonContent, IonPage, isPlatform, IonToolbar, IonHeader, onIonViewWillEnter } from "@ionic/vue";
+import { IonContent, IonPage, isPlatform, IonToolbar, IonHeader } from "@ionic/vue";
 import { onMounted, reactive, ref, watchEffect } from "vue";
 import { create as createConfetti } from "canvas-confetti";
 import { App } from "@capacitor/app";
@@ -175,7 +175,7 @@ const makeSound = (name: string) => {
 
 const appStateChange = ref();
 const modals = reactive({
-  changePlayer: false,
+  changePlayer: true,
   winner: false,
   pause: false,
 });
@@ -229,14 +229,10 @@ const initGameLoop = () => {
   main.nextGuess();
   game.nextTeam();
   modals.changePlayer = true;
+  modals.winner = false;
 }
 
-onIonViewWillEnter(() => {
-  initGameLoop();
-});
-
 onMounted(() => {
-  console.log('game.$state', game.$state);
   watchEffect(async () => {
     if(timer.isExpired.value) {
         makeSound("horn");

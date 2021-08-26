@@ -1,17 +1,11 @@
 import { randomSelect } from '@/services/random';
-import firebase from "firebase/app";
-// Required for side-effects
-import "firebase/firestore";
 import { defineStore } from 'pinia'
 
-import FIREBASE_CONFIG from "./.env.firebase";
+import { collection, getFirestore, getDocs, orderBy, query, where } from "firebase/firestore"; 
+import { firebaseApp } from '../services/firebase';
 import { useGameStore } from './game';
 
-// initialize firebase, this is directly from the firebase documentation
-// regarding getting started for the web
-if (firebase.apps.length === 0) {
-  firebase.initializeApp(FIREBASE_CONFIG);
-}
+const db = getFirestore(firebaseApp);
 
 export type Theme = {
     active: boolean;
@@ -56,7 +50,7 @@ export const useMainStore = defineStore('main', {
   state: () => ({
       error: false,
       loading: false,
-      lastUpdate: new Date().toISOString(),
+      lastUpdate: '',
       initialized: false,
       currentPath: '/home',
       themes: [] as Theme[],
@@ -97,7 +91,7 @@ export const useMainStore = defineStore('main', {
       this.loading = true;
       try {
         await Promise.all([this.initLangMessages(), this.initThemes()]);
-        this.initialized = true;
+        this.initialized = true;        
       } catch (err) {
         this.error = err;
         console.log('err initialise', err);
@@ -108,7 +102,7 @@ export const useMainStore = defineStore('main', {
     async initGuessCategory(category: string) {
       const value: Guess[] = [];
       try {
-        const snapshot = await firebase.firestore().collection(`mode/${category}/${this.lang}`).get();
+        const snapshot = await getDocs(collection(db, `mode/${category}/${this.lang}`));
         snapshot.docs.map(doc => {
             const data = doc.data() as Guess;
             value.push(data);
@@ -123,10 +117,7 @@ export const useMainStore = defineStore('main', {
       const value: Theme[] = [];
       const listProm: Promise<void>[] = [];
       try {
-        const snapshot = await firebase.firestore()
-          .collection('mode')
-          .where('active', '==', true)
-          .orderBy('order', 'asc').get();
+        const snapshot = await getDocs(query(collection(db, 'mode'), where('active', '==', true), orderBy('order', 'asc')));
         snapshot.docs.map(doc => {
             const theme = doc.data() as Theme;
             value.push(theme);
@@ -142,8 +133,7 @@ export const useMainStore = defineStore('main', {
     async initLangMessages() {
       const value: LangMessages =  {} as LangMessages;
       try {
-        const snapshot = await firebase.firestore().collection('langs')
-        .where('active', '==', true).get();
+        const snapshot = await getDocs(query(collection(db, 'langs'), where('active', '==', true)));
         snapshot.docs.map(doc => {
             const data = doc.data() as LangMessage;
             value[data.id] = data;

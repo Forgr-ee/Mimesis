@@ -1,22 +1,17 @@
 import { isPlatform } from "@ionic/vue";
 import { RateApp } from "capacitor-rate-app";
-import firebase from "firebase/app";
-// Required for side-effects
-import "firebase/firestore";
 import { defineStore } from 'pinia'
 import { useAuthStore } from './auth'
 import { useMainStore } from './main'
 import { v4 as uuidv4 } from "uuid";
-import FIREBASE_CONFIG from "./.env.firebase";
 import faker from 'faker';
 
 faker.locale = 'fr';
 
-// initialize firebase, this is directly from the firebase documentation
-// regarding getting started for the web
-if (firebase.apps.length === 0) {
-  firebase.initializeApp(FIREBASE_CONFIG);
-}
+import { addDoc, collection, getFirestore, getDocs, setDoc, doc } from "firebase/firestore"; 
+import { firebaseApp } from '../services/firebase';
+
+const db = getFirestore(firebaseApp);
 
 export const randomPlayer = (): Player => ({
   score: 0,
@@ -235,17 +230,20 @@ export const useGameStore = defineStore('game', {
       if (!authStore.initialized) {
         await authStore.authCheck();
       }
-      const refGames = firebase.firestore().collection(`users/${authStore?.user?.uid}/games`);
-      const refUser = firebase.firestore().collection(`users`).doc(authStore?.user?.uid);
-      await refGames.add({lang: mainStore.lang, ...this.$state, doneAt: new Date().toISOString()});
-      const gamesRef = await refGames.get();
-      const games = gamesRef.docs.length;
-      if (isPlatform("capacitor") && games > 2) {
+      try {
+        
+        const colGames = await collection(db, `users/${authStore?.user?.uid}/games`)
+        const refUser = doc(db, 'users', authStore?.user?.uid as string);
+        await addDoc(colGames, {lang: mainStore.lang, ...this.$state, doneAt: new Date().toISOString()});
+        const querySnapshot = await getDocs(colGames)
+        const games = querySnapshot.docs.length;
+        if (isPlatform("capacitor") && games > 2) {
           RateApp.requestReview();
+        }
+        await setDoc(refUser, {games})
+      } catch (e) {
+        console.error("Error adding document: ", e);
       }
-      await refUser.set({
-          games,
-      });
     }
   }
 })

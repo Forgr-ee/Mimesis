@@ -1,25 +1,22 @@
-import firebase from "firebase/app";
-// Required for side-effects
-import "firebase/firestore";
 import { defineStore } from 'pinia'
-import "firebase/auth";
 
-import FIREBASE_CONFIG from "./.env.firebase";
+import { getAuth, onAuthStateChanged, signOut, signInAnonymously, User } from "firebase/auth";
+import { firebaseApp } from '../services/firebase';
 
-if (firebase.apps.length === 0) {
-  firebase.initializeApp(FIREBASE_CONFIG);
-}
+const auth = getAuth(firebaseApp);
 
-const promAuth = (): Promise<firebase.User | null>  => {
-  return new Promise<firebase.User | null>((resolve, reject) => {
-      firebase.auth().onAuthStateChanged(resolve, reject);
+
+const promAuth = (): Promise<User | null>  => {
+  return new Promise<User | null>((resolve, reject) => {
+      // firebase.auth().onAuthStateChanged(resolve, reject);
+      onAuthStateChanged(auth, resolve, reject);
   });
 }
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
       userId: '',
-      user: {} as null | firebase.User,
+      user: {} as null | User,
       loading: true,
       error: null as Error | null,
       initialized: false,
@@ -28,10 +25,8 @@ export const useAuthStore = defineStore('auth', {
     async login() {
       this.loading = true;
       try {
-        await firebase
-        .auth()
-        .signInAnonymously();
-        this.user = firebase.auth().currentUser;
+        const userCredential = await signInAnonymously(auth);
+        this.user = userCredential.user;
         this.error = null;
         this.loading = false;
       } catch (err) {
@@ -42,9 +37,7 @@ export const useAuthStore = defineStore('auth', {
     async logout ()  {
       this.loading = true;
       try {
-        await firebase
-        .auth()
-        .signOut();
+        await signOut(auth);
         this.user = null;
         // this.userData= null;
         this.error = null;

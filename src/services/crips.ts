@@ -34,6 +34,6 @@ export const initCrisp = () => {
     s.async = true;
     document.getElementsByTagName("head")[0].appendChild(s);
   } catch (e) {
-    console.error('Plausible cannot be init', e);
+    console.error('Crips cannot be init', e);
   }
 };

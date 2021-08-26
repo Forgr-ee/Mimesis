@@ -39,16 +39,20 @@ const app = createApp(App)
 // app.component(VueFeather.name || 'VueFeather', VueFeather);
 
 const initI18n = async () => {
+  try {
     const main = useMainStore();
     await main.initialize();
     const i18n = createI18n({
-    legacy: false,
-    globalInjection: false,
-    locale: 'fr',
-    fallbackLocale: 'fr',
-    messages: main.langsMessages,
-  })
-  app.use(i18n);
+      legacy: false,
+      globalInjection: false,
+      locale: 'fr',
+      fallbackLocale: 'fr',
+      messages: main.langsMessages,
+    })
+    app.use(i18n);
+  } catch (err) {
+    console.error('initI18n', err);
+  }
 }
 const auth = useAuthStore();
 
@@ -57,10 +61,10 @@ auth.authCheck()
     initCrisp();
     await initI18n();
     // save currentPath
-    // router.afterEach((to) => {
-    //   const main = useMainStore();
-    //   main.currentPath = to.fullPath;
-    // });
+    router.afterEach((to) => {
+      const main = useMainStore();
+      main.currentPath = to.fullPath;
+    });
     app.use(router);
     return router.isReady();
   })

@@ -79,11 +79,13 @@ const langName = (theme: Theme): string => {
 }
 const saveTheme = async(theme: string) => {
   game.theme = theme;
+  game.reset();
+  main.nextGuess();
+  game.nextTeam();
   router.push({path: "/game"});
 };
 const restore = () => {
   console.log("restore");
-
 }
 </script>
 <style scoped>
