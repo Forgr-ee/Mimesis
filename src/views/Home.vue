@@ -276,7 +276,7 @@ const presentActionSheet = async () => {
             {
               text: `${t('by')} Martin Donadieu`,
               handler: () => {
-                window.open("https://martindonadieu.com", "_blank");
+                window.open("https://msha.ke/martindonadieu", "_blank");
               },
             },
             {
