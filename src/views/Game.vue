@@ -126,7 +126,7 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
-import { IonContent, IonPage, isPlatform, onIonViewWillEnter } from "@ionic/vue";
+import { IonContent, IonPage, isPlatform, IonToolbar, IonHeader, onIonViewWillEnter } from "@ionic/vue";
 import { onMounted, reactive, ref, watchEffect } from "vue";
 import { create as createConfetti } from "canvas-confetti";
 import { App } from "@capacitor/app";
@@ -134,7 +134,7 @@ import { KeepAwake } from "@capacitor-community/keep-awake";
 import { NativeAudio } from "@capacitor-community/native-audio";
 import { useTimer } from "vue-timer-hook";
 import { useMainStore } from "../store/main";
-import { Team, useGameStore } from "../store/game";
+import { useGameStore } from "../store/game";
 import Modal from "../components/Modal.vue";
 import { CheckIcon, ExclamationIcon, ArrowLeftIcon } from '@heroicons/vue/outline'
 

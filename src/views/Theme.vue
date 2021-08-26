@@ -61,7 +61,7 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
-import { IonContent, IonPage, isPlatform } from "@ionic/vue";
+import { IonContent, IonPage, isPlatform, IonToolbar, IonHeader } from "@ionic/vue";
 import { useRouter } from "vue-router";
 import { Theme, useMainStore } from "../store/main";
 import { useGameStore } from "../store/game";
