@@ -1,10 +1,12 @@
 import { defineStore } from 'pinia'
 
-import { getAuth, onAuthStateChanged, signOut, signInAnonymously, User } from "firebase/auth";
+import { onAuthStateChanged, signOut, signInAnonymously, User, initializeAuth, browserLocalPersistence } from "firebase/auth";
 import { firebaseApp } from '../services/firebase';
 
-const auth = getAuth(firebaseApp);
-
+// const auth = getAuth(firebaseApp);
+const auth = initializeAuth(firebaseApp, {
+  persistence: browserLocalPersistence, 
+});
 
 const promAuth = (): Promise<User | null>  => {
   return new Promise<User | null>((resolve, reject) => {
