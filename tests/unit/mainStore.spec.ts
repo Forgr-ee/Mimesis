@@ -1,7 +1,8 @@
 import { setActivePinia, createPinia } from 'pinia';
 import { useGameStore } from "../../src/store/game";
-import { GuessDb, LangMessage, LangMessages, Theme, useMainStore } from "../../src/store/main";
+import { useMainStore } from "../../src/store/main";
 import { mockRandom, resetMockRandom } from 'jest-mock-random';
+import { LangMessages, LangMessage, Theme, GuessDb } from '@/services/firebase';
 
 const langs: LangMessages = {
     fr: {

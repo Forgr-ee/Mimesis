@@ -35,7 +35,7 @@
     "capacitor-rate-app": "^1.1.0",
     "core-js": "^3.16.1",
     "faker": "git+https://github.com/riderx/faker.js.git",
-    "firebase": "^9.0.0",
+    "firebase": "^8.10.0",
     "pinia": "^2.0.0-rc.4",
     "postcss": "^7.0.36",
     "tailwind-capitalize-first-letter": "^1.0.1",

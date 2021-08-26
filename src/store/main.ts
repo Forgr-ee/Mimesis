@@ -1,44 +1,10 @@
 import { randomSelect } from '@/services/random';
 import { defineStore } from 'pinia'
 
-import { collection, getFirestore, getDocs, orderBy, query, where } from "firebase/firestore"; 
-import { firebaseApp } from '../services/firebase';
+import { Guess, GuessDb, LangMessages, Theme, useFirebase } from '../services/firebase';
 import { useGameStore } from './game';
 
-const db = getFirestore(firebaseApp);
-
-export type Theme = {
-    active: boolean;
-    lang: {
-    [key: string]: string;
-    };
-    icon: string;
-    id: string;
-    order: number;
-    status: string;
-};
-
-export type GuessDb = {
-    [key: string]: Guess[];
-};
-
-export type Guess = {
-    title: string;
-};
-
-type Message = {
-  [key: string]: string;
-}
-
-export type LangMessage = Message & {
-  id: string;
-  active: boolean;
-}
-
-
-export type LangMessages = {
-  [key: string]: LangMessage;
-}
+const { getLangMessages, getThemes, getGuessesDb} = useFirebase();
 
 const filterListByTitle = (list: Guess[], past: string[]) => {
   const filtered = list.filter((n) => !past.includes(n.title));
@@ -91,6 +57,7 @@ export const useMainStore = defineStore('main', {
       this.loading = true;
       try {
         await Promise.all([this.initLangMessages(), this.initThemes()]);
+        await this.initGuessTheme();
         this.initialized = true;        
       } catch (err) {
         this.error = err;
@@ -99,50 +66,14 @@ export const useMainStore = defineStore('main', {
       this.lastUpdate = new Date().toISOString();
       this.loading = false;
     },
-    async initGuessCategory(category: string) {
-      const value: Guess[] = [];
-      try {
-        const snapshot = await getDocs(collection(db, `mode/${category}/${this.lang}`));
-        snapshot.docs.map(doc => {
-            const data = doc.data() as Guess;
-            value.push(data);
-        });
-      } catch (err) {
-        console.error('initGuessCategory', category, err);
-        throw new Error(err);
-      }
-      this.guessDb[`${category}_${this.lang}`] = value;
+    async initGuessTheme() {
+      this.guessDb = await getGuessesDb(this.themes, this.lang);
     },
     async initThemes() {
-      const value: Theme[] = [];
-      const listProm: Promise<void>[] = [];
-      try {
-        const snapshot = await getDocs(query(collection(db, 'mode'), where('active', '==', true), orderBy('order', 'asc')));
-        snapshot.docs.map(doc => {
-            const theme = doc.data() as Theme;
-            value.push(theme);
-            listProm.push(this.initGuessCategory(theme.id));
-        });
-        await Promise.all(listProm);
-      } catch (err) {
-        console.error('initThemes', err);
-        throw new Error(err);
-      }
-      this.themes = value;
+      this.themes = await getThemes();
     },
     async initLangMessages() {
-      const value: LangMessages =  {} as LangMessages;
-      try {
-        const snapshot = await getDocs(query(collection(db, 'langs'), where('active', '==', true)));
-        snapshot.docs.map(doc => {
-            const data = doc.data() as LangMessage;
-            value[data.id] = data;
-        });
-      } catch (err) {
-        console.error('initLangMessages', err);
-        throw new Error(err);
-      }
-      this.langsMessages = value;
+      this.langsMessages = await getLangMessages();
     },
     nextGuess(found = false) {
       const game = useGameStore();

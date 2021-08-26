@@ -242,7 +242,7 @@ onMounted(() => {
   })
   watchEffect(async () => {
     if (game.winned) {
-      await playConfetti();
+      playConfetti(); // don't await this 
       timer.pause();
       modals.winner = true;
       makeSound("tada");

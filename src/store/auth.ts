@@ -1,24 +1,14 @@
 import { defineStore } from 'pinia'
 
-import { onAuthStateChanged, signOut, signInAnonymously, User, initializeAuth, browserLocalPersistence } from "firebase/auth";
-import { firebaseApp } from '../services/firebase';
+import { useFirebase } from '../services/firebase';
 
-// const auth = getAuth(firebaseApp);
-const auth = initializeAuth(firebaseApp, {
-  persistence: browserLocalPersistence, 
-});
+const { login, logout, getUser } = useFirebase();
 
-const promAuth = (): Promise<User | null>  => {
-  return new Promise<User | null>((resolve, reject) => {
-      // firebase.auth().onAuthStateChanged(resolve, reject);
-      onAuthStateChanged(auth, resolve, reject);
-  });
-}
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
       userId: '',
-      user: {} as null | User,
+      user: {} as null | firebase.default.User,
       loading: true,
       error: null as Error | null,
       initialized: false,
@@ -27,8 +17,7 @@ export const useAuthStore = defineStore('auth', {
     async login() {
       this.loading = true;
       try {
-        const userCredential = await signInAnonymously(auth);
-        this.user = userCredential.user;
+        this.user = await login();
         this.error = null;
         this.loading = false;
       } catch (err) {
@@ -39,9 +28,7 @@ export const useAuthStore = defineStore('auth', {
     async logout ()  {
       this.loading = true;
       try {
-        await signOut(auth);
-        this.user = null;
-        // this.userData= null;
+        this.user = await logout();
         this.error = null;
         this.loading = false;
         this.initialized = false;
@@ -54,7 +41,7 @@ export const useAuthStore = defineStore('auth', {
       if (this.initialized) return this.user;
       this.loading = true;
       try {
-        this.user = await promAuth();
+        this.user = await getUser();
         if (!this.user) {
           await this.login();
         }

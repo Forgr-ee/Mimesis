@@ -4,14 +4,13 @@ import { defineStore } from 'pinia'
 import { useAuthStore } from './auth'
 import { useMainStore } from './main'
 import { v4 as uuidv4 } from "uuid";
+import { Player, Team, useFirebase } from '../services/firebase';
 import faker from 'faker';
 
 faker.locale = 'fr';
 
-import { addDoc, collection, getFirestore, getDocs, setDoc, doc } from "firebase/firestore"; 
-import { firebaseApp } from '../services/firebase';
 
-const db = getFirestore(firebaseApp);
+const { addGame  } = useFirebase();
 
 export const randomPlayer = (): Player => ({
   score: 0,
@@ -21,22 +20,6 @@ export const randomPlayer = (): Player => ({
 
 export const randomTeamName = () => faker.commerce.color()
 
-export interface Player {
-  // index: number;
-  uuid: string;
-  score: number;
-  name: string;
-}
-
-export interface Team {
-  // index: number;
-  uuid: string;
-  score: number;
-  name: string;
-  players: Player[];
-  pastPlayers: string[];
-}
-
 export const randomTeam = (): Team => ({
   uuid: uuidv4(),
   name: randomTeamName(),
@@ -44,25 +27,6 @@ export const randomTeam = (): Team => ({
   pastPlayers: [],
   score: 0,
 });
-
-export type Theme = {
-    active: boolean;
-    lang: {
-    [key: string]: string;
-    };
-    icon: string;
-    id: string;
-    order: number;
-    status: string;
-};
-
-export type GuessDb = {
-    [key: string]: Guess[];
-};
-
-export type Guess = {
-    title: string;
-};
 
 // function find by uuid in array
 const findByUUID = (list: any[], uuid: string) => {
@@ -231,16 +195,10 @@ export const useGameStore = defineStore('game', {
         await authStore.authCheck();
       }
       try {
-        
-        const colGames = await collection(db, `users/${authStore?.user?.uid}/games`)
-        const refUser = doc(db, 'users', authStore?.user?.uid as string);
-        await addDoc(colGames, {lang: mainStore.lang, ...this.$state, doneAt: new Date().toISOString()});
-        const querySnapshot = await getDocs(colGames)
-        const games = querySnapshot.docs.length;
+        const games = await addGame(authStore?.user?.uid, mainStore.lang, this.$state);
         if (isPlatform("capacitor") && games > 2) {
           RateApp.requestReview();
-        }
-        await setDoc(refUser, {games})
+      }
       } catch (e) {
         console.error("Error adding document: ", e);
       }
