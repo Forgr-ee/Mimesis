@@ -6,7 +6,7 @@
       >
         <img
           class="object-contain h-20 xsheight:h-32"
-          src="assets/icon/icon.png"
+          src="/assets/icon/icon.png"
           alt="logo"
         />
         <div
@@ -211,7 +211,7 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
-import { randomPlayer, randomTeam } from "@/store/game";
+import { randomPlayer, randomTeam } from "../store/game";
 import { RateApp } from "capacitor-rate-app";
 import { IonContent, isPlatform, IonPage, IonInput, actionSheetController } from "@ionic/vue";
 import { reactive } from "vue";

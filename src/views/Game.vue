@@ -12,7 +12,7 @@
       
         <img
           class="absolute left-0 right-0 hidden object-contain h-20 m-auto xs:block"
-          src="assets/icon/icon.png"
+          src="/assets/icon/icon.png"
           alt="logo"
         />
         <Modal :open="modals.changePlayer" >

@@ -1,4 +1,4 @@
-import { randomSelect } from '@/services/random';
+import { randomSelect } from '../services/random';
 import { defineStore } from 'pinia'
 
 import { Guess, GuessDb, LangMessages, Theme, useFirebase } from '../services/firebase';
