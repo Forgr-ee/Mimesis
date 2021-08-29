@@ -1,21 +1,23 @@
-import { isPlatform } from '@ionic/vue';
+import { isPlatform } from '@ionic/vue'
 
 declare global {
-  interface HTMLScriptElement { 'data-domain': string }
+  interface HTMLScriptElement {
+    'data-domain': string
+  }
 }
 
-export const initPlausible = () => {
+export const initPlausible = (): void => {
   try {
-    const s = document.createElement("script");
-    s.src = "https://plausible.io/js/plausible.js";
-    s.async = true;
-    s.defer = true;
-    s['data-domain'] = "mimesis.fun";
-    if (isPlatform("capacitor")) {
-      s.src = "https://plausible.io/js/plausible.local.js";
+    const s = document.createElement('script')
+    s.src = 'https://plausible.io/js/plausible.js'
+    s.async = true
+    s.defer = true
+    s['data-domain'] = 'mimesis.fun'
+    if (isPlatform('capacitor')) {
+      s.src = 'https://plausible.io/js/plausible.local.js'
     }
-    document.getElementsByTagName("head")[0].appendChild(s);
+    document.getElementsByTagName('head')[0].appendChild(s)
   } catch (e) {
-    console.error('Plausible cannot be init', e);
+    console.error('Plausible cannot be init', e)
   }
-  };
+}

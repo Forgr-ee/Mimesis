@@ -1,39 +1,42 @@
-import { isPlatform } from '@ionic/vue';
+import { isPlatform } from '@ionic/vue'
 
 declare global {
-    interface Window { $crisp: any[]; CRISP_WEBSITE_ID: string }
+  interface Window {
+    $crisp: unknown[]
+    CRISP_WEBSITE_ID: string
+  }
 }
 
-export const initCrisp = () => {
+export const initCrisp = (): void => {
   try {
-    if (isPlatform("capacitor")) {
+    if (isPlatform('capacitor')) {
       window.$crisp = [
-        ["safe", true],
-        ["do", "chat:hide"],
+        ['safe', true],
+        ['do', 'chat:hide'],
         [
-          "on",
-          "chat:closed",
+          'on',
+          'chat:closed',
           () => {
-            window.$crisp.push(["do", "chat:hide"]);
+            window.$crisp.push(['do', 'chat:hide'])
           },
         ],
         [
-          "on",
-          "message:received",
+          'on',
+          'message:received',
           () => {
-            window.$crisp.push(["do", "chat:show"]);
+            window.$crisp.push(['do', 'chat:show'])
           },
         ],
-      ];
+      ]
     } else {
-      window.$crisp = [];
+      window.$crisp = []
     }
-    window.CRISP_WEBSITE_ID = "1f5d5a70-2622-4536-a454-996394feeaad";
-    const s = document.createElement("script");
-    s.src = "https://client.crisp.chat/l.js";
-    s.async = true;
-    document.getElementsByTagName("head")[0].appendChild(s);
+    window.CRISP_WEBSITE_ID = '1f5d5a70-2622-4536-a454-996394feeaad'
+    const s = document.createElement('script')
+    s.src = 'https://client.crisp.chat/l.js'
+    s.async = true
+    document.getElementsByTagName('head')[0].appendChild(s)
   } catch (e) {
-    console.error('Crips cannot be init', e);
+    console.error('Crips cannot be init', e)
   }
-};
+}

@@ -12,7 +12,12 @@
       "vite/client", 
       "@types/jest",
     ],
-    "lib": ["esnext", "dom"]
+    "skipLibCheck": true,
+    "lib": ["esnext", "dom"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"]
 }

@@ -1,24 +1,24 @@
-import { isPlatform } from "@ionic/vue";
-import { RateApp } from "capacitor-rate-app";
+import { randomSelect } from '@/services/random'
+import { isPlatform } from '@ionic/vue'
+import { RateApp } from 'capacitor-rate-app'
 import { defineStore } from 'pinia'
 import { useAuthStore } from './auth'
 import { useMainStore } from './main'
-import { v4 as uuidv4 } from "uuid";
-import { Player, Team, useFirebase } from '../services/firebase';
-import faker from 'faker';
+import { v4 as uuidv4 } from 'uuid'
+import { Entity, Player, Team, useFirebase } from '../services/firebase'
+import faker from 'faker'
 
-faker.locale = 'fr';
+faker.locale = 'fr'
 
-
-const { addGame  } = useFirebase();
+const { addGame } = useFirebase()
 
 export const randomPlayer = (): Player => ({
   score: 0,
   name: faker.name.firstName(),
   uuid: uuidv4(),
-});
+})
 
-export const randomTeamName = () => faker.commerce.color()
+export const randomTeamName = (): string => faker.commerce.color()
 
 export const randomTeam = (): Team => ({
   uuid: uuidv4(),
@@ -26,91 +26,99 @@ export const randomTeam = (): Team => ({
   players: [randomPlayer(), randomPlayer()],
   pastPlayers: [],
   score: 0,
-});
+})
 
 // function find by uuid in array
-const findByUUID = (list: any[], uuid: string) => {
-  return list.find(item => item.uuid === uuid);
-};
+const findByUUID = <Type extends Entity>(
+  list: Type[] | undefined,
+  uuid: string
+): Type | undefined => {
+  if (!list) return undefined
+  return list.find((item) => item.uuid === uuid)
+}
 
-const filterListByUUID = (list: any[], past: string[]) => {
+const filterListByUUID = (
+  list: Player[] | Team[],
+  past: string[]
+): Player[] | Team[] => {
   const filtered = list.filter((n) => {
-    const index = past.findIndex((b) => {
-        return b === n.uuid;
-      }) === -1;
-      return index;
-  });
-  return filtered;
-};
-
-const randomSelect = (filtered: any[]) => {
-  return filtered[Math.floor(Math.random() * filtered.length)];
-};
+    const index =
+      past.findIndex((b) => {
+        return b === n.uuid
+      }) === -1
+    return index
+  })
+  return filtered
+}
 
 export const useGameStore = defineStore('game', {
   state: () => ({
-      winned: false,
-      loading: true,
-      uuid:  uuidv4(),
-      createdAt: new Date().toISOString(),
-      theme: 'improbable',
-      teams: [randomTeam(), randomTeam()] as Team[],
-      teamUUID: "-1",
-      playerUUID: "-1",
-      pastTeams: [] as string[],
-      skipGuess: [] as string[],
-      foundGuess: [] as string[],
+    winned: false,
+    loading: true,
+    uuid: uuidv4(),
+    createdAt: new Date().toISOString(),
+    theme: 'improbable',
+    teams: [randomTeam(), randomTeam()] as Team[],
+    teamUUID: '-1',
+    playerUUID: '-1',
+    pastTeams: [] as string[],
+    skipGuess: [] as string[],
+    foundGuess: [] as string[],
   }),
   getters: {
     ready(): boolean {
-      return this.teamUUID !== "-1";
+      return this.teamUUID !== '-1'
     },
     nextTeams(): Team[] {
-      return filterListByUUID(this.teams, this.pastTeams) as Team[];
+      return filterListByUUID(this.teams, this.pastTeams) as Team[]
     },
     ladder(): Team[] {
       const sorted = this.teams.sort((a: Team, b: Team) => {
-        return a.score > b.score ? -1 : 1;
-      });
-      return sorted;
+        return a.score > b.score ? -1 : 1
+      })
+      return sorted
     },
     nextPlayers(): Player[] {
-      return filterListByUUID(this.team.players, this.team.pastPlayers) as Player[];
+      if (!this.team) return []
+      return filterListByUUID(
+        this.team.players,
+        this.team.pastPlayers
+      ) as Player[]
     },
-    team(): Team {
-      return findByUUID(this.teams, this.teamUUID);
+    team(): Team | undefined {
+      return findByUUID(this.teams, this.teamUUID)
     },
-    player(): Player {
-      return findByUUID(this.team.players, this.playerUUID);
+    player(): Player | undefined {
+      return findByUUID(this.team?.players, this.playerUUID)
     },
     pastGuess(): string[] {
-      return [...this.skipGuess, ...this.foundGuess];
+      return [...this.skipGuess, ...this.foundGuess]
     },
     teamScore(): number {
       try {
-        return this.team.score;
+        return this.team ? this.team.score : 0
       } catch (err) {
         return 0
-      }     
+      }
     },
     teamName(): string {
       try {
-        return this.team.name;
+        return this.team ? this.team.name : ''
       } catch (err) {
         return ''
-      }     
+      }
     },
     mode() {
-      const teamLength = this.teams[0].players.length;
-      let inequal = false;
+      const teamLength = this.teams[0].players.length
+      let inequal = false
       this.teams.forEach((t: Team) => {
-          inequal = inequal || teamLength !== t.players.length ? true : false;
-      });
-      return inequal ? 1 : 0;
+        inequal = inequal || teamLength !== t.players.length ? true : false
+      })
+      return inequal ? 1 : 0
     },
     playerName(): string {
       try {
-        return this.player.name;
+        return this.player ? this.player.name : ''
       } catch (err) {
         return ''
       }
@@ -118,28 +126,32 @@ export const useGameStore = defineStore('game', {
   },
   actions: {
     nextPlayer(setLoading = true) {
-      this.loading = setLoading ? true : this.loading;
-      let didReset = false;
-      if (this.team && this.team.players.length === this.team.pastPlayers.length) {
-        this.team.pastPlayers = [this.player.uuid];
-        didReset = true;
+      this.loading = setLoading ? true : this.loading
+      let didReset = false
+      if (
+        this.team &&
+        this.player &&
+        this.team.players.length === this.team.pastPlayers.length
+      ) {
+        this.team.pastPlayers = [this.player.uuid]
+        didReset = true
       }
-      let plr = null;
+      let plr = null
       if (this.mode === 1) {
-        plr = randomSelect(this.nextPlayers) as Player;
+        plr = randomSelect<Player>(this.nextPlayers)
       } else {
-        plr = this.nextPlayers.pop() as Player;
+        plr = this.nextPlayers.pop() as Player
       }
-      this.playerUUID = plr.uuid;
-      if (didReset) {
-        this.team.pastPlayers = [plr.uuid];
-      } else {
-        this.team.pastPlayers.push(plr.uuid);
+      this.playerUUID = plr.uuid
+      if (didReset && this.team) {
+        this.team.pastPlayers = [plr.uuid]
+      } else if (this.team) {
+        this.team.pastPlayers.push(plr.uuid)
       }
-      this.loading = setLoading ? false : this.loading;
+      this.loading = setLoading ? false : this.loading
     },
     addScore() {
-      if (this.team.score < 10) {
+      if (this.team && this.player && this.team.score < 10) {
         this.team.score += 1
         this.player.score++
         if (this.team.score >= 10) {
@@ -148,60 +160,64 @@ export const useGameStore = defineStore('game', {
       }
     },
     nextTeam() {
-      this.loading = true;
-      if (this.teamUUID !== "-1") {
-        this.pastTeams.push(this.teamUUID);
+      this.loading = true
+      if (this.teamUUID !== '-1') {
+        this.pastTeams.push(this.teamUUID)
       }
       if (this.pastTeams.length === this.teams.length) {
-        this.pastTeams = [this.teamUUID];
+        this.pastTeams = [this.teamUUID]
       }
-      let newTeam: Team;
+      let newTeam: Team
       if (this.mode === 1) {
-        newTeam = randomSelect(this.nextTeams) as Team;
+        newTeam = randomSelect<Team>(this.nextTeams)
       } else {
-        newTeam = this.nextTeams.pop() as Team;
+        newTeam = this.nextTeams.pop() as Team
       }
-      this.teamUUID = newTeam.uuid;
-      this.nextPlayer(false);
-      this.loading = false;
+      this.teamUUID = newTeam.uuid
+      this.nextPlayer(false)
+      this.loading = false
     },
     resetScore() {
       this.teams.forEach((t: Team) => {
-        t.score = 0;
-      });
-      this.winned = false;
+        t.score = 0
+      })
+      this.winned = false
     },
     resetHistory() {
       this.teams.forEach((t: Team) => {
-        t.pastPlayers = [];
-      });
-      this.pastTeams = [];
-      this.skipGuess = [];
-      this.foundGuess = [];
+        t.pastPlayers = []
+      })
+      this.pastTeams = []
+      this.skipGuess = []
+      this.foundGuess = []
     },
     resetIndex() {
-      this.playerUUID = "-1";
-      this.teamUUID = "-1";
+      this.playerUUID = '-1'
+      this.teamUUID = '-1'
     },
     reset() {
-      this.resetScore();
-      this.resetHistory();
-      this.resetIndex();
+      this.resetScore()
+      this.resetHistory()
+      this.resetIndex()
     },
     async save() {
       const authStore = useAuthStore()
       const mainStore = useMainStore()
       if (!authStore.initialized) {
-        await authStore.authCheck();
+        await authStore.authCheck()
       }
       try {
-        const games = await addGame(authStore?.user?.uid, mainStore.lang, this.$state);
-        if (isPlatform("capacitor") && games > 2) {
-          RateApp.requestReview();
-      }
+        const games = await addGame(
+          authStore?.user?.uid,
+          mainStore.lang,
+          this.$state
+        )
+        if (isPlatform('capacitor') && games > 2) {
+          RateApp.requestReview()
+        }
       } catch (e) {
-        console.error("Error adding document: ", e);
+        console.error('Error adding document: ', e)
       }
-    }
-  }
+    },
+  },
 })

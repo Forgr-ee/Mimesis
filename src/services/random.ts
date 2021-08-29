@@ -1,3 +1,3 @@
-export const randomSelect = (filtered: any[]) => {
-    return filtered[Math.floor(Math.random() * filtered.length)];
-};
+export const randomSelect = <Type>(filtered: Type[]): Type => {
+  return filtered[Math.floor(Math.random() * filtered.length)]
+}

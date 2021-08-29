@@ -2,57 +2,111 @@
   <ion-page>
     <ion-header mode="ios">
       <ion-toolbar color="secondary">
-          <ArrowLeftIcon @click="router.push('/')" class="w-1/12 mr-3 text-primary"/>
+        <ArrowLeftIcon
+          class="w-1/12 mr-3 text-primary"
+          @click="router.push('/')"
+        />
       </ion-toolbar>
     </ion-header>
-    <ion-content :fullscreen="true" :scroll-y="false" >
+    <ion-content :fullscreen="true" :scroll-y="false">
       <div class="flex flex-col justify-start h-screen p-10 bg-secondary">
         <h1 class="mb-5 text-5xl font-bold text-center xs:mb-10 text-primary">
-          {{ t("themes") }}
+          {{ t('themes') }}
         </h1>
         <h3
           v-if="main.offline && main.themes.length > 0"
           class="mx-5 mb-5 font-bold text-center text-1xl text-primary"
         >
-          {{ t("noInternet") }}
+          {{ t('noInternet') }}
         </h3>
         <h3
           v-if="main.offline && main.themes.length === 0"
           class="mx-5 mb-5 font-bold text-center text-1xl text-primary"
         >
-          {{ t("noInternetFirst") }}
+          {{ t('noInternetFirst') }}
         </h3>
         <div class="overflow-x-scroll no_bar md:w-1/2 md:mx-auto">
           <div
             v-for="theme in main.themes"
             :key="theme.id"
-            class="flex items-center my-1 border cursor-pointer xs:my-3 md:my-5 border-primary bg-light rounded-xl"
+            class="
+              flex
+              items-center
+              my-1
+              border
+              cursor-pointer
+              xs:my-3
+              md:my-5
+              border-primary
+              bg-light
+              rounded-xl
+            "
             @click="saveTheme(theme.id)"
           >
             <div
-              class="relative w-20 h-20 mr-3 xs:w-24 xs:h-24 bg-primary rounded-l-xl"
+              class="
+                relative
+                w-20
+                h-20
+                mr-3
+                xs:w-24 xs:h-24
+                bg-primary
+                rounded-l-xl
+              "
             >
               <div
                 v-if="theme.status === 'paid'"
-                class="absolute inset-0 z-20 flex items-center justify-center bg-black text-light bg-opacity-40 rounded-l-xl"
+                class="
+                  absolute
+                  inset-0
+                  z-20
+                  flex
+                  items-center
+                  justify-center
+                  bg-black
+                  text-light
+                  bg-opacity-40
+                  rounded-l-xl
+                "
               >
-                <LockClosedIcon/>
+                <LockClosedIcon />
               </div>
               <img
                 alt="test"
-                class="w-full h-full mt-2 fill-current stroke-current text-secondary svg_icon"
+                class="
+                  w-full
+                  h-full
+                  mt-2
+                  fill-current
+                  stroke-current
+                  text-secondary
+                  svg_icon
+                "
                 :src="theme.icon"
               />
             </div>
-            <p class="xs:text-2xl text-primary">{{langName(theme)}}</p>
+            <p class="xs:text-2xl text-primary">{{ langName(theme) }}</p>
           </div>
         </div>
         <button
           v-if="isIos()"
-          class="px-3 py-1 mx-auto mt-1 text-sm border xs:mt-2 md:w-1/4 bg-light border-primary text-primary rounded-xl"
+          class="
+            px-3
+            py-1
+            mx-auto
+            mt-1
+            text-sm
+            border
+            xs:mt-2
+            md:w-1/4
+            bg-light
+            border-primary
+            text-primary
+            rounded-xl
+          "
           @click="restore()"
         >
-          {{ t("restore") }}
+          {{ t('restore') }}
         </button>
       </div>
     </ion-content>
@@ -60,37 +114,43 @@
 </template>
 
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n';
-import { IonContent, IonPage, isPlatform, IonToolbar, IonHeader } from "@ionic/vue";
-import { useRouter } from "vue-router";
-import { useMainStore } from "../store/main";
-import { useGameStore } from "../store/game";
-import { LockClosedIcon, ArrowLeftIcon } from '@heroicons/vue/outline'
-import { Theme } from '../services/firebase';
+  import { useI18n } from 'vue-i18n'
+  import {
+    IonContent,
+    IonPage,
+    isPlatform,
+    IonToolbar,
+    IonHeader,
+  } from '@ionic/vue'
+  import { LockClosedIcon, ArrowLeftIcon } from '@heroicons/vue/outline'
+  import { useRouter } from 'vue-router'
+  import { useMainStore } from '@/store/main'
+  import { useGameStore } from '@/store/game'
+  import { Theme } from '@/services/firebase'
 
-const { t, locale } = useI18n();
-const main = useMainStore();
-const game = useGameStore();
-const router = useRouter();
-const isIos = () => {
-  return isPlatform("ios");
-};
-const langName = (theme: Theme): string => {
-  return (theme as any)[locale.value]
-}
-const saveTheme = async(theme: string) => {
-  game.theme = theme;
-  game.reset();
-  main.nextGuess();
-  game.nextTeam();
-  router.push({path: "/game"});
-};
-const restore = () => {
-  console.log("restore");
-}
+  const { t, locale } = useI18n()
+  const main = useMainStore()
+  const game = useGameStore()
+  const router = useRouter()
+  const isIos = () => {
+    return isPlatform('ios')
+  }
+  const langName = (theme: Theme): string => {
+    return (theme as never)[locale.value]
+  }
+  const saveTheme = async (theme: string) => {
+    game.theme = theme
+    game.reset()
+    main.nextGuess()
+    game.nextTeam()
+    router.push({ path: '/game' })
+  }
+  const restore = () => {
+    console.log('restore')
+  }
 </script>
 <style scoped>
-ion-toolbar {
-  --border-style: none;
-}
+  ion-toolbar {
+    --border-style: none;
+  }
 </style>

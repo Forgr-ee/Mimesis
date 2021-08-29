@@ -10,96 +10,187 @@
           alt="logo"
         />
         <div
-          class="mx-auto text-4xl font-semibold leading-6 text-center text-gray-50 capitalize-first"
+          class="
+            mx-auto
+            text-4xl
+            font-semibold
+            leading-6
+            text-center text-gray-50
+            capitalize-first
+          "
         >
-          {{ t("createTeam") }}
+          {{ t('createTeam') }}
         </div>
         <Modal :open="modals.lang">
-          <template v-slot:icon
+          <template #icon
             ><TranslateIcon class="w-6 h-6 text-red-600" aria-hidden="true"
           /></template>
-          <template v-slot:title>{{ t("langTitle") }}</template>
-          <template v-slot:content>
+          <template #title>{{ t('langTitle') }}</template>
+          <template #content>
             <div>
               <button
                 v-for="l in availableLocales"
+                :key="`locale-${l}`"
                 class="p-2 my-2 font-medium rounded-lg"
                 :class="{ 'bg-primary': locale === l }"
-                :key="`locale-${l}`"
                 @click="
-                  locale = l;
-                  main.lang = l;
+                  locale = l
+                  main.lang = l
                 "
               >
                 {{ t(l) }}
               </button>
             </div>
           </template>
-          <template v-slot:buttons>
+          <template #buttons>
             <button
               type="button"
+              class="
+                px-6
+                py-3
+                mb-1
+                mr-1
+                text-xs
+                font-bold
+                uppercase
+                transition-all
+                duration-150
+                ease-linear
+                border
+                rounded
+                shadow
+                outline-none
+                bg-primary
+                text-light
+                border-light
+                md:text-base
+                hover:shadow-lg
+                focus:outline-none
+              "
               @click="modals.lang = false"
-              class="px-6 py-3 mb-1 mr-1 text-xs font-bold uppercase transition-all duration-150 ease-linear border rounded shadow outline-none bg-primary text-light border-light md:text-base hover:shadow-lg focus:outline-none"
             >
-              {{ t("accept") }}
+              {{ t('accept') }}
             </button>
           </template>
         </Modal>
         <Modal :open="modals.rules">
-          <template v-slot:icon
+          <template #icon
             ><ClipboardListIcon class="w-6 h-6 text-red-600" aria-hidden="true"
           /></template>
-          <template v-slot:title>{{ t("ruleTitle") }}</template>
-          <template v-slot:content>
+          <template #title>{{ t('ruleTitle') }}</template>
+          <template #content>
             <div class="text-left">
               <p class="my-1">
-                - {{ t("rule010") }} <strong>{{ t("rule011") }}</strong>
-                {{ t("rule012") }}
+                - {{ t('rule010') }} <strong>{{ t('rule011') }}</strong>
+                {{ t('rule012') }}
               </p>
               <p class="my-1">
-                - {{ t("rule020") }} <strong>{{ t("rule021") }}</strong
+                - {{ t('rule020') }} <strong>{{ t('rule021') }}</strong
                 >.
               </p>
-              <p class="my-1">- {{ t("rule030") }}</p>
-              <p class="my-1">- {{ t("rule040") }}</p>
+              <p class="my-1">- {{ t('rule030') }}</p>
+              <p class="my-1">- {{ t('rule040') }}</p>
               <p class="pt-5 my-1">
-                <strong>{{ t("rule050") }}:</strong> {{ t("rule051") }}
+                <strong>{{ t('rule050') }}:</strong> {{ t('rule051') }}
               </p>
             </div>
           </template>
-          <template v-slot:buttons>
+          <template #buttons>
             <button
               type="button"
+              class="
+                px-6
+                py-3
+                mb-1
+                mr-1
+                text-xs
+                font-bold
+                uppercase
+                transition-all
+                duration-150
+                ease-linear
+                border
+                rounded
+                shadow
+                outline-none
+                bg-primary
+                text-light
+                border-light
+                md:text-base
+                hover:shadow-lg
+                focus:outline-none
+              "
               @click="modals.rules = false"
-              class="px-6 py-3 mb-1 mr-1 text-xs font-bold uppercase transition-all duration-150 ease-linear border rounded shadow outline-none bg-primary text-light border-light md:text-base hover:shadow-lg focus:outline-none"
             >
-              {{ t("accept") }}
+              {{ t('accept') }}
             </button>
           </template>
         </Modal>
         <Modal :open="modals.inequal">
-          <template v-slot:icon
+          <template #icon
             ><ExclamationIcon class="w-6 h-6 text-red-600" aria-hidden="true"
           /></template>
-          <template v-slot:title>{{ t("beCarefull") }}</template>
-          <template v-slot:content
-            >{{ t("inequal") }}<br />
-            <strong>{{ t("fairRule") }}</strong></template
+          <template #title>{{ t('beCarefull') }}</template>
+          <template #content
+            >{{ t('inequal') }}<br />
+            <strong>{{ t('fairRule') }}</strong></template
           >
-          <template v-slot:buttons>
+          <template #buttons>
             <button
+              class="
+                px-6
+                py-3
+                mb-1
+                mr-1
+                text-xs
+                font-bold
+                uppercase
+                transition-all
+                duration-150
+                ease-linear
+                border
+                rounded
+                shadow
+                outline-none
+                bg-light
+                text-primary
+                border-primary
+                md:text-base
+                hover:shadow-lg
+                focus:outline-none
+              "
               @click="modals.inequal = false"
-              class="px-6 py-3 mb-1 mr-1 text-xs font-bold uppercase transition-all duration-150 ease-linear border rounded shadow outline-none bg-light text-primary border-primary md:text-base hover:shadow-lg focus:outline-none"
             >
-              {{ t("update") }} {{ t("team") }}
+              {{ t('update') }} {{ t('team') }}
             </button>
             <router-link
               to="/theme"
               type="button"
+              class="
+                px-6
+                py-3
+                mb-1
+                mr-1
+                text-xs
+                font-bold
+                uppercase
+                transition-all
+                duration-150
+                ease-linear
+                border
+                rounded
+                shadow
+                outline-none
+                bg-primary
+                text-light
+                border-light
+                md:text-base
+                hover:shadow-lg
+                focus:outline-none
+              "
               @click="modals.inequal = false"
-              class="px-6 py-3 mb-1 mr-1 text-xs font-bold uppercase transition-all duration-150 ease-linear border rounded shadow outline-none bg-primary text-light border-light md:text-base hover:shadow-lg focus:outline-none"
             >
-              {{ t("go") }}
+              {{ t('go') }}
             </router-link>
           </template>
         </Modal>
@@ -113,24 +204,52 @@
             }"
           >
             <div
-              class="relative flex flex-col items-center pt-10 pb-4 mx-3 my-5 border border-primary bg-light rounded-xl"
+              class="
+                relative
+                flex flex-col
+                items-center
+                pt-10
+                pb-4
+                mx-3
+                my-5
+                border border-primary
+                bg-light
+                rounded-xl
+              "
             >
               <p class="absolute top-0 left-0 p-3 text-primary">
-                {{ t("team") }} {{ index + 1 }}
+                {{ t('team') }} {{ index + 1 }}
               </p>
               <ion-input
-                class="w-2/3 mx-auto mb-6 text-5xl text-center border-b-2 bg-light border-primary text-primary"
+                class="
+                  w-2/3
+                  mx-auto
+                  mb-6
+                  text-5xl text-center
+                  border-b-2
+                  bg-light
+                  border-primary
+                  text-primary
+                "
                 :value="team.name"
               ></ion-input>
               <div class="mb-5 overflow-y-scroll no_bar h-28 xs:h-48 md:h-60">
                 <div class="px-3">
                   <div
                     v-for="(player, idx) in team.players"
-                    class="flex items-center"
                     :key="player.uuid"
+                    class="flex items-center"
                   >
                     <ion-input
-                      class="my-1 text-lg text-center border rounded-lg text-primary bg-light border-primary"
+                      class="
+                        my-1
+                        text-lg text-center
+                        border
+                        rounded-lg
+                        text-primary
+                        bg-light
+                        border-primary
+                      "
                       :value="player.name"
                     ></ion-input>
                     <button
@@ -139,7 +258,7 @@
                       type="button"
                       @click="team.players.splice(idx, 1)"
                     >
-                      <TrashIcon class="w-8 h-8"/>
+                      <TrashIcon class="w-8 h-8" />
                     </button>
                   </div>
                 </div>
@@ -149,59 +268,96 @@
                     type="button"
                     @click="team.players.push(randomPlayer())"
                   >
-                    <PlusCircleIcon class="w-8 h-8"/>
+                    <PlusCircleIcon class="w-8 h-8" />
                   </a>
                 </div>
               </div>
               <button
-                class="w-2/12 p-2 text-primary"
                 v-if="game.teams.length > 2"
+                class="w-2/12 p-2 text-primary"
                 type="button"
                 @click="game.teams.splice(index, 1)"
               >
-                <TrashIcon class="w-8 h-8"/>
+                <TrashIcon class="w-8 h-8" />
               </button>
             </div>
           </div>
-          <div
-            class="flex-none w-3/12 md:w-1/12"
-          >
+          <div class="flex-none w-3/12 md:w-1/12">
             <div
-              class="relative flex items-center justify-center w-full mx-3 my-10 border h-60 xs:h-80 md:h-96 md:mx-5 border-primary bg-light rounded-xl"
+              class="
+                relative
+                flex
+                items-center
+                justify-center
+                w-full
+                mx-3
+                my-10
+                border
+                h-60
+                xs:h-80
+                md:h-96 md:mx-5
+                border-primary
+                bg-light
+                rounded-xl
+              "
             >
-                <div @click="game.teams.push(randomTeam())" class="flex items-center justify-center w-12 h-12 rounded-full cursor-pointer bg-primary active:bg-secondary">
-                  <PlusIcon class="w-8 h-8 text-light"/>
+              <div
+                class="
+                  flex
+                  items-center
+                  justify-center
+                  w-12
+                  h-12
+                  rounded-full
+                  cursor-pointer
+                  bg-primary
+                  active:bg-secondary
+                "
+                @click="game.teams.push(randomTeam())"
+              >
+                <PlusIcon class="w-8 h-8 text-light" />
               </div>
             </div>
           </div>
         </div>
         <div class="flex justify-center text-5xl text-primary">
           <a
+            class="
+              w-1/2
+              px-5
+              py-2
+              overflow-hidden
+              border-2
+              xs:mt-2
+              md:w-1/3
+              bg-light
+              border-primary
+              rounded-xl
+            "
             @click="saveTeam()"
-            class="w-1/2 px-5 py-2 overflow-hidden border-2 xs:mt-2 md:w-1/3 bg-light border-primary rounded-xl"
           >
             <div class="relative flex items-center justify-center">
               <PlayIcon class="w-12 h-12" />
-              <p>{{ t("play") }}</p>
+              <p>{{ t('play') }}</p>
             </div>
           </a>
         </div>
         <div class="flex flex-colunm">
           <button
-            @click="modals.lang = true"
             v-if="availableLocales.length > 1"
             class="w-1/4 mx-auto mt-6"
+            @click="modals.lang = true"
           >
-            <FlagIcon class="w-12 h-12 mx-auto text-primary"/>
+            <FlagIcon class="w-12 h-12 mx-auto text-primary" />
           </button>
-          <button @click="modals.rules = true" class="w-1/4 mx-auto mt-6">
-            <InformationCircleIcon class="w-12 h-12 mx-auto text-primary"/>
+          <button class="w-1/4 mx-auto mt-6" @click="modals.rules = true">
+            <InformationCircleIcon class="w-12 h-12 mx-auto text-primary" />
           </button>
           <button class="w-1/4 mx-auto mt-6" @click="openChat()">
-            <ChatIcon class="w-12 h-12 mx-auto text-primary"/>
+            <ChatIcon class="w-12 h-12 mx-auto text-primary" />
           </button>
           <button class="w-1/4 mx-auto mt-6" @click="presentActionSheet()">
-            <DotsVerticalIcon class="w-12 h-12 mx-auto text-primary"/>
+            <DotsVerticalIcon class="w-12 h-12 mx-auto text-primary" />
           </button>
         </div>
       </div>
@@ -210,84 +366,89 @@
 </template>
 
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n';
-import { randomPlayer, randomTeam } from "../store/game";
-import { RateApp } from "capacitor-rate-app";
-import { IonContent, isPlatform, IonPage, IonInput, actionSheetController } from "@ionic/vue";
-import { reactive } from "vue";
-import { useRouter } from "vue-router";
-import { useGameStore } from "../store/game";
-import { useMainStore } from "../store/main";
-import Modal from "../components/Modal.vue";
-import {
-  TranslateIcon,
-  PlayIcon,
-  PlusCircleIcon,
-  PlusIcon,
-  FlagIcon,
-  TrashIcon,
-  InformationCircleIcon,
-  DotsVerticalIcon,
-  ChatIcon,
-  ClipboardListIcon,
-  ExclamationIcon,
-} from "@heroicons/vue/outline";
+  import { useI18n } from 'vue-i18n'
+  import { randomPlayer, randomTeam } from '@/store/game'
+  import { RateApp } from 'capacitor-rate-app'
+  import {
+    IonContent,
+    isPlatform,
+    IonPage,
+    IonInput,
+    actionSheetController,
+  } from '@ionic/vue'
+  import { reactive } from 'vue'
+  import { useRouter } from 'vue-router'
+  import { useGameStore } from '@/store/game'
+  import { useMainStore } from '@/store/main'
+  import Modal from '@/components/Modal.vue'
+  import {
+    TranslateIcon,
+    PlayIcon,
+    PlusCircleIcon,
+    PlusIcon,
+    FlagIcon,
+    TrashIcon,
+    InformationCircleIcon,
+    DotsVerticalIcon,
+    ChatIcon,
+    ClipboardListIcon,
+    ExclamationIcon,
+  } from '@heroicons/vue/outline'
 
-const { t, availableLocales, locale } = useI18n();
+  const { t, availableLocales, locale } = useI18n()
 
-const modals = reactive({
-  inequal: false,
-  lang: false,
-  rules: false,
-});
-const router = useRouter();
-const game = useGameStore();
-const main = useMainStore();
-const openChat = () => {
-  window.$crisp.push(["do", "chat:show"]);
-  window.$crisp.push(["do", "chat:open"]);
-};
-const saveTeam = () => {
-  if (game.mode === 1) {
-    modals.inequal = true;
-  } else {
-    router.push("/theme");
+  const modals = reactive({
+    inequal: false,
+    lang: false,
+    rules: false,
+  })
+  const router = useRouter()
+  const game = useGameStore()
+  const main = useMainStore()
+  const openChat = () => {
+    window.$crisp.push(['do', 'chat:show'])
+    window.$crisp.push(['do', 'chat:open'])
   }
-};
-const presentActionSheet = async () => {
-      const actionSheet = await actionSheetController
-        .create({
-          header: t('more'),
-          buttons: [
-            {
-              text: t('openSource'),
-              handler: () => {
-                window.open("https://github.com/Forgr-ee/Mimesis", "_blank");
-              },
-            },
-            {
-              text: t('rate'),
-              handler: () => {
-                if (isPlatform("capacitor")) {
-                    RateApp.requestReview();
-                }
-              },
-            },
-            {
-              text: `${t('by')} Martin Donadieu`,
-              handler: () => {
-                window.open("https://msha.ke/martindonadieu", "_blank");
-              },
-            },
-            {
-              text: t('close'),
-              role: 'cancel',
-            },
-          ],
-        });
-      await actionSheet.present();
-
-      const { role } = await actionSheet.onDidDismiss();
-      console.log('onDidDismiss resolved with role', role);
+  const saveTeam = () => {
+    if (game.mode === 1) {
+      modals.inequal = true
+    } else {
+      router.push('/theme')
     }
+  }
+  const presentActionSheet = async () => {
+    const actionSheet = await actionSheetController.create({
+      header: t('more'),
+      buttons: [
+        {
+          text: t('openSource'),
+          handler: () => {
+            window.open('https://github.com/Forgr-ee/Mimesis', '_blank')
+          },
+        },
+        {
+          text: t('rate'),
+          handler: () => {
+            if (isPlatform('capacitor')) {
+              RateApp.requestReview()
+            }
+          },
+        },
+        {
+          text: `${t('by')} Martin Donadieu`,
+          handler: () => {
+            window.open('https://msha.ke/martindonadieu', '_blank')
+          },
+        },
+        {
+          text: t('close'),
+          role: 'cancel',
+        },
+      ],
+    })
+    await actionSheet.present()
+
+    const { role } = await actionSheet.onDidDismiss()
+    console.log('onDidDismiss resolved with role', role)
+  }
 </script>
