@@ -10,14 +10,7 @@
           alt="logo"
         />
         <div
-          class="
-            mx-auto
-            text-4xl
-            font-semibold
-            leading-6
-            text-center text-gray-50
-            capitalize-first
-          "
+          class="mx-auto text-4xl font-semibold leading-6 text-center  text-gray-50 capitalize-first"
         >
           {{ t('createTeam') }}
         </div>
@@ -29,14 +22,11 @@
           <template #content>
             <div>
               <button
-                v-for="l in availableLocales"
+                v-for="l in main.langs"
                 :key="`locale-${l}`"
                 class="p-2 my-2 font-medium rounded-lg"
-                :class="{ 'bg-primary': locale === l }"
-                @click="
-                  locale = l
-                  main.lang = l
-                "
+                :class="{ 'bg-primary': main.lang === l }"
+                @click="setLang(l)"
               >
                 {{ t(l) }}
               </button>
@@ -45,28 +35,7 @@
           <template #buttons>
             <button
               type="button"
-              class="
-                px-6
-                py-3
-                mb-1
-                mr-1
-                text-xs
-                font-bold
-                uppercase
-                transition-all
-                duration-150
-                ease-linear
-                border
-                rounded
-                shadow
-                outline-none
-                bg-primary
-                text-light
-                border-light
-                md:text-base
-                hover:shadow-lg
-                focus:outline-none
-              "
+              class="px-6 py-3 mb-1 mr-1 text-xs font-bold uppercase transition-all duration-150 ease-linear border rounded shadow outline-none  bg-primary text-light border-light md:text-base hover:shadow-lg focus:outline-none"
               @click="modals.lang = false"
             >
               {{ t('accept') }}
@@ -98,28 +67,7 @@
           <template #buttons>
             <button
               type="button"
-              class="
-                px-6
-                py-3
-                mb-1
-                mr-1
-                text-xs
-                font-bold
-                uppercase
-                transition-all
-                duration-150
-                ease-linear
-                border
-                rounded
-                shadow
-                outline-none
-                bg-primary
-                text-light
-                border-light
-                md:text-base
-                hover:shadow-lg
-                focus:outline-none
-              "
+              class="px-6 py-3 mb-1 mr-1 text-xs font-bold uppercase transition-all duration-150 ease-linear border rounded shadow outline-none  bg-primary text-light border-light md:text-base hover:shadow-lg focus:outline-none"
               @click="modals.rules = false"
             >
               {{ t('accept') }}
@@ -137,28 +85,7 @@
           >
           <template #buttons>
             <button
-              class="
-                px-6
-                py-3
-                mb-1
-                mr-1
-                text-xs
-                font-bold
-                uppercase
-                transition-all
-                duration-150
-                ease-linear
-                border
-                rounded
-                shadow
-                outline-none
-                bg-light
-                text-primary
-                border-primary
-                md:text-base
-                hover:shadow-lg
-                focus:outline-none
-              "
+              class="px-6 py-3 mb-1 mr-1 text-xs font-bold uppercase transition-all duration-150 ease-linear border rounded shadow outline-none  bg-light text-primary border-primary md:text-base hover:shadow-lg focus:outline-none"
               @click="modals.inequal = false"
             >
               {{ t('update') }} {{ t('team') }}
@@ -166,28 +93,7 @@
             <router-link
               to="/theme"
               type="button"
-              class="
-                px-6
-                py-3
-                mb-1
-                mr-1
-                text-xs
-                font-bold
-                uppercase
-                transition-all
-                duration-150
-                ease-linear
-                border
-                rounded
-                shadow
-                outline-none
-                bg-primary
-                text-light
-                border-light
-                md:text-base
-                hover:shadow-lg
-                focus:outline-none
-              "
+              class="px-6 py-3 mb-1 mr-1 text-xs font-bold uppercase transition-all duration-150 ease-linear border rounded shadow outline-none  bg-primary text-light border-light md:text-base hover:shadow-lg focus:outline-none"
               @click="modals.inequal = false"
             >
               {{ t('go') }}
@@ -204,33 +110,13 @@
             }"
           >
             <div
-              class="
-                relative
-                flex flex-col
-                items-center
-                pt-10
-                pb-4
-                mx-3
-                my-5
-                border border-primary
-                bg-light
-                rounded-xl
-              "
+              class="relative flex flex-col items-center pt-10 pb-4 mx-3 my-5 border  border-primary bg-light rounded-xl"
             >
               <p class="absolute top-0 left-0 p-3 text-primary">
                 {{ t('team') }} {{ index + 1 }}
               </p>
               <ion-input
-                class="
-                  w-2/3
-                  mx-auto
-                  mb-6
-                  text-5xl text-center
-                  border-b-2
-                  bg-light
-                  border-primary
-                  text-primary
-                "
+                class="w-2/3 mx-auto mb-6 text-5xl text-center border-b-2  bg-light border-primary text-primary"
                 :value="team.name"
               ></ion-input>
               <div class="mb-5 overflow-y-scroll no_bar h-28 xs:h-48 md:h-60">
@@ -241,15 +127,7 @@
                     class="flex items-center"
                   >
                     <ion-input
-                      class="
-                        my-1
-                        text-lg text-center
-                        border
-                        rounded-lg
-                        text-primary
-                        bg-light
-                        border-primary
-                      "
+                      class="my-1 text-lg text-center border rounded-lg  text-primary bg-light border-primary"
                       :value="player.name"
                     ></ion-input>
                     <button
@@ -284,35 +162,10 @@
           </div>
           <div class="flex-none w-3/12 md:w-1/12">
             <div
-              class="
-                relative
-                flex
-                items-center
-                justify-center
-                w-full
-                mx-3
-                my-10
-                border
-                h-60
-                xs:h-80
-                md:h-96 md:mx-5
-                border-primary
-                bg-light
-                rounded-xl
-              "
+              class="relative flex items-center justify-center w-full mx-3 my-10 border  h-60 xs:h-80 md:h-96 md:mx-5 border-primary bg-light rounded-xl"
             >
               <div
-                class="
-                  flex
-                  items-center
-                  justify-center
-                  w-12
-                  h-12
-                  rounded-full
-                  cursor-pointer
-                  bg-primary
-                  active:bg-secondary
-                "
+                class="flex items-center justify-center w-12 h-12 rounded-full cursor-pointer  bg-primary active:bg-secondary"
                 @click="game.teams.push(randomTeam())"
               >
                 <PlusIcon class="w-8 h-8 text-light" />
@@ -322,18 +175,7 @@
         </div>
         <div class="flex justify-center text-5xl text-primary">
           <a
-            class="
-              w-1/2
-              px-5
-              py-2
-              overflow-hidden
-              border-2
-              xs:mt-2
-              md:w-1/3
-              bg-light
-              border-primary
-              rounded-xl
-            "
+            class="w-1/2 px-5 py-2 overflow-hidden border-2  xs:mt-2 md:w-1/3 bg-light border-primary rounded-xl"
             @click="saveTeam()"
           >
             <div class="relative flex items-center justify-center">
@@ -344,7 +186,7 @@
         </div>
         <div class="flex flex-colunm">
           <button
-            v-if="availableLocales.length > 1"
+            v-if="lenghtLangs > 1"
             class="w-1/4 mx-auto mt-6"
             @click="modals.lang = true"
           >
@@ -376,7 +218,7 @@
     IonInput,
     actionSheetController,
   } from '@ionic/vue'
-  import { reactive } from 'vue'
+  import { computed, reactive } from 'vue'
   import { useRouter } from 'vue-router'
   import { useGameStore } from '@/store/game'
   import { useMainStore } from '@/store/main'
@@ -395,8 +237,6 @@
     ExclamationIcon,
   } from '@heroicons/vue/outline'
 
-  const { t, availableLocales, locale } = useI18n()
-
   const modals = reactive({
     inequal: false,
     lang: false,
@@ -405,10 +245,16 @@
   const router = useRouter()
   const game = useGameStore()
   const main = useMainStore()
+  const { t, locale } = useI18n()
   const openChat = () => {
     window.$crisp.push(['do', 'chat:show'])
     window.$crisp.push(['do', 'chat:open'])
   }
+  const setLang = (l: string) => {
+    main.lang = l
+    locale.value = l
+  }
+  const lenghtLangs = computed(() => Object.keys(main.langs).length)
   const saveTeam = () => {
     if (game.mode === 1) {
       modals.inequal = true
