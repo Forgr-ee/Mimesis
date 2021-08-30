@@ -5,6 +5,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
+    "resources": "cordova-res --skip-config --copy",
+    "sync": "cap sync",
     "serve": "vite preview",
     "test": "jest src",
     "lint:markup": "vue-tsc --noEmit",
@@ -40,7 +42,9 @@
     "vue-timer-hook": "^0.0.21"
   },
   "devDependencies": {
+    "@capacitor/android": "^3.2.0",
     "@capacitor/cli": "^3.2.0",
+    "@capacitor/ios": "^3.2.0",
     "@types/canvas-confetti": "^1.4.2",
     "@types/jest": "^27.0.1",
     "@types/uuid": "^8.3.1",
