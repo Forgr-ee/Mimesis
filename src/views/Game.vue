@@ -2,12 +2,12 @@
   <ion-page>
     <ion-header mode="ios">
       <ion-toolbar color="secondary">
-        <ArrowLeftIcon class="w-1/12 pr-3 text-primary" @click="pause()" />
+        <ArrowLeftIcon class="w-1/12 mr-3 text-primary" @click="pause()" />
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true" :scroll-y="false">
       <div
-        class="relative flex flex-col justify-between h-screen px-5 pb-10 xs:px-10 bg-secondary"
+        class="relative flex flex-col justify-between h-full px-5 pb-10 xs:px-10 bg-secondary"
       >
         <img
           class="absolute left-0 right-0 hidden object-contain h-20 m-auto xs:block"
@@ -123,12 +123,12 @@
             </h1>
           </div>
         </div>
-        <h5 class="my-12 text-5xl font-bold text-center text-primary">
+        <h5 class="my-10 text-5xl font-bold text-center text-primary">
           {{ timer.seconds }}
         </h5>
         <div class="h-48">
           <div
-            class="flex flex-col items-center my-auto mb-10 overflow-y-scroll text-3xl border text-primary border-primary bg-light rounded-xl max-h-48"
+            class="flex flex-col items-center my-auto overflow-y-scroll text-3xl border text-primary border-primary bg-light rounded-xl max-h-48"
           >
             <div class="px-5 py-8 md:p-14">{{ main.guess }}</div>
           </div>
