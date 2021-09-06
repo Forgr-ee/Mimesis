@@ -1,9 +1,11 @@
+import { IAPProductCustom, registerProduct, restore } from './iap';
 import FIREBASE_CONFIG from './.env.firebase'
 
 import firebase from 'firebase/app'
 // Required for side-effects
 import 'firebase/firestore'
 import 'firebase/auth'
+import { IAPProduct } from '@ionic-native/in-app-purchase-2'
 
 export interface Player {
   uuid: string
@@ -26,10 +28,13 @@ export type Theme = {
   lang: {
     [key: string]: string
   }
+  product?: IAPProduct,
   icon: string
+  id_ios: string
+  id_android: string
   id: string
   order: number
-  status: string
+  status: 'paid' | 'free' | 'purchased'
 }
 
 export type GuessDb = {
@@ -96,7 +101,7 @@ export const useFirebase = (): Usefirebase => {
         const data = doc.data() as Guess
         value.push(data)
       })
-    } catch (err) {
+    } catch (err: any) {
       console.error('initThemes', err)
       throw new Error(err)
     }
@@ -113,14 +118,14 @@ export const useFirebase = (): Usefirebase => {
         const guessList = await getGuesses(theme.id, lang)
         guessDb[`${theme.id}_${lang}`] = guessList
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('getGuessesDb', err)
       throw new Error(err)
     }
     return guessDb
   }
   const getThemes = async () => {
-    const value: Theme[] = []
+    let values: Theme[] = []
     try {
       const snapshot = await firebase
         .firestore()
@@ -128,15 +133,24 @@ export const useFirebase = (): Usefirebase => {
         .where('active', '==', true)
         .orderBy('order', 'asc')
         .get()
+      const pList: Promise<Theme>[] = []
       snapshot.docs.map((doc) => {
         const theme = doc.data() as Theme
-        value.push(theme)
+        pList.push(registerProduct(theme as IAPProductCustom).then((product) => {
+          theme.product = product
+          if (product && product.owned) {
+            theme.status = 'purchased'
+          }
+          return theme
+        }))
       })
-    } catch (err) {
+      restore()
+      values = await Promise.all(pList)
+    } catch (err: any) {
       console.error('initThemes', err)
       throw new Error(err)
     }
-    return value
+    return values
   }
   const getLangMessages = async (): Promise<LangMessages> => {
     const value: LangMessages = {} as LangMessages
@@ -150,7 +164,7 @@ export const useFirebase = (): Usefirebase => {
         const data = doc.data() as LangMessage
         value[data.id] = data
       })
-    } catch (err) {
+    } catch (err: any) {
       console.error('initLangMessages', err)
       throw new Error(err)
     }

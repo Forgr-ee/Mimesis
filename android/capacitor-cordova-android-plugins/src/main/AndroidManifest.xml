@@ -5,5 +5,5 @@ xmlns:amazon="http://schemas.amazon.com/apk/res/android">
 <application  >
 
 </application>
-
+<uses-permission android:name="com.android.vending.BILLING"/>
 </manifest>

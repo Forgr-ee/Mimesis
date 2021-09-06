@@ -19,7 +19,7 @@ export const useAuthStore = defineStore('auth', {
         this.user = await login()
         this.error = null
         this.loading = false
-      } catch (err) {
+      } catch (err: any) {
         this.error = err
         this.loading = false
       }
@@ -31,7 +31,7 @@ export const useAuthStore = defineStore('auth', {
         this.error = null
         this.loading = false
         this.initialized = false
-      } catch (err) {
+      } catch (err: any) {
         this.error = err
         this.loading = false
       }
@@ -47,7 +47,7 @@ export const useAuthStore = defineStore('auth', {
         this.error = null
         this.loading = false
         this.initialized = true
-      } catch (err) {
+      } catch (err: any) {
         this.error = err
         this.loading = false
       }

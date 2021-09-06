@@ -29,6 +29,8 @@ import '@ionic/vue/css/display.css'
 
 /* Theme variables */
 import './theme/variables.css'
+import { Store } from 'pinia'
+import { LangMessages } from './services/firebase'
 
 initPlausible()
 
@@ -36,38 +38,54 @@ const app = createApp(App).use(IonicVue).use(pinia())
 
 // app.component(VueFeather.name || 'VueFeather', VueFeather);
 
-const initI18n = async () => {
+const initI18n = async (langsMessages: LangMessages) => {
   try {
-    const main = useMainStore()
-    await main.initialize()
     const i18n = createI18n({
       legacy: false,
       globalInjection: false,
       locale: 'fr',
       fallbackLocale: 'fr',
-      messages: main.langsMessages,
+      messages: langsMessages,
     })
     app.use(i18n)
   } catch (err) {
     console.error('initI18n', err)
   }
 }
-const auth = useAuthStore()
 
-auth
-  .authCheck()
-  .then(async () => {
+const init = async (isRecall: boolean =false) => {
+  console.error('init')
+  const main = useMainStore()
+  const auth = useAuthStore()
+  try {
+    console.log('authCheck')
+    await auth.authCheck()
+    console.log('initCrisp')
     initCrisp()
-    await initI18n()
+    console.log('main.initialize')
+    await main.initialize(true) // Todo remove before production
+    console.log('initI18n')
+    await initI18n(main.langsMessages)
     // save currentPath
     router.afterEach((to) => {
       const main = useMainStore()
       main.currentPath = to.fullPath
     })
+    console.log('use.router')
     app.use(router)
-    return router.isReady()
-  })
-  .then(() => {
+    console.log('router.isReady')
+    await router.isReady()
+    console.log('mount')
     app.mount('#app')
+    console.log('initCapacitor')
     initCapacitor()
-  })
+  } catch (err) {
+    console.error('init', err)
+    if (!isRecall) {
+      console.error('isRecall')
+      await main.initialize(true)
+      await init(true)
+    }
+  }
+}
+init()

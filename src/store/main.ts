@@ -58,15 +58,16 @@ export const useMainStore = defineStore('main', {
     },
   },
   actions: {
-    async initialize() {
+    async initialize(force: boolean=false) {
+      console.log('initialize', force);
       this.offline = !window.navigator.onLine
-      if (this.offline || this.initialized || !this.needUpdate) return
+      if (!force && (this.offline || this.initialized || !this.needUpdate)) return
       this.loading = true
       try {
         await Promise.all([this.initLangMessages(), this.initThemes()])
         await this.initGuessTheme()
         this.initialized = true
-      } catch (err) {
+      } catch (err: any) {
         this.error = err
         console.log('err initialise', err)
       }
