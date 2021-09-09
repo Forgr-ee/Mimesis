@@ -177,7 +177,7 @@
     IonToolbar,
     IonHeader,
   } from '@ionic/vue'
-  import { computed, onMounted, reactive, ref, watchEffect } from 'vue'
+  import { computed, onMounted, reactive, ref, StyleValue, watchEffect } from 'vue'
   import { create as createConfetti, CreateTypes } from 'canvas-confetti'
   import { App } from '@capacitor/app'
   import { KeepAwake } from '@capacitor-community/keep-awake'
@@ -249,14 +249,14 @@
   const timer = useTimer(1, false)
   let confetti: CreateTypes
 
-  const bgColor = computed(() => ({ 
-    'background-image': main.guess.cover ? `url('${main.guess.cover}')` : 'none',
-    // 'background-blend-mode': 'screen',
-    'background-blend-mode': 'multiply',
-    'background-position': 'center',
-    'background-repeat': 'no-repeat',
-    'background-size': 'cover'
-  }))
+  const bgColor = computed<StyleValue[]>(() => ([{ 
+    backgroundImage: main.guess.cover ? `url('${main.guess.cover}')` : 'none',
+    // backgroundBlendMode: 'screen',
+    backgroundBlendMode: 'multiply',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover'
+  }] as StyleValue[]))
   const createTime = () => {
     const expiryTimestamp = new Date()
     expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + 45)
