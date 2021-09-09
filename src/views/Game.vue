@@ -3,17 +3,20 @@
     <ion-header mode="ios">
       <ion-toolbar color="secondary">
         <ArrowLeftIcon class="w-1/12 mr-3 text-primary" @click="pause()" />
+        <ion-title>
+          <img
+            class="h-10 mx-auto"
+            src="/assets/icon/icon.png"
+            alt="logo"
+          />
+        </ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true" :scroll-y="false">
       <div
         class="relative flex flex-col justify-between h-full px-5 pb-10 xs:px-10 bg-secondary"
+        :style="bgColor"
       >
-        <img
-          class="absolute left-0 right-0 hidden object-contain h-20 m-auto xs:block"
-          src="/assets/icon/icon.png"
-          alt="logo"
-        />
         <Modal :open="modals.changePlayer">
           <template #icon
             ><CheckIcon class="w-6 h-6 text-green-600" aria-hidden="true"
@@ -108,13 +111,13 @@
           </template>
         </Modal>
         <div class="flex items-center justify-between pt-3 md:pt-10 safe-pt">
-          <div>
+          <div class="p-2 bg-secondary rounded-xl">
             <p class="text-md md:text-xl text-primary">{{ t('team') }} :</p>
             <h2 class="text-xl font-bold md:text-2xl text-primary">
               {{ game.teamName }}
             </h2>
           </div>
-          <div>
+          <div class="p-2 bg-secondary rounded-xl">
             <p class="text-right text-md md:text-xl text-primary">
               {{ t('player') }} :
             </p>
@@ -123,20 +126,25 @@
             </h1>
           </div>
         </div>
-        <h5 class="my-10 text-5xl font-bold text-center text-primary">
-          {{ timer.seconds }}
-        </h5>
-        <div class="h-48">
+        <div class="flex flex-col items-center">
+          <h5 class="p-2 my-10 text-5xl font-bold text-center text-primary bg-secondary rounded-xl">
+            {{ timer.seconds }}
+          </h5>
+        </div>
+        <div class="h-48" >
           <div
-            class="flex flex-col items-center my-auto overflow-y-scroll text-3xl border text-primary border-primary bg-light rounded-xl max-h-48"
+            class="flex flex-col items-center my-auto overflow-y-scroll text-3xl border text-primary drop-shadow border-primary bg-light rounded-xl max-h-48"
           >
-            <div class="px-5 py-8 md:p-14">{{ main.guess }}</div>
+            <!-- <img v-if="main.guess.cover" :src="main.guess.cover"/> -->
+            <div class="px-5 py-8 md:p-14"><p class="text-2xl" v-if="main.guess.type ">{{ main.guess.type }}</p> <b>{{ main.guess.title }}</b> <p class="text-2xl" v-if="main.guess.author ">de {{ main.guess.author }}</p></div>
           </div>
         </div>
         <div class="w-full mb-5">
-          <h3 class="text-3xl font-bold text-right md:text-center text-primary">
-            {{ t('score') }}: {{ game.teamScore }}
-          </h3>
+          <div class="flex flex-col items-end">
+            <h3 class="p-2 text-3xl font-bold text-right md:text-center text-primary bg-secondary rounded-xl">
+              {{ t('score') }}: {{ game.teamScore }}
+            </h3>
+          </div>
           <div
             class="flex justify-between mt-10 text-4xl md:justify-around md:text-5xl text-primary"
           >
@@ -163,12 +171,13 @@
   import { useI18n } from 'vue-i18n'
   import {
     IonContent,
+    IonTitle,
     IonPage,
     isPlatform,
     IonToolbar,
     IonHeader,
   } from '@ionic/vue'
-  import { onMounted, reactive, ref, watchEffect } from 'vue'
+  import { computed, onMounted, reactive, ref, watchEffect } from 'vue'
   import { create as createConfetti, CreateTypes } from 'canvas-confetti'
   import { App } from '@capacitor/app'
   import { KeepAwake } from '@capacitor-community/keep-awake'
@@ -240,6 +249,14 @@
   const timer = useTimer(1, false)
   let confetti: CreateTypes
 
+  const bgColor = computed(() => ({ 
+    'background-image': main.guess.cover ? `url('${main.guess.cover}')` : 'none',
+    // 'background-blend-mode': 'screen',
+    'background-blend-mode': 'multiply',
+    'background-position': 'center',
+    'background-repeat': 'no-repeat',
+    'background-size': 'cover'
+  }))
   const createTime = () => {
     const expiryTimestamp = new Date()
     expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + 45)

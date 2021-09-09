@@ -30,7 +30,7 @@ export const useMainStore = defineStore('main', {
     langsMessages: {} as LangMessages,
     lang: 'fr',
     guessDb: {} as GuessDb,
-    guess: '',
+    guess: {title: ''} as Guess,
   }),
   getters: {
     langs(): string[] {
@@ -85,11 +85,11 @@ export const useMainStore = defineStore('main', {
     },
     nextGuess(found = false) {
       const game = useGameStore()
-      if (this.guess) {
+      if (this.guess && this.guess.title !== '') {
         if (found) {
-          game.foundGuess.push(this.guess)
+          game.foundGuess.push(this.guess.title)
         } else {
-          game.skipGuess.push(this.guess)
+          game.skipGuess.push(this.guess.title)
         }
       }
       if (game.pastGuess.length === this.guesses.length) {
@@ -99,7 +99,7 @@ export const useMainStore = defineStore('main', {
             : []
       }
       const result = randomSelect<Guess>(this.nextGuesses)
-      this.guess = result ? result.title : 'Error'
+      this.guess = result ? result : {title: 'Error'}
     },
   },
 })

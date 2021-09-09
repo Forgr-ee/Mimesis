@@ -43,6 +43,9 @@ export type GuessDb = {
 
 export type Guess = {
   title: string
+  cover?: string
+  author?: string
+  type?: string
 }
 
 type Message = {
