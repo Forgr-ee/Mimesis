@@ -143,13 +143,13 @@
                   </div>
                 </div>
                 <div class="flex flex-col items-end pr-3">
-                  <a
+                  <button
                     class="w-2/12 p-2 text-primary"
                     type="button"
                     @click="team.players.push(randomPlayer())"
                   >
                     <PlusCircleIcon class="w-8 h-8" />
-                  </a>
+                  </button>
                 </div>
               </div>
               <button
