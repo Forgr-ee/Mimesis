@@ -177,7 +177,7 @@
     IonToolbar,
     IonHeader,
   } from '@ionic/vue'
-  import { computed, onMounted, reactive, ref, StyleValue, watchEffect } from 'vue'
+  import { computed, onBeforeUnmount, onMounted, reactive, ref, StyleValue, watchEffect } from 'vue'
   import { create as createConfetti, CreateTypes } from 'canvas-confetti'
   import { App } from '@capacitor/app'
   import { KeepAwake } from '@capacitor-community/keep-awake'
@@ -306,6 +306,9 @@
     modals.winner = false
   }
 
+  onBeforeUnmount(() => {
+    timer.pause()
+  })
   onMounted(() => {
     watchEffect(async () => {
       if (timer.isExpired.value) {
