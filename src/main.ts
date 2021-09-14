@@ -63,7 +63,7 @@ const init = async (isRecall: boolean =false) => {
     console.log('initCrisp')
     initCrisp()
     console.log('main.initialize')
-    await main.initialize(true) // Todo remove before production
+    await main.initialize()
     console.log('initI18n')
     await initI18n(main.langsMessages)
     // save currentPath
