@@ -130,7 +130,7 @@
                   >
                     <ion-input
                       class="my-1 text-lg text-center border rounded-lg text-primary bg-light border-primary"
-                      :value="player.name"
+                      v-model="player.name"
                     ></ion-input>
                     <button
                       v-if="team.players.length > 2"
