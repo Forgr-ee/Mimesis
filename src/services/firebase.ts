@@ -1,4 +1,4 @@
-import { IAPProductCustom, registerProduct, restore } from './iap';
+import { IAPProductCustom, registerProduct, restore } from './iap'
 import FIREBASE_CONFIG from './.env.firebase'
 
 import firebase from 'firebase/app'
@@ -28,7 +28,7 @@ export type Theme = {
   lang: {
     [key: string]: string
   }
-  product?: IAPProduct,
+  product?: IAPProduct
   icon: string
   id_ios: string
   id_android: string
@@ -139,13 +139,15 @@ export const useFirebase = (): Usefirebase => {
       const pList: Promise<Theme>[] = []
       snapshot.docs.map((doc) => {
         const theme = doc.data() as Theme
-        pList.push(registerProduct(theme as IAPProductCustom).then((product) => {
-          theme.product = product
-          if (product && product.owned) {
-            theme.status = 'purchased'
-          }
-          return theme
-        }))
+        pList.push(
+          registerProduct(theme as IAPProductCustom).then((product) => {
+            theme.product = product
+            if (product && product.owned) {
+              theme.status = 'purchased'
+            }
+            return theme
+          })
+        )
       })
       restore()
       values = await Promise.all(pList)

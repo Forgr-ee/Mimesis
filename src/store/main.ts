@@ -30,7 +30,7 @@ export const useMainStore = defineStore('main', {
     langsMessages: {} as LangMessages,
     lang: 'fr',
     guessDb: {} as GuessDb,
-    guess: {title: ''} as Guess,
+    guess: { title: '' } as Guess,
   }),
   getters: {
     langs(): string[] {
@@ -58,10 +58,11 @@ export const useMainStore = defineStore('main', {
     },
   },
   actions: {
-    async initialize(force: boolean=false) {
-      console.log('initialize', force);
+    async initialize(force = false) {
+      console.log('initialize', force)
       this.offline = !window.navigator.onLine
-      if (!force && (this.offline || this.initialized || !this.needUpdate)) return
+      if (!force && (this.offline || this.initialized || !this.needUpdate))
+        return
       this.loading = true
       try {
         await Promise.all([this.initLangMessages(), this.initThemes()])
@@ -99,7 +100,7 @@ export const useMainStore = defineStore('main', {
             : []
       }
       const result = randomSelect<Guess>(this.nextGuesses)
-      this.guess = result ? result : {title: 'Error'}
+      this.guess = result ? result : { title: 'Error' }
     },
   },
 })

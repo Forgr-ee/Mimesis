@@ -7,7 +7,17 @@
       @close="$emit('close')"
     >
       <div
-        class="flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0"
+        class="
+          flex
+          items-end
+          justify-center
+          min-h-screen
+          px-4
+          pt-4
+          pb-20
+          text-center
+          sm:block sm:p-0
+        "
       >
         <TransitionChild
           as="template"
@@ -39,11 +49,36 @@
           leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
         >
           <div
-            class="inline-block px-4 pt-5 pb-4 overflow-hidden align-bottom transition-all transform border-2 rounded-lg shadow-xl border-primary text-primary bg-secondary sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6"
+            class="
+              inline-block
+              px-4
+              pt-5
+              pb-4
+              overflow-hidden
+              align-bottom
+              transition-all
+              transform
+              border-2
+              rounded-lg
+              shadow-xl
+              border-primary
+              text-primary
+              bg-secondary
+              sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6
+            "
           >
             <div>
               <div
-                class="flex items-center justify-center w-12 h-12 mx-auto bg-green-100 rounded-full "
+                class="
+                  flex
+                  items-center
+                  justify-center
+                  w-12
+                  h-12
+                  mx-auto
+                  bg-green-100
+                  rounded-full
+                "
               >
                 <slot name="icon"></slot>
               </div>

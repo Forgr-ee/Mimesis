@@ -4,17 +4,22 @@
       <ion-toolbar color="secondary">
         <ArrowLeftIcon class="w-1/12 mr-3 text-primary" @click="pause()" />
         <ion-title>
-          <img
-            class="h-10 mx-auto"
-            src="/assets/icon/icon.png"
-            alt="logo"
-          />
+          <img class="h-10 mx-auto" src="/assets/icon/icon.png" alt="logo" />
         </ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true" :scroll-y="false">
       <div
-        class="relative flex flex-col justify-between h-full px-5 pb-10 xs:px-10 bg-secondary"
+        class="
+          relative
+          flex flex-col
+          justify-between
+          h-full
+          px-5
+          pb-10
+          xs:px-10
+          bg-secondary
+        "
         :style="bgColor"
       >
         <Modal :open="modals.changePlayer">
@@ -24,7 +29,15 @@
           <template #title>{{ t('ready') }} ?</template>
           <template #content>
             <p
-              class="px-5 mt-4 mb-2 text-xl leading-relaxed text-center md:text-2xl"
+              class="
+                px-5
+                mt-4
+                mb-2
+                text-xl
+                leading-relaxed
+                text-center
+                md:text-2xl
+              "
             >
               {{ t('team') }} <strong>{{ game.teamName }}</strong>
             </p>
@@ -35,7 +48,28 @@
           <template #buttons>
             <button
               type="button"
-              class="px-6 py-3 mb-1 mr-1 text-xs font-bold uppercase transition-all duration-150 ease-linear border rounded shadow outline-none bg-primary text-light border-light md:text-base hover:shadow-lg focus:outline-none"
+              class="
+                px-6
+                py-3
+                mb-1
+                mr-1
+                text-xs
+                font-bold
+                uppercase
+                transition-all
+                duration-150
+                ease-linear
+                border
+                rounded
+                shadow
+                outline-none
+                bg-primary
+                text-light
+                border-light
+                md:text-base
+                hover:shadow-lg
+                focus:outline-none
+              "
               @click="nextRound()"
             >
               {{ t('go') }}
@@ -51,19 +85,58 @@
             ><p class="py-10 md:text-2xl">{{ t('leave') }}</p></template
           >
           <template #buttons>
-            <router-link
-              to="/home"
-              @click="modals.pause = false"
+            <router-link to="/home" @click="modals.pause = false">
+              <button
+                class="
+                  px-6
+                  py-3
+                  mb-1
+                  mr-1
+                  text-xs
+                  font-bold
+                  uppercase
+                  transition-all
+                  duration-150
+                  ease-linear
+                  border
+                  rounded
+                  shadow
+                  outline-none
+                  bg-light
+                  text-primary
+                  border-primary
+                  md:text-base
+                  hover:shadow-lg
+                  focus:outline-none
+                "
               >
-                <button
-                  class="px-6 py-3 mb-1 mr-1 text-xs font-bold uppercase transition-all duration-150 ease-linear border rounded shadow outline-none bg-light text-primary border-primary md:text-base hover:shadow-lg focus:outline-none"
-                >
-                  {{ t('backHome') }}
-                </button>
-              </router-link>
+                {{ t('backHome') }}
+              </button>
+            </router-link>
             <button
               type="button"
-              class="px-6 py-3 mb-1 mr-1 text-xs font-bold uppercase transition-all duration-150 ease-linear border rounded shadow outline-none bg-primary text-light border-light md:text-base hover:shadow-lg focus:outline-none"
+              class="
+                px-6
+                py-3
+                mb-1
+                mr-1
+                text-xs
+                font-bold
+                uppercase
+                transition-all
+                duration-150
+                ease-linear
+                border
+                rounded
+                shadow
+                outline-none
+                bg-primary
+                text-light
+                border-light
+                md:text-base
+                hover:shadow-lg
+                focus:outline-none
+              "
               @click="resume()"
             >
               {{ t('resume') }}
@@ -91,19 +164,58 @@
             </div>
           </template>
           <template #buttons>
-            <router-link
-              to="/home"
-              @click="modals.winner = false"
+            <router-link to="/home" @click="modals.winner = false">
+              <button
+                class="
+                  px-6
+                  py-3
+                  mb-1
+                  mr-1
+                  text-xs
+                  font-bold
+                  uppercase
+                  transition-all
+                  duration-150
+                  ease-linear
+                  border
+                  rounded
+                  shadow
+                  outline-none
+                  bg-light
+                  text-primary
+                  border-primary
+                  md:text-base
+                  hover:shadow-lg
+                  focus:outline-none
+                "
               >
-                <button
-                  class="px-6 py-3 mb-1 mr-1 text-xs font-bold uppercase transition-all duration-150 ease-linear border rounded shadow outline-none bg-light text-primary border-primary md:text-base hover:shadow-lg focus:outline-none"
-                >
-                  {{ t('backHome') }}
-                </button>
-              </router-link>
+                {{ t('backHome') }}
+              </button>
+            </router-link>
             <button
               type="button"
-              class="px-6 py-3 mb-1 mr-1 text-xs font-bold uppercase transition-all duration-150 ease-linear border rounded shadow outline-none bg-primary text-light border-light md:text-base hover:shadow-lg focus:outline-none"
+              class="
+                px-6
+                py-3
+                mb-1
+                mr-1
+                text-xs
+                font-bold
+                uppercase
+                transition-all
+                duration-150
+                ease-linear
+                border
+                rounded
+                shadow
+                outline-none
+                bg-primary
+                text-light
+                border-light
+                md:text-base
+                hover:shadow-lg
+                focus:outline-none
+              "
               @click="initGameLoop()"
             >
               {{ t('restart') }}
@@ -127,35 +239,100 @@
           </div>
         </div>
         <div class="flex flex-col items-center">
-          <h5 class="p-2 my-10 text-5xl font-bold text-center text-primary bg-secondary rounded-xl">
+          <h5
+            class="
+              p-2
+              my-10
+              text-5xl
+              font-bold
+              text-center text-primary
+              bg-secondary
+              rounded-xl
+            "
+          >
             {{ timer.seconds }}
           </h5>
         </div>
-        <div class="h-48" >
+        <div class="h-48">
           <div
-            class="flex flex-col items-center my-auto overflow-y-scroll text-3xl border text-primary drop-shadow border-primary bg-light rounded-xl max-h-48"
+            class="
+              flex flex-col
+              items-center
+              my-auto
+              overflow-y-scroll
+              text-3xl
+              border
+              text-primary
+              drop-shadow
+              border-primary
+              bg-light
+              rounded-xl
+              max-h-48
+            "
           >
             <!-- <img v-if="main.guess.cover" :src="main.guess.cover"/> -->
-            <div class="px-5 py-8 md:p-14"><p class="text-2xl" v-if="main.guess.type ">{{ main.guess.type }}</p> <b>{{ main.guess.title }}</b> <p class="text-2xl" v-if="main.guess.author ">de {{ main.guess.author }}</p></div>
+            <div class="px-5 py-8 md:p-14">
+              <p v-if="main.guess.type" class="text-2xl">
+                {{ main.guess.type }}
+              </p>
+              <b>{{ main.guess.title }}</b>
+              <p v-if="main.guess.author" class="text-2xl">
+                de {{ main.guess.author }}
+              </p>
+            </div>
           </div>
         </div>
         <div class="w-full mb-5">
           <div class="flex flex-col items-end">
-            <h3 class="p-2 text-3xl font-bold text-right md:text-center text-primary bg-secondary rounded-xl">
+            <h3
+              class="
+                p-2
+                text-3xl
+                font-bold
+                text-right
+                md:text-center
+                text-primary
+                bg-secondary
+                rounded-xl
+              "
+            >
               {{ t('score') }}: {{ game.teamScore }}
             </h3>
           </div>
           <div
-            class="flex justify-between mt-10 text-4xl md:justify-around md:text-5xl text-primary"
+            class="
+              flex
+              justify-between
+              mt-10
+              text-4xl
+              md:justify-around md:text-5xl
+              text-primary
+            "
           >
             <a
-              class="px-4 py-2 border-2 md:py-3 md:px-5 bg-light border-primary rounded-xl"
+              class="
+                px-4
+                py-2
+                border-2
+                md:py-3 md:px-5
+                bg-light
+                border-primary
+                rounded-xl
+              "
               @click="skipGuess()"
             >
               {{ t('pass') }}
             </a>
             <a
-              class="px-4 py-2 border-2 md:py-3 md:px-5 bg-light border-primary rounded-xl"
+              class="
+                px-4
+                py-2
+                border-2
+                md:py-3 md:px-5
+                bg-light
+                border-primary
+                rounded-xl
+              "
               @click="validGuess()"
             >
               {{ t('validate') }}
@@ -177,7 +354,15 @@
     IonToolbar,
     IonHeader,
   } from '@ionic/vue'
-  import { computed, onBeforeUnmount, onMounted, reactive, ref, StyleValue, watchEffect } from 'vue'
+  import {
+    computed,
+    onBeforeUnmount,
+    onMounted,
+    reactive,
+    ref,
+    StyleValue,
+    watchEffect,
+  } from 'vue'
   import { create as createConfetti, CreateTypes } from 'canvas-confetti'
   import { App } from '@capacitor/app'
   import { KeepAwake } from '@capacitor-community/keep-awake'
@@ -249,14 +434,21 @@
   const timer = useTimer(1, false)
   let confetti: CreateTypes
 
-  const bgColor = computed<StyleValue[]>(() => ([{ 
-    backgroundImage: main.guess.cover ? `url('${main.guess.cover}')` : 'none',
-    // backgroundBlendMode: 'screen',
-    backgroundBlendMode: 'multiply',
-    backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: 'cover'
-  }] as StyleValue[]))
+  const bgColor = computed<StyleValue[]>(
+    () =>
+      [
+        {
+          backgroundImage: main.guess.cover
+            ? `url('${main.guess.cover}')`
+            : 'none',
+          // backgroundBlendMode: 'screen',
+          backgroundBlendMode: 'multiply',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: 'cover',
+        },
+      ] as StyleValue[]
+  )
   const createTime = () => {
     const expiryTimestamp = new Date()
     expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + 45)

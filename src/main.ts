@@ -52,7 +52,7 @@ const initI18n = async (langsMessages: LangMessages) => {
   }
 }
 
-const init = async (isRecall: boolean =false) => {
+const init = async (isRecall = false) => {
   console.error('init')
   const main = useMainStore()
   const auth = useAuthStore()
