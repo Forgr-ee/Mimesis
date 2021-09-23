@@ -7,7 +7,7 @@ export interface IAPProductCustom {
   id_android: string
 }
 
-export const restore = () => {
+export const restore = (): void => {
   if (isPlatform('capacitor')) {
     console.log('restore')
     InAppPurchase2.refresh()
