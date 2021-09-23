@@ -22,7 +22,7 @@
         "
         :style="bgColor"
       >
-        <Modal :open="modals.changePlayer">
+        <Modal :open="main.currentPath === '/game' && modals.changePlayer">
           <template #icon
             ><CheckIcon class="w-6 h-6 text-green-600" aria-hidden="true"
           /></template>
@@ -85,7 +85,10 @@
             ><p class="py-10 md:text-2xl">{{ t('leave') }}</p></template
           >
           <template #buttons>
-            <router-link to="/home" @click="modals.pause = false">
+            <router-link
+              to="/home"
+              @click="initGameLoop() && (modals.pause = false)"
+            >
               <button
                 class="
                   px-6
@@ -164,7 +167,7 @@
             </div>
           </template>
           <template #buttons>
-            <router-link to="/home" @click="modals.winner = false">
+            <router-link to="/home" @click="initGameLoop()">
               <button
                 class="
                   px-6
@@ -451,7 +454,7 @@
   )
   const createTime = () => {
     const expiryTimestamp = new Date()
-    expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + 45)
+    expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + 1)
     return expiryTimestamp.getTime()
   }
 
@@ -491,14 +494,18 @@
   }
 
   const initGameLoop = () => {
-    game.reset()
-    main.nextGuess()
-    game.nextTeam()
-    modals.changePlayer = true
-    modals.winner = false
+    setTimeout(() => {
+      game.reset()
+      main.nextGuess()
+      game.nextTeam()
+      modals.changePlayer = true
+      modals.winner = false
+    }, 10)
+    return true
   }
 
   onBeforeUnmount(() => {
+    modals.changePlayer = true
     timer.pause()
   })
   onMounted(() => {

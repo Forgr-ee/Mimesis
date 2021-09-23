@@ -70,6 +70,9 @@ export const useGameStore = defineStore('game', {
       return this.teamUUID !== '-1'
     },
     nextTeams(): Team[] {
+      if (this.teams.length === this.pastTeams.length) {
+        return filterListByUUID(this.teams, [this.teamUUID]) as Team[]
+      }
       return filterListByUUID(this.teams, this.pastTeams) as Team[]
     },
     ladder(): Team[] {
@@ -80,6 +83,11 @@ export const useGameStore = defineStore('game', {
     },
     nextPlayers(): Player[] {
       if (!this.team) return []
+      if (this.team.players.length === this.team.pastPlayers.length) {
+        return filterListByUUID(this.team.players, [
+          this.playerUUID,
+        ]) as Player[]
+      }
       return filterListByUUID(
         this.team.players,
         this.team.pastPlayers
@@ -126,28 +134,19 @@ export const useGameStore = defineStore('game', {
   },
   actions: {
     nextPlayer(setLoading = true) {
+      if (!this.team) return
       this.loading = setLoading ? true : this.loading
-      let didReset = false
-      if (
-        this.team &&
-        this.player &&
-        this.team.players.length === this.team.pastPlayers.length
-      ) {
-        this.team.pastPlayers = [this.player.uuid]
-        didReset = true
-      }
-      let plr = null
+      let plr
       if (this.mode === 1) {
         plr = randomSelect<Player>(this.nextPlayers)
       } else {
         plr = this.nextPlayers.pop() as Player
       }
       this.playerUUID = plr.uuid
-      if (didReset && this.team) {
-        this.team.pastPlayers = [plr.uuid]
-      } else if (this.team) {
-        this.team.pastPlayers.push(plr.uuid)
+      if (this.team.players.length === this.team.pastPlayers.length) {
+        this.team.pastPlayers.length = 0
       }
+      this.team.pastPlayers.push(plr.uuid)
       this.loading = setLoading ? false : this.loading
     },
     addScore() {
@@ -161,12 +160,6 @@ export const useGameStore = defineStore('game', {
     },
     nextTeam() {
       this.loading = true
-      if (this.teamUUID !== '-1') {
-        this.pastTeams.push(this.teamUUID)
-      }
-      if (this.pastTeams.length === this.teams.length) {
-        this.pastTeams = [this.teamUUID]
-      }
       let newTeam: Team
       if (this.mode === 1) {
         newTeam = randomSelect<Team>(this.nextTeams)
@@ -174,6 +167,10 @@ export const useGameStore = defineStore('game', {
         newTeam = this.nextTeams.pop() as Team
       }
       this.teamUUID = newTeam.uuid
+      if (this.pastTeams.length === this.teams.length) {
+        this.pastTeams.length = 0
+      }
+      this.pastTeams.push(this.teamUUID)
       this.nextPlayer(false)
       this.loading = false
     },
