@@ -10,16 +10,7 @@
     </ion-header>
     <ion-content :fullscreen="true" :scroll-y="false">
       <div
-        class="
-          relative
-          flex flex-col
-          justify-between
-          h-full
-          px-5
-          pb-10
-          xs:px-10
-          bg-secondary
-        "
+        class="relative flex flex-col justify-between h-full px-5 pb-10  xs:px-10 bg-secondary"
         :style="bgColor"
       >
         <Modal :open="main.currentPath === '/game' && modals.changePlayer">
@@ -29,15 +20,7 @@
           <template #title>{{ t('ready') }} ?</template>
           <template #content>
             <p
-              class="
-                px-5
-                mt-4
-                mb-2
-                text-xl
-                leading-relaxed
-                text-center
-                md:text-2xl
-              "
+              class="px-5 mt-4 mb-2 text-xl leading-relaxed text-center  md:text-2xl"
             >
               {{ t('team') }} <strong>{{ game.teamName }}</strong>
             </p>
@@ -48,28 +31,7 @@
           <template #buttons>
             <button
               type="button"
-              class="
-                px-6
-                py-3
-                mb-1
-                mr-1
-                text-xs
-                font-bold
-                uppercase
-                transition-all
-                duration-150
-                ease-linear
-                border
-                rounded
-                shadow
-                outline-none
-                bg-primary
-                text-light
-                border-light
-                md:text-base
-                hover:shadow-lg
-                focus:outline-none
-              "
+              class="px-6 py-3 mb-1 mr-1 text-xs font-bold uppercase transition-all duration-150 ease-linear border rounded shadow outline-none  bg-primary text-light border-light md:text-base hover:shadow-lg focus:outline-none"
               @click="nextRound()"
             >
               {{ t('go') }}
@@ -90,56 +52,14 @@
               @click="initGameLoop() && (modals.pause = false)"
             >
               <button
-                class="
-                  px-6
-                  py-3
-                  mb-1
-                  mr-1
-                  text-xs
-                  font-bold
-                  uppercase
-                  transition-all
-                  duration-150
-                  ease-linear
-                  border
-                  rounded
-                  shadow
-                  outline-none
-                  bg-light
-                  text-primary
-                  border-primary
-                  md:text-base
-                  hover:shadow-lg
-                  focus:outline-none
-                "
+                class="px-6 py-3 mb-1 mr-1 text-xs font-bold uppercase transition-all duration-150 ease-linear border rounded shadow outline-none  bg-light text-primary border-primary md:text-base hover:shadow-lg focus:outline-none"
               >
                 {{ t('backHome') }}
               </button>
             </router-link>
             <button
               type="button"
-              class="
-                px-6
-                py-3
-                mb-1
-                mr-1
-                text-xs
-                font-bold
-                uppercase
-                transition-all
-                duration-150
-                ease-linear
-                border
-                rounded
-                shadow
-                outline-none
-                bg-primary
-                text-light
-                border-light
-                md:text-base
-                hover:shadow-lg
-                focus:outline-none
-              "
+              class="px-6 py-3 mb-1 mr-1 text-xs font-bold uppercase transition-all duration-150 ease-linear border rounded shadow outline-none  bg-primary text-light border-light md:text-base hover:shadow-lg focus:outline-none"
               @click="resume()"
             >
               {{ t('resume') }}
@@ -169,56 +89,14 @@
           <template #buttons>
             <router-link to="/home" @click="initGameLoop()">
               <button
-                class="
-                  px-6
-                  py-3
-                  mb-1
-                  mr-1
-                  text-xs
-                  font-bold
-                  uppercase
-                  transition-all
-                  duration-150
-                  ease-linear
-                  border
-                  rounded
-                  shadow
-                  outline-none
-                  bg-light
-                  text-primary
-                  border-primary
-                  md:text-base
-                  hover:shadow-lg
-                  focus:outline-none
-                "
+                class="px-6 py-3 mb-1 mr-1 text-xs font-bold uppercase transition-all duration-150 ease-linear border rounded shadow outline-none  bg-light text-primary border-primary md:text-base hover:shadow-lg focus:outline-none"
               >
                 {{ t('backHome') }}
               </button>
             </router-link>
             <button
               type="button"
-              class="
-                px-6
-                py-3
-                mb-1
-                mr-1
-                text-xs
-                font-bold
-                uppercase
-                transition-all
-                duration-150
-                ease-linear
-                border
-                rounded
-                shadow
-                outline-none
-                bg-primary
-                text-light
-                border-light
-                md:text-base
-                hover:shadow-lg
-                focus:outline-none
-              "
+              class="px-6 py-3 mb-1 mr-1 text-xs font-bold uppercase transition-all duration-150 ease-linear border rounded shadow outline-none  bg-primary text-light border-light md:text-base hover:shadow-lg focus:outline-none"
               @click="initGameLoop()"
             >
               {{ t('restart') }}
@@ -243,35 +121,14 @@
         </div>
         <div class="flex flex-col items-center">
           <h5
-            class="
-              p-2
-              my-10
-              text-5xl
-              font-bold
-              text-center text-primary
-              bg-secondary
-              rounded-xl
-            "
+            class="p-2 my-10 text-5xl font-bold text-center  text-primary bg-secondary rounded-xl"
           >
             {{ timer.seconds }}
           </h5>
         </div>
         <div class="h-48">
           <div
-            class="
-              flex flex-col
-              items-center
-              my-auto
-              overflow-y-scroll
-              text-3xl
-              border
-              text-primary
-              drop-shadow
-              border-primary
-              bg-light
-              rounded-xl
-              max-h-48
-            "
+            class="flex flex-col items-center my-auto overflow-y-scroll text-3xl border  text-primary drop-shadow border-primary bg-light rounded-xl max-h-48"
           >
             <!-- <img v-if="main.guess.cover" :src="main.guess.cover"/> -->
             <div class="px-5 py-8 md:p-14">
@@ -288,54 +145,22 @@
         <div class="w-full mb-5">
           <div class="flex flex-col items-end">
             <h3
-              class="
-                p-2
-                text-3xl
-                font-bold
-                text-right
-                md:text-center
-                text-primary
-                bg-secondary
-                rounded-xl
-              "
+              class="p-2 text-3xl font-bold text-right  md:text-center text-primary bg-secondary rounded-xl"
             >
               {{ t('score') }}: {{ game.teamScore }}
             </h3>
           </div>
           <div
-            class="
-              flex
-              justify-between
-              mt-10
-              text-4xl
-              md:justify-around md:text-5xl
-              text-primary
-            "
+            class="flex justify-between mt-10 text-4xl  md:justify-around md:text-5xl text-primary"
           >
             <a
-              class="
-                px-4
-                py-2
-                border-2
-                md:py-3 md:px-5
-                bg-light
-                border-primary
-                rounded-xl
-              "
+              class="px-4 py-2 border-2  md:py-3 md:px-5 bg-light border-primary rounded-xl"
               @click="skipGuess()"
             >
               {{ t('pass') }}
             </a>
             <a
-              class="
-                px-4
-                py-2
-                border-2
-                md:py-3 md:px-5
-                bg-light
-                border-primary
-                rounded-xl
-              "
+              class="px-4 py-2 border-2  md:py-3 md:px-5 bg-light border-primary rounded-xl"
               @click="validGuess()"
             >
               {{ t('validate') }}
@@ -434,7 +259,7 @@
   })
   const game = useGameStore()
   const main = useMainStore()
-  const timer = useTimer(1, false)
+  const timer = useTimer(60, false)
   let confetti: CreateTypes
 
   const bgColor = computed<StyleValue[]>(
