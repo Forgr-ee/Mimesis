@@ -210,6 +210,7 @@
   }
   const audios: Sound = {}
 
+  const gameLenght = 60
   const { t } = useI18n()
 
   if (isPlatform('capacitor')) {
@@ -259,7 +260,7 @@
   })
   const game = useGameStore()
   const main = useMainStore()
-  const timer = useTimer(60, false)
+  const timer = useTimer(gameLenght, false)
   let confetti: CreateTypes
 
   const bgColor = computed<StyleValue[]>(
@@ -279,7 +280,7 @@
   )
   const createTime = () => {
     const expiryTimestamp = new Date()
-    expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + 1)
+    expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + gameLenght)
     return expiryTimestamp.getTime()
   }
 
