@@ -3,25 +3,36 @@
     <ion-header mode="ios">
       <ion-toolbar color="secondary">
         <ArrowLeftIcon
-          class="w-1/12 mr-3 text-primary"
+          slot="start"
+          class="w-1/12 mr-3 text-rose-500"
           @click="router.push('/')"
         />
+        <button
+          v-if="isIos()"
+          slot="end"
+          class="px-3 py-1 mx-auto mt-1 text-sm border  xs:mt-2 md:w-1/4 bg-lavender-500 border-rose-500 text-rose-500 rounded-xl first-letter:uppercase"
+          @click="restore()"
+        >
+          {{ t('restore') }}
+        </button>
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true" :scroll-y="false">
-      <div class="flex flex-col justify-start h-screen p-10 bg-secondary">
-        <h1 class="mb-5 text-5xl font-bold text-center xs:mb-10 text-primary">
+      <div class="flex flex-col justify-start h-screen p-10 bg-pizazz-500">
+        <h1
+          class="mb-5 text-5xl font-bold text-center  xs:mb-10 text-rose-500 first-letter:uppercase"
+        >
           {{ t('themes') }}
         </h1>
         <h3
           v-if="main.offline && main.themes.length > 0"
-          class="mx-5 mb-5 font-bold text-center text-1xl text-primary"
+          class="mx-5 mb-5 font-bold text-center  text-1xl text-rose-500 first-letter:uppercase"
         >
           {{ t('noInternet') }}
         </h3>
         <h3
           v-if="main.offline && main.themes.length === 0"
-          class="mx-5 mb-5 font-bold text-center text-1xl text-primary"
+          class="mx-5 mb-5 font-bold text-center  text-1xl text-rose-500 first-letter:uppercase"
         >
           {{ t('noInternetFirst') }}
         </h3>
@@ -29,85 +40,27 @@
           <div
             v-for="theme in main.themes"
             :key="theme.id"
-            class="
-              flex
-              items-center
-              my-1
-              border
-              cursor-pointer
-              xs:my-3
-              md:my-5
-              border-primary
-              bg-light
-              rounded-xl
-            "
+            class="flex items-center my-1 border cursor-pointer  xs:my-3 md:my-5 border-rose-500 bg-lavender-500 rounded-xl"
             @click="saveTheme(theme)"
           >
             <div
-              class="
-                relative
-                w-20
-                h-20
-                mr-3
-                xs:w-24 xs:h-24
-                bg-primary
-                rounded-l-xl
-              "
+              class="relative w-20 h-20 mr-3  xs:w-24 xs:h-24 bg-rose-500 rounded-l-xl"
             >
               <div
                 v-if="theme.status === 'paid'"
-                class="
-                  absolute
-                  inset-0
-                  z-10
-                  flex
-                  items-center
-                  justify-center
-                  bg-black
-                  text-light
-                  bg-opacity-40
-                  rounded-l-xl
-                "
+                class="absolute inset-0 z-10 flex items-center justify-center bg-black  text-lavender-500 bg-opacity-40 rounded-l-xl"
               >
-                <LockClosedIcon class="w-2/3 text-light" />
+                <LockClosedIcon class="w-2/3 text-lavender-500" />
               </div>
               <img
                 alt="test"
-                class="
-                  w-full
-                  h-full
-                  mt-2
-                  fill-current
-                  stroke-current
-                  text-secondary
-                  svg_icon
-                "
+                class="w-full h-full mt-2 fill-current stroke-current  text-pizazz-500 svg_icon"
                 :src="theme.icon"
               />
             </div>
-            <p class="xs:text-2xl text-primary">{{ langName(theme) }}</p>
+            <p class="xs:text-2xl text-rose-500">{{ langName(theme) }}</p>
           </div>
         </div>
-        <button
-          v-if="isIos()"
-          class="
-            px-3
-            py-1
-            mx-auto
-            mt-1
-            text-sm
-            border
-            xs:mt-2
-            md:w-1/4
-            bg-light
-            border-primary
-            text-primary
-            rounded-xl
-          "
-          @click="restore()"
-        >
-          {{ t('restore') }}
-        </button>
       </div>
       <PageLoader :show="loading" />
     </ion-content>
@@ -128,7 +81,7 @@
   import { useMainStore } from '@/store/main'
   import { useGameStore } from '@/store/game'
   import { Theme } from '@/services/firebase'
-  import { purchase, listenBuy, listenCancel } from '@/services/iap'
+  import { purchase, restore } from '@/services/iap'
   import PageLoader from '@/components/PageLoader.vue'
   import { ref } from 'vue'
 
@@ -146,22 +99,12 @@
     return (theme as never)[locale.value]
   }
 
-  const restore = async () => {
-    await main.initThemes()
-  }
-
   const buy = async (theme: Theme) => {
-    if (theme.status !== 'paid' || !theme.product) return
+    if (theme.status !== 'paid' || !theme.package) return
     try {
       loading.value = true
-      await purchase(theme.product)
-      listenCancel(theme.product).then(() => {
-        loading.value = false
-      })
-      listenBuy(theme.product).then(() => {
-        theme.status = 'purchased'
-        loading.value = false
-      })
+      await purchase(theme.package)
+      theme.status = 'purchased'
     } catch (e) {
       loading.value = false
       return console.error(e)
@@ -169,7 +112,7 @@
   }
 
   const saveTheme = async (theme: Theme) => {
-    if (theme.status === 'paid' && theme.product) {
+    if (theme.status === 'paid' && theme.package) {
       return buy(theme)
     }
     game.theme = theme.id

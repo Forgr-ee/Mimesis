@@ -19,9 +19,10 @@ dependencies {
     implementation project(':capacitor-status-bar')
     implementation project(':capacitor-storage')
     implementation project(':capacitor-rate-app')
-    implementation "com.android.billingclient:billing:3.0.3"
+    implementation "com.revenuecat.purchases:purchases-hybrid-common:1.10.0"
+    implementation "androidx.annotation:annotation:[1.2.0]"
 }
-
+apply from: "../../node_modules/.pnpm/cordova-annotated-plugin-android@1.0.4/node_modules/cordova-annotated-plugin-android/build.gradle"
 
 if (hasProperty('postBuildExtras')) {
   postBuildExtras()

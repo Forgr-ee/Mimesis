@@ -1,4 +1,9 @@
-import { IAPProduct, InAppPurchase2 } from '@ionic-native/in-app-purchase-2'
+import {
+  PurchaserInfo,
+  Purchases,
+  PurchasesOffering,
+  PurchasesPackage,
+} from '@ionic-native/purchases'
 import { isPlatform } from '@ionic/vue'
 
 export interface IAPProductCustom {
@@ -7,67 +12,69 @@ export interface IAPProductCustom {
   id_android: string
 }
 
-export const restore = (): void => {
+export const initIap = (id: string) => {
   if (isPlatform('capacitor')) {
-    console.log('restore')
-    InAppPurchase2.refresh()
+    if (import.meta.env.MODE !== 'production')
+      Purchases.setDebugLogsEnabled(true) // Enable to get debug logs
+    Purchases.setup(id)
   }
 }
 
-export const listenBuy = (product: IAPProduct): Promise<IAPProduct> => {
-  return new Promise((resolve) => {
-    InAppPurchase2.when(product.id)
-      .owned((p: IAPProduct) => {
-        resolve(p)
-      })
-      .approved((p: IAPProduct) => p.finish())
-  })
+export const restore = async (): Promise<PurchaserInfo | null> => {
+  if (isPlatform('capacitor')) {
+    const res = await Purchases.restoreTransactions()
+    console.log('restore', res)
+    return res
+  }
+  return null
 }
 
-export const listenCancel = (product: IAPProduct): Promise<IAPProduct> => {
-  return new Promise((resolve) => {
-    InAppPurchase2.when(product.id)
-      .cancelled((p: IAPProduct) => {
-        resolve(p)
-      })
-      .approved((p: IAPProduct) => p.finish())
-  })
+export const purchase = async (
+  p: PurchasesPackage
+): Promise<PurchaserInfo | false> => {
+  try {
+    const product = await Purchases.purchasePackage(p)
+    console.log('listenBuy', product)
+    if (
+      typeof product.purchaserInfo.entitlements.active
+        .my_entitlement_identifier !== 'undefined'
+    ) {
+      return product.purchaserInfo
+    }
+  } catch (e) {
+    console.error('listenBuy error', e)
+  }
+  return false
 }
 
-export const purchase = (product: IAPProduct): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    if (isPlatform('capacitor')) {
-      InAppPurchase2.order(product)
-        .then(() => {
-          resolve()
-        })
-        .error((e: any) => {
-          console.error(`Failed to purchase: ${e}`)
-          reject(e)
-        })
-    } else {
-      console.log('purchase web', product)
-      resolve()
+export const getCurrentOfferings =
+  async (): Promise<PurchasesOffering | null> => {
+    const offerings = await Purchases.getOfferings()
+    return offerings.current
+  }
+
+export const findProduct = async (
+  productId: string
+): Promise<PurchasesPackage | null> => {
+  const offering = await getCurrentOfferings()
+  offering?.availablePackages.forEach((p) => {
+    if (p.identifier === productId) {
+      return p
     }
   })
+  return null
 }
 
-export const registerProduct = (
-  p: IAPProductCustom
-): Promise<IAPProduct | undefined> => {
-  return new Promise((resolve) => {
-    if (isPlatform('capacitor') && p.status === 'paid') {
-      InAppPurchase2.when(
-        isPlatform('ios') ? p.id_ios : p.id_android
-      ).registered((product: IAPProduct) => {
-        resolve(product)
-      })
-      InAppPurchase2.register({
-        id: isPlatform('ios') ? p.id_ios : p.id_android,
-        type: InAppPurchase2.NON_CONSUMABLE,
-      })
-    } else {
-      resolve(undefined)
-    }
-  })
+export const isPurchased = (
+  productId: string | undefined,
+  pInfo: PurchaserInfo | null
+): boolean => {
+  if (pInfo && productId) {
+    pInfo.allPurchasedProductIdentifiers.forEach((p) => {
+      if (p === productId) {
+        return true
+      }
+    })
+  }
+  return false
 }

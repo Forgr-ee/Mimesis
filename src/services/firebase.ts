@@ -1,11 +1,13 @@
-import { IAPProductCustom, registerProduct, restore } from './iap'
+// import { IAPProductCustom, registerProduct, restore } from './iap'
 import FIREBASE_CONFIG from './.env.firebase'
 
 import firebase from 'firebase/app'
 // Required for side-effects
 import 'firebase/firestore'
 import 'firebase/auth'
-import { IAPProduct } from '@ionic-native/in-app-purchase-2'
+import { findProduct, isPurchased, restore } from './iap'
+import { isPlatform } from '@ionic/vue'
+import { PurchasesPackage } from '@ionic-native/purchases'
 
 export interface Player {
   uuid: string
@@ -28,7 +30,7 @@ export type Theme = {
   lang: {
     [key: string]: string
   }
-  product?: IAPProduct
+  package?: PurchasesPackage | null
   icon: string
   id_ios: string
   id_android: string
@@ -137,20 +139,29 @@ export const useFirebase = (): Usefirebase => {
         .orderBy('order', 'asc')
         .get()
       const pList: Promise<Theme>[] = []
+      const pInfo = isPlatform('capacitor') ? await restore() : null
+      console.log('getThemes')
       snapshot.docs.map((doc) => {
         const theme = doc.data() as Theme
-        pList.push(
-          registerProduct(theme as IAPProductCustom).then((product) => {
-            theme.product = product
-            if (product && product.owned) {
-              theme.status = 'purchased'
-            }
-            return theme
-          })
-        )
+        if (isPlatform('capacitor')) {
+          const productId = isPlatform('ios') ? theme.id_ios : theme.id_android
+          pList.push(
+            findProduct(productId).then((product) => {
+              theme.package = product
+              const owned = isPurchased(product?.identifier, pInfo)
+              if (product && owned) {
+                theme.status = 'purchased'
+              }
+              return theme
+            })
+          )
+        } else {
+          pList.push(Promise.resolve(theme))
+        }
       })
-      restore()
+      console.log('toyoy')
       values = await Promise.all(pList)
+      console.log('getThemes', values)
     } catch (err: any) {
       console.error('initThemes', err)
       throw new Error(err)

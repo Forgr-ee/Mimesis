@@ -12,17 +12,18 @@ module.exports = {
     '@vue/prettier',
     '@vue/prettier/@typescript-eslint',
   ],
+  parserOptions: {
+    ecmaVersion: 2021,
+  },
+  plugins: [],
   globals: {
     defineProps: 'readonly',
     defineEmits: 'readonly',
     defineExpose: 'readonly',
     withDefaults: 'readonly',
   },
-  parserOptions: {
-    ecmaVersion: 2021,
-  },
-  plugins: [],
   rules: {
+    'vue/no-deprecated-slot-attribute': 'off',
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
   },

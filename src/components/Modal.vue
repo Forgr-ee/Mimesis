@@ -61,9 +61,9 @@
               border-2
               rounded-lg
               shadow-xl
-              border-primary
-              text-primary
-              bg-secondary
+              border-rose-500
+              text-rose-500
+              bg-pizazz-500
               sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6
             "
           >
@@ -85,7 +85,12 @@
               <div class="mt-3 text-center sm:mt-5">
                 <DialogTitle
                   as="h3"
-                  class="text-4xl font-semibold text-gray-50 capitalize-first"
+                  class="
+                    text-4xl
+                    font-semibold
+                    text-gray-50
+                    first-letter:uppercase
+                  "
                 >
                   <slot name="title"></slot>
                 </DialogTitle>

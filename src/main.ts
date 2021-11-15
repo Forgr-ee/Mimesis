@@ -11,6 +11,9 @@ import pinia from './services/pinia'
 import { initCapacitor } from './services/capacitor'
 import { initPlausible } from './services/plausible'
 
+import 'virtual:windi.css'
+import 'virtual:windi-devtools'
+
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/vue/css/core.css'
 
@@ -30,6 +33,7 @@ import '@ionic/vue/css/display.css'
 /* Theme variables */
 import './theme/variables.css'
 import { LangMessages } from './services/firebase'
+import { initIap } from './services/iap'
 
 initPlausible()
 
@@ -65,6 +69,7 @@ const init = async (isRecall = false) => {
     await main.initialize()
     console.log('initI18n')
     await initI18n(main.langsMessages)
+    initIap('lwSBejyKtyLhBghkjWZmsBKKTykuHxfQ')
     // save currentPath
     router.afterEach((to) => {
       const main = useMainStore()
