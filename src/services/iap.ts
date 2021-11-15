@@ -14,8 +14,7 @@ export interface IAPProductCustom {
 
 export const initIap = (id: string) => {
   if (isPlatform('capacitor')) {
-    if (import.meta.env.MODE !== 'production')
-      Purchases.setDebugLogsEnabled(true) // Enable to get debug logs
+    Purchases.setDebugLogsEnabled(import.meta.env.DEV) // Enable to get debug logs in dev mode
     Purchases.setup(id)
   }
 }
