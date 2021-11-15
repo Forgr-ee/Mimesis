@@ -10,7 +10,21 @@
         <button
           v-if="isIos()"
           slot="end"
-          class="px-3 py-1 mx-auto mt-1 text-sm border  xs:mt-2 md:w-1/4 bg-lavender-500 border-rose-500 text-rose-500 rounded-xl first-letter:uppercase"
+          class="
+            px-3
+            py-1
+            mx-auto
+            mt-1
+            text-sm
+            border
+            xs:mt-2
+            md:w-1/4
+            bg-lavender-500
+            border-rose-500
+            text-rose-500
+            rounded-xl
+            first-letter:uppercase
+          "
           @click="restore()"
         >
           {{ t('restore') }}
@@ -20,19 +34,39 @@
     <ion-content :fullscreen="true" :scroll-y="false">
       <div class="flex flex-col justify-start h-screen p-10 bg-pizazz-500">
         <h1
-          class="mb-5 text-5xl font-bold text-center  xs:mb-10 text-rose-500 first-letter:uppercase"
+          class="
+            mb-5
+            text-5xl
+            font-bold
+            text-center
+            xs:mb-10
+            text-rose-500
+            first-letter:uppercase
+          "
         >
           {{ t('themes') }}
         </h1>
         <h3
           v-if="main.offline && main.themes.length > 0"
-          class="mx-5 mb-5 font-bold text-center  text-1xl text-rose-500 first-letter:uppercase"
+          class="
+            mx-5
+            mb-5
+            font-bold
+            text-center text-1xl text-rose-500
+            first-letter:uppercase
+          "
         >
           {{ t('noInternet') }}
         </h3>
         <h3
           v-if="main.offline && main.themes.length === 0"
-          class="mx-5 mb-5 font-bold text-center  text-1xl text-rose-500 first-letter:uppercase"
+          class="
+            mx-5
+            mb-5
+            font-bold
+            text-center text-1xl text-rose-500
+            first-letter:uppercase
+          "
         >
           {{ t('noInternetFirst') }}
         </h3>
@@ -40,21 +74,59 @@
           <div
             v-for="theme in main.themes"
             :key="theme.id"
-            class="flex items-center my-1 border cursor-pointer  xs:my-3 md:my-5 border-rose-500 bg-lavender-500 rounded-xl"
+            class="
+              flex
+              items-center
+              my-1
+              border
+              cursor-pointer
+              xs:my-3
+              md:my-5
+              border-rose-500
+              bg-lavender-500
+              rounded-xl
+            "
             @click="saveTheme(theme)"
           >
             <div
-              class="relative w-20 h-20 mr-3  xs:w-24 xs:h-24 bg-rose-500 rounded-l-xl"
+              class="
+                relative
+                w-20
+                h-20
+                mr-3
+                xs:w-24 xs:h-24
+                bg-rose-500
+                rounded-l-xl
+              "
             >
               <div
                 v-if="theme.status === 'paid'"
-                class="absolute inset-0 z-10 flex items-center justify-center bg-black  text-lavender-500 bg-opacity-40 rounded-l-xl"
+                class="
+                  absolute
+                  inset-0
+                  z-10
+                  flex
+                  items-center
+                  justify-center
+                  bg-black
+                  text-lavender-500
+                  bg-opacity-40
+                  rounded-l-xl
+                "
               >
                 <LockClosedIcon class="w-2/3 text-lavender-500" />
               </div>
               <img
                 alt="test"
-                class="w-full h-full mt-2 fill-current stroke-current  text-pizazz-500 svg_icon"
+                class="
+                  w-full
+                  h-full
+                  mt-2
+                  fill-current
+                  stroke-current
+                  text-pizazz-500
+                  svg_icon
+                "
                 :src="theme.icon"
               />
             </div>

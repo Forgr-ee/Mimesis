@@ -10,7 +10,14 @@
           alt="logo"
         />
         <div
-          class="mx-auto text-4xl font-semibold leading-6 text-center  text-gray-50 first-letter:uppercase"
+          class="
+            mx-auto
+            text-4xl
+            font-semibold
+            leading-6
+            text-center text-gray-50
+            first-letter:uppercase
+          "
         >
           {{ t('createTeam') }}
         </div>
@@ -35,7 +42,28 @@
           <template #buttons>
             <button
               type="button"
-              class="px-6 py-3 mb-1 mr-1 text-xs font-bold uppercase transition-all duration-150 ease-linear border rounded shadow outline-none  bg-rose-500 text-lavender-500 border-lavender-500 md:text-base hover:shadow-lg focus:outline-none"
+              class="
+                px-6
+                py-3
+                mb-1
+                mr-1
+                text-xs
+                font-bold
+                uppercase
+                transition-all
+                duration-150
+                ease-linear
+                border
+                rounded
+                shadow
+                outline-none
+                bg-rose-500
+                text-lavender-500
+                border-lavender-500
+                md:text-base
+                hover:shadow-lg
+                focus:outline-none
+              "
               @click="modals.lang = false"
             >
               {{ t('accept') }}
@@ -72,7 +100,28 @@
           <template #buttons>
             <button
               type="button"
-              class="px-6 py-3 mb-1 mr-1 text-xs font-bold uppercase transition-all duration-150 ease-linear border rounded shadow outline-none  bg-rose-500 text-lavender-500 border-lavender-500 md:text-base hover:shadow-lg focus:outline-none"
+              class="
+                px-6
+                py-3
+                mb-1
+                mr-1
+                text-xs
+                font-bold
+                uppercase
+                transition-all
+                duration-150
+                ease-linear
+                border
+                rounded
+                shadow
+                outline-none
+                bg-rose-500
+                text-lavender-500
+                border-lavender-500
+                md:text-base
+                hover:shadow-lg
+                focus:outline-none
+              "
               @click="modals.rules = false"
             >
               {{ t('accept') }}
@@ -91,14 +140,56 @@
           </template>
           <template #buttons>
             <button
-              class="px-6 py-3 mb-1 mr-1 text-xs font-bold uppercase transition-all duration-150 ease-linear border rounded shadow outline-none  bg-lavender-500 text-rose-500 border-rose-500 md:text-base hover:shadow-lg focus:outline-none"
+              class="
+                px-6
+                py-3
+                mb-1
+                mr-1
+                text-xs
+                font-bold
+                uppercase
+                transition-all
+                duration-150
+                ease-linear
+                border
+                rounded
+                shadow
+                outline-none
+                bg-lavender-500
+                text-rose-500
+                border-rose-500
+                md:text-base
+                hover:shadow-lg
+                focus:outline-none
+              "
               @click="modals.inequal = false"
             >
               {{ t('update') }} {{ t('team') }}
             </button>
             <router-link to="/theme" @click="modals.inequal = false">
               <button
-                class="px-6 py-3 mb-1 mr-1 text-xs font-bold uppercase transition-all duration-150 ease-linear border rounded shadow outline-none  bg-rose-500 text-lavender-500 border-lavender-500 md:text-base hover:shadow-lg focus:outline-none"
+                class="
+                  px-6
+                  py-3
+                  mb-1
+                  mr-1
+                  text-xs
+                  font-bold
+                  uppercase
+                  transition-all
+                  duration-150
+                  ease-linear
+                  border
+                  rounded
+                  shadow
+                  outline-none
+                  bg-rose-500
+                  text-lavender-500
+                  border-lavender-500
+                  md:text-base
+                  hover:shadow-lg
+                  focus:outline-none
+                "
               >
                 {{ t('go') }}
               </button>
@@ -115,15 +206,42 @@
             }"
           >
             <div
-              class="relative flex flex-col items-center pt-10 pb-4 mx-3 my-5 border  border-rose-500 bg-lavender-500 rounded-xl"
+              class="
+                relative
+                flex flex-col
+                items-center
+                pt-10
+                pb-4
+                mx-3
+                my-5
+                border border-rose-500
+                bg-lavender-500
+                rounded-xl
+              "
             >
               <p
-                class="absolute top-0 left-0 p-3  text-rose-500 first-letter:uppercase"
+                class="
+                  absolute
+                  top-0
+                  left-0
+                  p-3
+                  text-rose-500
+                  first-letter:uppercase
+                "
               >
                 {{ t('team') }} {{ index + 1 }}
               </p>
               <ion-input
-                class="w-2/3 mx-auto mb-6 text-5xl text-center border-b-2  bg-lavender-500 border-rose-500 text-rose-500"
+                class="
+                  w-2/3
+                  mx-auto
+                  mb-6
+                  text-5xl text-center
+                  border-b-2
+                  bg-lavender-500
+                  border-rose-500
+                  text-rose-500
+                "
                 :value="team.name"
               />
               <div class="mb-5 overflow-y-scroll no_bar h-28 xs:h-48 md:h-60">
@@ -135,7 +253,15 @@
                   >
                     <ion-input
                       v-model="player.name"
-                      class="my-1 text-lg text-center border rounded-lg  text-rose-500 bg-lavender-500 border-rose-500"
+                      class="
+                        my-1
+                        text-lg text-center
+                        border
+                        rounded-lg
+                        text-rose-500
+                        bg-lavender-500
+                        border-rose-500
+                      "
                     />
                     <button
                       v-if="team.players.length > 2"
@@ -169,10 +295,35 @@
           </div>
           <div class="flex-none w-3/12 md:w-1/12">
             <div
-              class="relative flex items-center justify-center w-full mx-3 my-10 border  h-60 xs:h-80 md:h-96 md:mx-5 border-rose-500 bg-lavender-500 rounded-xl"
+              class="
+                relative
+                flex
+                items-center
+                justify-center
+                w-full
+                mx-3
+                my-10
+                border
+                h-60
+                xs:h-80
+                md:h-96 md:mx-5
+                border-rose-500
+                bg-lavender-500
+                rounded-xl
+              "
             >
               <div
-                class="flex items-center justify-center w-12 h-12 rounded-full cursor-pointer  bg-rose-500 active:bg-pizazz-500"
+                class="
+                  flex
+                  items-center
+                  justify-center
+                  w-12
+                  h-12
+                  rounded-full
+                  cursor-pointer
+                  bg-rose-500
+                  active:bg-pizazz-500
+                "
                 @click="game.teams.push(randomTeam())"
               >
                 <PlusIcon class="w-8 h-8 text-lavender-500" />
@@ -182,7 +333,18 @@
         </div>
         <div class="flex justify-center text-5xl text-rose-500">
           <a
-            class="w-1/2 px-5 py-2 overflow-hidden border-2  xs:mt-2 md:w-1/3 bg-lavender-500 border-rose-500 rounded-xl"
+            class="
+              w-1/2
+              px-5
+              py-2
+              overflow-hidden
+              border-2
+              xs:mt-2
+              md:w-1/3
+              bg-lavender-500
+              border-rose-500
+              rounded-xl
+            "
             @click="saveTeam()"
           >
             <div class="relative flex items-center justify-center">
