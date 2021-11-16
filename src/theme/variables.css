@@ -75,3 +75,13 @@ http://ionicframework.com/docs/theming/ */
 .modal.active {
   @apply visible opacity-100 pointer-events-auto;
 }
+
+.crisp-client .cc-kv6t[data-full-view="true"] .cc-1xry .cc-ge4v::before {
+  background: #b5244f !important;
+  content: "";
+  width: 100vw !important;
+  height: env(safe-area-inset-top) !important;
+  position: absolute !important;
+}
+.crisp-client .cc-kv6t[data-full-view="true"] .cc-1xry .cc-ge4v .cc-bdff { padding-top: env(safe-area-inset-top) !important; }
+.crisp-client .cc-kv6t[data-full-view="true"] .cc-1xry .cc-ge4v .cc-qqzz { transform: scaleY(0.94); }
