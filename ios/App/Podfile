@@ -18,6 +18,7 @@ def capacitor_pods
   pod 'CapacitorSplashScreen', :path => '../../node_modules/.pnpm/@capacitor+splash-screen@1.1.6_@capacitor+core@3.3.1/node_modules/@capacitor/splash-screen'
   pod 'CapacitorStatusBar', :path => '../../node_modules/.pnpm/@capacitor+status-bar@1.0.6_@capacitor+core@3.3.1/node_modules/@capacitor/status-bar'
   pod 'CapacitorStorage', :path => '../../node_modules/.pnpm/@capacitor+storage@1.2.3_@capacitor+core@3.3.1/node_modules/@capacitor/storage'
+  pod 'CapacitorCrisp', :path => '../../node_modules/.pnpm/capacitor-crisp@1.0.9_@capacitor+core@3.3.1/node_modules/capacitor-crisp'
   pod 'CapacitorRateApp', :path => '../../node_modules/.pnpm/capacitor-rate-app@2.0.0_@capacitor+core@3.3.1/node_modules/capacitor-rate-app'
   pod 'CordovaPluginsStatic', :path => '../capacitor-cordova-ios-plugins'
 end

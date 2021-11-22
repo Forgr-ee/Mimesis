@@ -30,6 +30,7 @@ specifiers:
   '@vue/eslint-config-typescript': 9.0.1
   '@vue/test-utils': ^2.0.0-rc.12
   canvas-confetti: ^1.4.0
+  capacitor-crisp: 1.0.9
   capacitor-rate-app: ^2.0.0
   cordova-annotated-plugin-android: ^1.0.4
   cordova-plugin-purchases: ^2.4.0
@@ -80,6 +81,7 @@ dependencies:
   '@ionic/vue': 6.0.0-rc.2
   '@ionic/vue-router': 6.0.0-rc.2
   canvas-confetti: 1.4.0
+  capacitor-crisp: 1.0.9_@capacitor+core@3.3.1
   capacitor-rate-app: 2.0.0_@capacitor+core@3.3.1
   cordova-annotated-plugin-android: 1.0.4
   cordova-plugin-purchases: 2.4.0
@@ -2578,6 +2580,14 @@ packages:
 
   /canvas-confetti/1.4.0:
     resolution: {integrity: sha512-S18o4Y9PqI/uabdlT/jI3MY7XBJjNxnfapFIkjkMwpz6qNxLFZOm2b22OMf4ZYDL9lpNWI+Ih4fEMVPwO1KHFQ==}
+    dev: false
+
+  /capacitor-crisp/1.0.9_@capacitor+core@3.3.1:
+    resolution: {integrity: sha512-s/4lbAra4L+5rzrejOFU4kYl/UGUwdoW1uTt/EsD9l+wIX4O/SDllv94dU5G2GrGAAU6aGiipVlz7pMYv5f3JQ==}
+    peerDependencies:
+      '@capacitor/core': ^3.0.0
+    dependencies:
+      '@capacitor/core': 3.3.1
     dev: false
 
   /capacitor-rate-app/2.0.0_@capacitor+core@3.3.1:

@@ -33,6 +33,7 @@
     "@ionic/vue": "^6.0.0-rc.2",
     "@ionic/vue-router": "^6.0.0-rc.2",
     "canvas-confetti": "^1.4.0",
+    "capacitor-crisp": "1.0.9",
     "capacitor-rate-app": "^2.0.0",
     "cordova-annotated-plugin-android": "^1.0.4",
     "cordova-plugin-purchases": "^2.4.0",

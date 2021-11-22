@@ -6,10 +6,11 @@ import { IonicVue } from '@ionic/vue'
 import { createI18n } from 'vue-i18n'
 import { useAuthStore } from './store/auth'
 import { useMainStore } from './store/main'
-import { initCrisp } from './services/crips'
+import { initCrisp, setUserId } from './services/crips'
 import pinia from './services/pinia'
 import { initCapacitor } from './services/capacitor'
 import { initPlausible } from './services/plausible'
+import { Device } from '@capacitor/device'
 
 import 'virtual:windi.css'
 import 'virtual:windi-devtools'
@@ -67,6 +68,9 @@ const init = async (isRecall = false) => {
     initCrisp()
     console.log('main.initialize')
     await main.initialize()
+    const info = await Device.getId()
+    console.log('info', info)
+    setUserId(info.uuid)
     console.log('initI18n')
     await initI18n(main.langsMessages)
     initIap('lwSBejyKtyLhBghkjWZmsBKKTykuHxfQ')

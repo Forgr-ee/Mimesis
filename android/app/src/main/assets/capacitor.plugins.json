@@ -36,6 +36,10 @@
 		"classpath": "com.capacitorjs.plugins.storage.StoragePlugin"
 	},
 	{
+		"pkg": "capacitor-crisp",
+		"classpath": "ee.forgr.plugin.crisp.CapacitorCrispPlugin"
+	},
+	{
 		"pkg": "capacitor-rate-app",
 		"classpath": "com.capacitor.rateapp.CapacitorRateAppPlugin"
 	}

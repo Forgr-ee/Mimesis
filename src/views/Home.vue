@@ -19,7 +19,7 @@
             first-letter:uppercase
           "
         >
-          {{ t('createTeam') }}
+          {{ t('createTeam') }} NONON
         </div>
         <Modal :open="modals.lang">
           <template #icon>
@@ -367,7 +367,7 @@
           <button class="w-1/4 mx-auto mt-6" @click="openChat()">
             <ChatIcon class="w-12 h-12 mx-auto text-rose-500" />
           </button>
-          <button class="w-1/4 mx-auto mt-6" @click="presentActionSheet()">
+          <button class="w-1/4 mx-auto mt-6" @click="testUpdate()">
             <DotsVerticalIcon class="w-12 h-12 mx-auto text-rose-500" />
           </button>
         </div>
@@ -405,6 +405,14 @@
     ClipboardListIcon,
     ExclamationIcon,
   } from '@heroicons/vue/outline'
+  import { openChat } from '@/services/crips'
+  // import { CapacitorUpdater } from 'capacitor-updater'
+
+  // const testUpdate = () => {
+  //   CapacitorUpdater.updateApp({
+  //     url: 'https://github.com/Forgr-ee/Mimesis/releases/download/0.0.1/dist.zip',
+  //   })
+  // }
 
   const modals = reactive({
     inequal: false,
@@ -415,10 +423,7 @@
   const game = useGameStore()
   const main = useMainStore()
   const { t, locale } = useI18n()
-  const openChat = () => {
-    window.$crisp.push(['do', 'chat:show'])
-    window.$crisp.push(['do', 'chat:open'])
-  }
+
   const setLang = (l: string) => {
     main.lang = l
     locale.value = l
