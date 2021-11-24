@@ -20,7 +20,7 @@ def capacitor_pods
   pod 'CapacitorCrisp', :path => '../../node_modules/.pnpm/capacitor-crisp@1.0.9_@capacitor+core@3.3.1/node_modules/capacitor-crisp'
   pod 'CapacitorNativeAudio', :path => '../../node_modules/.pnpm/capacitor-native-audio@3.0.2_@capacitor+core@3.3.1/node_modules/capacitor-native-audio'
   pod 'CapacitorRateApp', :path => '../../node_modules/.pnpm/capacitor-rate-app@2.0.0_@capacitor+core@3.3.1/node_modules/capacitor-rate-app'
-  pod 'CapacitorUpdater', :path => '../../node_modules/.pnpm/capacitor-updater@1.0.4_@capacitor+core@3.3.1/node_modules/capacitor-updater'
+  pod 'CapacitorUpdater', :path => '../../node_modules/.pnpm/capacitor-updater@1.0.9_@capacitor+core@3.3.1/node_modules/capacitor-updater'
   pod 'CordovaPluginsStatic', :path => '../capacitor-cordova-ios-plugins'
 end
 
