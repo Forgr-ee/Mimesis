@@ -4,10 +4,6 @@
 		"classpath": "com.getcapacitor.community.keepawake.KeepAwakePlugin"
 	},
 	{
-		"pkg": "@capacitor-community/native-audio",
-		"classpath": "com.getcapacitor.community.audio.NativeAudio"
-	},
-	{
 		"pkg": "@capacitor/app",
 		"classpath": "com.capacitorjs.plugins.app.AppPlugin"
 	},
@@ -40,7 +36,15 @@
 		"classpath": "ee.forgr.plugin.crisp.CapacitorCrispPlugin"
 	},
 	{
+		"pkg": "capacitor-native-audio",
+		"classpath": "com.getcapacitor.community.audio.NativeAudio"
+	},
+	{
 		"pkg": "capacitor-rate-app",
 		"classpath": "com.capacitor.rateapp.CapacitorRateAppPlugin"
+	},
+	{
+		"pkg": "capacitor-updater",
+		"classpath": "ee.forgr.capacitor_updater.CapacitorUpdaterPlugin"
 	}
 ]

@@ -19,7 +19,7 @@
             first-letter:uppercase
           "
         >
-          {{ t('createTeam') }} NONON
+          {{ t('createTeam') }}
         </div>
         <Modal :open="modals.lang">
           <template #icon>
@@ -367,7 +367,7 @@
           <button class="w-1/4 mx-auto mt-6" @click="openChat()">
             <ChatIcon class="w-12 h-12 mx-auto text-rose-500" />
           </button>
-          <button class="w-1/4 mx-auto mt-6" @click="testUpdate()">
+          <button class="w-1/4 mx-auto mt-6" @click="presentActionSheet()">
             <DotsVerticalIcon class="w-12 h-12 mx-auto text-rose-500" />
           </button>
         </div>
@@ -406,13 +406,6 @@
     ExclamationIcon,
   } from '@heroicons/vue/outline'
   import { openChat } from '@/services/crips'
-  // import { CapacitorUpdater } from 'capacitor-updater'
-
-  // const testUpdate = () => {
-  //   CapacitorUpdater.updateApp({
-  //     url: 'https://github.com/Forgr-ee/Mimesis/releases/download/0.0.1/dist.zip',
-  //   })
-  // }
 
   const modals = reactive({
     inequal: false,

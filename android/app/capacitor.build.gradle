@@ -10,7 +10,6 @@ android {
 apply from: "../capacitor-cordova-android-plugins/cordova.variables.gradle"
 dependencies {
     implementation project(':capacitor-community-keep-awake')
-    implementation project(':capacitor-community-native-audio')
     implementation project(':capacitor-app')
     implementation project(':capacitor-device')
     implementation project(':capacitor-haptics')
@@ -19,7 +18,9 @@ dependencies {
     implementation project(':capacitor-status-bar')
     implementation project(':capacitor-storage')
     implementation project(':capacitor-crisp')
+    implementation project(':capacitor-native-audio')
     implementation project(':capacitor-rate-app')
+    implementation project(':capacitor-updater')
     implementation "com.revenuecat.purchases:purchases-hybrid-common:1.10.0"
     implementation "androidx.annotation:annotation:[1.2.0]"
 }

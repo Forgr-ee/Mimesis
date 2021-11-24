@@ -2,7 +2,6 @@ lockfileVersion: 5.3
 
 specifiers:
   '@capacitor-community/keep-awake': ^2.1.0
-  '@capacitor-community/native-audio': ^3.0.0
   '@capacitor/android': ^3.3.1
   '@capacitor/app': ^1.0.6
   '@capacitor/cli': ^3.3.1
@@ -25,13 +24,15 @@ specifiers:
   '@types/uuid': ^8.3.1
   '@typescript-eslint/eslint-plugin': 5.3.1
   '@typescript-eslint/parser': 5.3.1
-  '@vitejs/plugin-vue': ^1.9.2
+  '@vitejs/plugin-vue': ^1.10.0
   '@vue/eslint-config-prettier': ^6.0.0
   '@vue/eslint-config-typescript': 9.0.1
   '@vue/test-utils': ^2.0.0-rc.12
   canvas-confetti: ^1.4.0
   capacitor-crisp: 1.0.9
+  capacitor-native-audio: ^3.0.2
   capacitor-rate-app: ^2.0.0
+  capacitor-updater: ^1.0.9
   cordova-annotated-plugin-android: ^1.0.4
   cordova-plugin-purchases: ^2.4.0
   cordova-res: ^0.15.3
@@ -65,7 +66,6 @@ specifiers:
 
 dependencies:
   '@capacitor-community/keep-awake': 2.1.0_@capacitor+core@3.3.1
-  '@capacitor-community/native-audio': 3.0.0_@capacitor+core@3.3.1
   '@capacitor/app': 1.0.6_@capacitor+core@3.3.1
   '@capacitor/core': 3.3.1
   '@capacitor/device': 1.0.6_@capacitor+core@3.3.1
@@ -82,7 +82,9 @@ dependencies:
   '@ionic/vue-router': 6.0.0-rc.2
   canvas-confetti: 1.4.0
   capacitor-crisp: 1.0.9_@capacitor+core@3.3.1
+  capacitor-native-audio: 3.0.2_@capacitor+core@3.3.1
   capacitor-rate-app: 2.0.0_@capacitor+core@3.3.1
+  capacitor-updater: 1.0.9_@capacitor+core@3.3.1
   cordova-annotated-plugin-android: 1.0.4
   cordova-plugin-purchases: 2.4.0
   faker: github.com/riderx/faker.js/57815a44709ebba6ed4c51389c4fcf10f46da555
@@ -105,7 +107,7 @@ devDependencies:
   '@types/uuid': 8.3.1
   '@typescript-eslint/eslint-plugin': 5.3.1_4653b7803b7453f5f37717b7e1448517
   '@typescript-eslint/parser': 5.3.1_eslint@8.2.0+typescript@4.4.4
-  '@vitejs/plugin-vue': 1.9.4_vite@2.6.14
+  '@vitejs/plugin-vue': 1.10.0_vite@2.6.14
   '@vue/eslint-config-prettier': 6.0.0_5ef9ff6669b626527300390dc84546fb
   '@vue/eslint-config-typescript': 9.0.1_a4352df0697e96c04e94ac6a54eee675
   '@vue/test-utils': 2.0.0-rc.16_vue@3.2.21
@@ -494,14 +496,6 @@ packages:
     resolution: {integrity: sha512-DBM1yDfPg29ptamQahWyR6EFAXMjY3Oj4nsI2K8u/ofiKLzFDKde1yn6ZBaL06AmK+9lWBRXC7bmbZRVQ1WzFg==}
     peerDependencies:
       '@capacitor/core': ^3.0.0-beta.6
-    dependencies:
-      '@capacitor/core': 3.3.1
-    dev: false
-
-  /@capacitor-community/native-audio/3.0.0_@capacitor+core@3.3.1:
-    resolution: {integrity: sha512-PSXhhscZnqW+0mOdOihLeWD6RVm+he6ZVbpcY4sTwR50meaXh69JZ41bzArhSMW16/lXEjoXDYclQDEcJwEj2A==}
-    peerDependencies:
-      '@capacitor/core': ^3.0.0
     dependencies:
       '@capacitor/core': 3.3.1
     dev: false
@@ -1945,8 +1939,8 @@ packages:
       eslint-visitor-keys: 3.1.0
     dev: true
 
-  /@vitejs/plugin-vue/1.9.4_vite@2.6.14:
-    resolution: {integrity: sha512-0CZqaCoChriPTTtGkERy1LGPcYjGFpi2uYRhBPIkqJqUGV5JnJFhQAgh6oH9j5XZHfrRaisX8W0xSpO4T7S78A==}
+  /@vitejs/plugin-vue/1.10.0_vite@2.6.14:
+    resolution: {integrity: sha512-XkSN7lduhQ3z/WMXv2spqt9TCS0znCjnvIGmbud2bxViWWWR4JWXE+x/cQZ/klR0Ug4Ts9eubL7LXAysON5Uvg==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
       vite: ^2.5.10
@@ -2590,8 +2584,24 @@ packages:
       '@capacitor/core': 3.3.1
     dev: false
 
+  /capacitor-native-audio/3.0.2_@capacitor+core@3.3.1:
+    resolution: {integrity: sha512-3V4nXs7OCR8IBDTiO8uj7o3oxikw7KOX4cYBPVlW8YY28DVxZBUrPVXeAGuLWUienktedFoY3cGGHF/ysoltAQ==}
+    peerDependencies:
+      '@capacitor/core': ^3.0.0
+    dependencies:
+      '@capacitor/core': 3.3.1
+    dev: false
+
   /capacitor-rate-app/2.0.0_@capacitor+core@3.3.1:
     resolution: {integrity: sha512-wqtmK7/mb34o5gp7eaWKudqx1xGwmXne4M2cPOdeO64ikfUXTHLtTfWd6kx2kzgm7yh9tNIXkKnqEwLvNT8cKQ==}
+    peerDependencies:
+      '@capacitor/core': ^3.0.0
+    dependencies:
+      '@capacitor/core': 3.3.1
+    dev: false
+
+  /capacitor-updater/1.0.9_@capacitor+core@3.3.1:
+    resolution: {integrity: sha512-gOcouaA6zTkPfBbTGet1E79774g6Z5ixSCuMc03CCFZiEqVSK1xXnuxpn9QkRjRHHsPaWTCf3dKKtd1QEUtjrA==}
     peerDependencies:
       '@capacitor/core': ^3.0.0
     dependencies:

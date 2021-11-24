@@ -139,21 +139,22 @@ export const useFirebase = (): Usefirebase => {
         .orderBy('order', 'asc')
         .get()
       const pList: Promise<Theme>[] = []
-      const pInfo = isPlatform('capacitor') ? await restore() : null
+      // const pInfo = isPlatform('capacitor') ? await restore() : null
       console.log('getThemes')
       snapshot.docs.map((doc) => {
         const theme = doc.data() as Theme
         if (isPlatform('capacitor')) {
-          const productId = isPlatform('ios') ? theme.id_ios : theme.id_android
+          // const productId = isPlatform('ios') ? theme.id_ios : theme.id_android
           pList.push(
-            findProduct(productId).then((product) => {
-              theme.package = product
-              const owned = isPurchased(product?.identifier, pInfo)
-              if (product && owned) {
-                theme.status = 'purchased'
-              }
-              return theme
-            })
+            Promise.resolve(theme)
+            // findProduct(productId).then((product) => {
+            //   theme.package = product
+            //   const owned = isPurchased(product?.identifier, pInfo)
+            //   if (product && owned) {
+            //     theme.status = 'purchased'
+            //   }
+            //   return theme
+            // })
           )
         } else {
           pList.push(Promise.resolve(theme))

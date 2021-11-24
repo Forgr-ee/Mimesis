@@ -22,6 +22,7 @@ export const useMainStore = defineStore('main', {
   state: () => ({
     error: false,
     loading: false,
+    version: '',
     lastUpdate: '',
     initialized: false,
     currentPath: '/home',

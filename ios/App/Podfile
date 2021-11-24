@@ -10,7 +10,6 @@ def capacitor_pods
   pod 'Capacitor', :path => '../../node_modules/.pnpm/@capacitor+ios@3.3.1_@capacitor+core@3.3.1/node_modules/@capacitor/ios'
   pod 'CapacitorCordova', :path => '../../node_modules/.pnpm/@capacitor+ios@3.3.1_@capacitor+core@3.3.1/node_modules/@capacitor/ios'
   pod 'CapacitorCommunityKeepAwake', :path => '../../node_modules/.pnpm/@capacitor-community+keep-awake@2.1.0_@capacitor+core@3.3.1/node_modules/@capacitor-community/keep-awake'
-  pod 'CapacitorCommunityNativeAudio', :path => '../../node_modules/.pnpm/@capacitor-community+native-audio@3.0.0_@capacitor+core@3.3.1/node_modules/@capacitor-community/native-audio'
   pod 'CapacitorApp', :path => '../../node_modules/.pnpm/@capacitor+app@1.0.6_@capacitor+core@3.3.1/node_modules/@capacitor/app'
   pod 'CapacitorDevice', :path => '../../node_modules/.pnpm/@capacitor+device@1.0.6_@capacitor+core@3.3.1/node_modules/@capacitor/device'
   pod 'CapacitorHaptics', :path => '../../node_modules/.pnpm/@capacitor+haptics@1.1.3_@capacitor+core@3.3.1/node_modules/@capacitor/haptics'
@@ -19,7 +18,9 @@ def capacitor_pods
   pod 'CapacitorStatusBar', :path => '../../node_modules/.pnpm/@capacitor+status-bar@1.0.6_@capacitor+core@3.3.1/node_modules/@capacitor/status-bar'
   pod 'CapacitorStorage', :path => '../../node_modules/.pnpm/@capacitor+storage@1.2.3_@capacitor+core@3.3.1/node_modules/@capacitor/storage'
   pod 'CapacitorCrisp', :path => '../../node_modules/.pnpm/capacitor-crisp@1.0.9_@capacitor+core@3.3.1/node_modules/capacitor-crisp'
+  pod 'CapacitorNativeAudio', :path => '../../node_modules/.pnpm/capacitor-native-audio@3.0.2_@capacitor+core@3.3.1/node_modules/capacitor-native-audio'
   pod 'CapacitorRateApp', :path => '../../node_modules/.pnpm/capacitor-rate-app@2.0.0_@capacitor+core@3.3.1/node_modules/capacitor-rate-app'
+  pod 'CapacitorUpdater', :path => '../../node_modules/.pnpm/capacitor-updater@1.0.4_@capacitor+core@3.3.1/node_modules/capacitor-updater'
   pod 'CordovaPluginsStatic', :path => '../capacitor-cordova-ios-plugins'
 end
 

@@ -369,7 +369,7 @@
   import { create as createConfetti, CreateTypes } from 'canvas-confetti'
   import { App } from '@capacitor/app'
   import { KeepAwake } from '@capacitor-community/keep-awake'
-  import { NativeAudio } from '@capacitor-community/native-audio'
+  import { NativeAudio } from 'capacitor-native-audio'
   import { useTimer } from 'vue-timer-hook'
   import { useMainStore } from '@/store/main'
   import { useGameStore } from '@/store/game'

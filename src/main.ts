@@ -58,7 +58,7 @@ const initI18n = async (langsMessages: LangMessages) => {
 }
 
 const init = async (isRecall = false) => {
-  console.error('init')
+  console.log('init')
   const main = useMainStore()
   const auth = useAuthStore()
   try {
