@@ -32,7 +32,7 @@ specifiers:
   capacitor-crisp: 1.0.9
   capacitor-native-audio: ^3.0.2
   capacitor-rate-app: ^2.0.0
-  capacitor-updater: ^1.0.9
+  capacitor-updater: ^1.0.10
   cordova-annotated-plugin-android: ^1.0.4
   cordova-plugin-purchases: ^2.4.0
   cordova-res: ^0.15.3
@@ -84,7 +84,7 @@ dependencies:
   capacitor-crisp: 1.0.9_@capacitor+core@3.3.1
   capacitor-native-audio: 3.0.2_@capacitor+core@3.3.1
   capacitor-rate-app: 2.0.0_@capacitor+core@3.3.1
-  capacitor-updater: 1.0.9_@capacitor+core@3.3.1
+  capacitor-updater: 1.0.10_@capacitor+core@3.3.1
   cordova-annotated-plugin-android: 1.0.4
   cordova-plugin-purchases: 2.4.0
   faker: github.com/riderx/faker.js/57815a44709ebba6ed4c51389c4fcf10f46da555
@@ -2600,8 +2600,8 @@ packages:
       '@capacitor/core': 3.3.1
     dev: false
 
-  /capacitor-updater/1.0.9_@capacitor+core@3.3.1:
-    resolution: {integrity: sha512-gOcouaA6zTkPfBbTGet1E79774g6Z5ixSCuMc03CCFZiEqVSK1xXnuxpn9QkRjRHHsPaWTCf3dKKtd1QEUtjrA==}
+  /capacitor-updater/1.0.10_@capacitor+core@3.3.1:
+    resolution: {integrity: sha512-qXvPlj4+vfrcMjhKkJ2HTCmgkpRAolQTPn6WUfcadDLoys8sdYJQWzZWL75rZfa1S64OgbQYcCRJ+wz4ksQaIA==}
     peerDependencies:
       '@capacitor/core': ^3.0.0
     dependencies:

@@ -35,7 +35,7 @@
     "capacitor-crisp": "1.0.9",
     "capacitor-native-audio": "^3.0.2",
     "capacitor-rate-app": "^2.0.0",
-    "capacitor-updater": "^1.0.9",
+    "capacitor-updater": "^1.0.10",
     "cordova-annotated-plugin-android": "^1.0.4",
     "cordova-plugin-purchases": "^2.4.0",
     "faker": "git+https://github.com/riderx/faker.js.git",
