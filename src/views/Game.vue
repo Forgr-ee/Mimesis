@@ -486,10 +486,7 @@
   const setupCanvas = () => {
     const options = {
       useWorker: true,
-      resize: true,
-    }
-    if (isPlatform('android') && isPlatform('capacitor')) {
-      options.resize = false
+      resize: !isPlatform('android'),
     }
     confetti = createConfetti(null as unknown as HTMLCanvasElement, options)
   }

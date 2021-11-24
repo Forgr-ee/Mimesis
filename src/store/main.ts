@@ -1,3 +1,4 @@
+import { CapacitorUpdater } from 'capacitor-updater'
 import { randomSelect } from '../services/random'
 import { defineStore } from 'pinia'
 
@@ -10,11 +11,17 @@ import {
 } from '../services/firebase'
 import { useGameStore } from './game'
 
-const { getLangMessages, getThemes, getGuessesDb } = useFirebase()
+const { getLangMessages, getThemes, getGuessesDb, getLastVersion } =
+  useFirebase()
 
 const filterListByTitle = (list: Guess[], past: string[]) => {
   const filtered = list.filter((n) => !past.includes(n.title))
   return filtered
+}
+interface Version {
+  version: string
+  path: string
+  folder: string
 }
 
 export const useMainStore = defineStore('main', {
@@ -22,7 +29,12 @@ export const useMainStore = defineStore('main', {
   state: () => ({
     error: false,
     loading: false,
-    version: '',
+    lastVersion: {
+      version: '',
+      path: '',
+      folder: '',
+    } as Version,
+    versions: [] as Version[],
     lastUpdate: '',
     initialized: false,
     currentPath: '/home',
@@ -66,7 +78,11 @@ export const useMainStore = defineStore('main', {
         return
       this.loading = true
       try {
-        await Promise.all([this.initLangMessages(), this.initThemes()])
+        await Promise.all([
+          this.initLangMessages(),
+          this.initThemes(),
+          this.getLastVersion(),
+        ])
         await this.initGuessTheme()
         this.initialized = true
       } catch (err: any) {
@@ -75,6 +91,15 @@ export const useMainStore = defineStore('main', {
       }
       this.lastUpdate = new Date().toISOString()
       this.loading = false
+    },
+    async getLastVersion() {
+      const newVersion = await getLastVersion()
+      if (newVersion.version !== this.lastVersion.version) {
+        this.lastVersion.version = newVersion.version
+        this.lastVersion.path = newVersion.versionPath
+        this.lastVersion.folder = ''
+        this.versions.push(this.lastVersion)
+      }
     },
     async initGuessTheme() {
       this.guessDb = await getGuessesDb(this.themes, this.lang)

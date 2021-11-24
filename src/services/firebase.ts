@@ -43,6 +43,11 @@ export type GuessDb = {
   [key: string]: Guess[]
 }
 
+export interface Config {
+  version: string
+  versionPath: string
+}
+
 export type Guess = {
   title: string
   cover?: string
@@ -68,6 +73,7 @@ type Usefirebase = {
   getGuessesDb: (themes: Theme[], lang: string) => Promise<GuessDb>
   getThemes: () => Promise<Theme[]>
   getLangMessages: () => Promise<LangMessages>
+  getLastVersion: () => Promise<Config>
   addGame: (
     uid: string | undefined,
     lang: string,
@@ -111,6 +117,17 @@ export const useFirebase = (): Usefirebase => {
       throw new Error(err)
     }
     return value
+  }
+  const getLastVersion = async (): Promise<Config> => {
+    try {
+      const config = (
+        await firebase.firestore().collection(`config`).doc('app').get()
+      ).data() as Config
+      return config
+    } catch (err: any) {
+      console.error('getLastVersion', err)
+      throw new Error(err)
+    }
   }
   const getGuessesDb = async (
     themes: Theme[],
@@ -206,6 +223,7 @@ export const useFirebase = (): Usefirebase => {
   return {
     firebase,
     getGuessesDb,
+    getLastVersion,
     getThemes,
     getLangMessages,
     addGame,

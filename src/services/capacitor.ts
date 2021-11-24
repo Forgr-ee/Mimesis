@@ -2,22 +2,24 @@ import { NativeAudio } from 'capacitor-native-audio'
 import { SplashScreen } from '@capacitor/splash-screen'
 import { StatusBar } from '@capacitor/status-bar'
 import { isPlatform } from '@ionic/vue'
-// import { App } from '@capacitor/app'
-// import { CapacitorUpdater } from 'capacitor-updater'
+import { App } from '@capacitor/app'
+import { CapacitorUpdater } from 'capacitor-updater'
+import { useMainStore } from '@/store/main'
 
 export const initCapacitor = (): void => {
   if (isPlatform('capacitor')) {
-    // Do the update when user lean app
-    // App.addListener('appStateChange', async (state) => {
-    //   if (!state.isActive) {
-    //     SplashScreen.show()
-    //     const version = await CapacitorUpdater.download({
-    //       url: 'https://github.com/Forgr-ee/Mimesis/releases/download/0.0.1/dist.zip',
-    //     })
-    //     await CapacitorUpdater.set(version)
-    //     SplashScreen.hide() // in case the set fail, otherwise the new app will have to hide it
-    //   }
-    // })
+    const main = useMainStore()
+    App.addListener('appStateChange', async (state) => {
+      if (!state.isActive && main.lastVersion.folder === '') {
+        SplashScreen.show()
+        const newFolder = await CapacitorUpdater.download({
+          url: main.lastVersion.path,
+        })
+        main.lastVersion.folder = newFolder.version
+        await CapacitorUpdater.set({ version: main.lastVersion.folder })
+        SplashScreen.hide() // in case set fail, otherwise the new app will have to hide it
+      }
+    })
     StatusBar.hide()
 
     NativeAudio.preload({
