@@ -10,12 +10,8 @@ export const initCapacitor = (): void => {
   if (isPlatform('capacitor')) {
     const main = useMainStore()
     App.addListener('appStateChange', async (state) => {
-      if (!state.isActive && main.lastVersion.folder === '') {
+      if (!state.isActive && !main.lastVersion.updated) {
         SplashScreen.show()
-        const newFolder = await CapacitorUpdater.download({
-          url: main.lastVersion.path,
-        })
-        main.lastVersion.folder = newFolder.version
         await CapacitorUpdater.set({ version: main.lastVersion.folder })
         SplashScreen.hide() // in case set fail, otherwise the new app will have to hide it
       }

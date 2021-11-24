@@ -19,6 +19,7 @@ const filterListByTitle = (list: Guess[], past: string[]) => {
   return filtered
 }
 interface Version {
+  updated: boolean
   version: string
   path: string
   folder: string
@@ -30,6 +31,7 @@ export const useMainStore = defineStore('main', {
     error: false,
     loading: false,
     lastVersion: {
+      updated: true,
       version: '',
       path: '',
       folder: '',
@@ -97,7 +99,11 @@ export const useMainStore = defineStore('main', {
       if (newVersion.version !== this.lastVersion.version) {
         this.lastVersion.version = newVersion.version
         this.lastVersion.path = newVersion.versionPath
-        this.lastVersion.folder = ''
+        const newFolder = await CapacitorUpdater.download({
+          url: this.lastVersion.path,
+        })
+        this.lastVersion.folder = newFolder.version
+        this.lastVersion.updated = false
         this.versions.push(this.lastVersion)
       }
     },

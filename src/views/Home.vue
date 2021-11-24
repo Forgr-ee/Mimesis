@@ -448,7 +448,7 @@
           },
         },
         {
-          text: `${t('by')} Martin Donadieu`,
+          text: `${t('by')} Martin DONADIEU`,
           handler: () => {
             window.open('https://msha.ke/martindonadieu', '_blank')
           },
