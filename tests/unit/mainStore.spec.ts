@@ -2,7 +2,12 @@ import { setActivePinia, createPinia } from 'pinia'
 import { useGameStore } from '../../src/store/game'
 import { useMainStore } from '../../src/store/main'
 import { mockRandom, resetMockRandom } from 'jest-mock-random'
-import { LangMessages, LangMessage, Theme, GuessDb } from '@/services/firebase'
+import {
+  LangMessages,
+  LangMessage,
+  Theme,
+  GuessDb,
+} from '../../src/services/firebase'
 
 const langs: LangMessages = {
   fr: {
@@ -20,6 +25,7 @@ const langs: LangMessages = {
 const gGuess = (title: string) => {
   return { title }
 }
+
 const themes: Theme[] = [
   {
     active: true,
@@ -29,6 +35,8 @@ const themes: Theme[] = [
     },
     icon: 'data',
     id: 't1',
+    id_ios: 't1.ios',
+    id_android: 't1.android',
     order: 1,
     status: 'paid',
   },

@@ -15,8 +15,8 @@
 <script setup lang="ts">
   import { IonApp, IonRouterOutlet } from '@ionic/vue'
   import { computed } from 'vue'
-  import { useAuthStore } from '@/store/auth'
-  import { useMainStore } from '@/store/main'
+  import { useAuthStore } from '~/store/auth'
+  import { useMainStore } from '~/store/main'
 
   const auth = useAuthStore()
   const main = useMainStore()

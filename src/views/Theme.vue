@@ -150,11 +150,11 @@
   } from '@ionic/vue'
   import { LockClosedIcon, ArrowLeftIcon } from '@heroicons/vue/outline'
   import { useRouter } from 'vue-router'
-  import { useMainStore } from '@/store/main'
-  import { useGameStore } from '@/store/game'
-  import { Theme } from '@/services/firebase'
-  import { purchase, restore } from '@/services/iap'
-  import PageLoader from '@/components/PageLoader.vue'
+  import { useMainStore } from '~/store/main'
+  import { useGameStore } from '~/store/game'
+  import { Theme } from '~/services/firebase'
+  import { purchase, restore } from '~/services/iap'
+  import PageLoader from '~/components/PageLoader.vue'
   import { ref } from 'vue'
 
   const { t, locale } = useI18n()

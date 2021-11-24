@@ -371,9 +371,9 @@
   import { KeepAwake } from '@capacitor-community/keep-awake'
   import { NativeAudio } from 'capacitor-native-audio'
   import { useTimer } from 'vue-timer-hook'
-  import { useMainStore } from '@/store/main'
-  import { useGameStore } from '@/store/game'
-  import Modal from '@/components/Modal.vue'
+  import { useMainStore } from '~/store/main'
+  import { useGameStore } from '~/store/game'
+  import Modal from '~/components/Modal.vue'
   import {
     CheckIcon,
     ExclamationIcon,

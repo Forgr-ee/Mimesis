@@ -4,7 +4,7 @@ import { StatusBar } from '@capacitor/status-bar'
 import { isPlatform } from '@ionic/vue'
 import { App } from '@capacitor/app'
 import { CapacitorUpdater } from 'capacitor-updater'
-import { useMainStore } from '@/store/main'
+import { useMainStore } from '~/store/main'
 
 export const initCapacitor = (): void => {
   if (isPlatform('capacitor')) {

@@ -378,7 +378,7 @@
 
 <script setup lang="ts">
   import { useI18n } from 'vue-i18n'
-  import { randomPlayer, randomTeam } from '@/store/game'
+  import { randomPlayer, randomTeam } from '~/store/game'
   import { RateApp } from 'capacitor-rate-app'
   import {
     IonContent,
@@ -389,9 +389,9 @@
   } from '@ionic/vue'
   import { computed, reactive } from 'vue'
   import { useRouter } from 'vue-router'
-  import { useGameStore } from '@/store/game'
-  import { useMainStore } from '@/store/main'
-  import Modal from '@/components/Modal.vue'
+  import { useGameStore } from '~/store/game'
+  import { useMainStore } from '~/store/main'
+  import Modal from '~/components/Modal.vue'
   import {
     TranslateIcon,
     PlayIcon,
@@ -405,7 +405,7 @@
     ClipboardListIcon,
     ExclamationIcon,
   } from '@heroicons/vue/outline'
-  import { openChat } from '@/services/crips'
+  import { openChat } from '~/services/crips'
 
   const modals = reactive({
     inequal: false,

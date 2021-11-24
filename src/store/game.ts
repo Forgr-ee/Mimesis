@@ -1,4 +1,4 @@
-import { randomSelect } from '@/services/random'
+import { randomSelect } from '~/services/random'
 import { isPlatform } from '@ionic/vue'
 import { RateApp } from 'capacitor-rate-app'
 import { defineStore } from 'pinia'
