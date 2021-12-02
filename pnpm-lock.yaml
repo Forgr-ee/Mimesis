@@ -29,10 +29,10 @@ specifiers:
   '@vue/eslint-config-typescript': 9.0.1
   '@vue/test-utils': ^2.0.0-rc.12
   canvas-confetti: ^1.4.0
-  capacitor-crisp: 1.0.9
+  capacitor-crisp: ^1.0.14
   capacitor-native-audio: ^3.0.2
   capacitor-rate-app: ^2.0.0
-  capacitor-updater: ^1.0.10
+  capacitor-updater: ^1.0.16
   cordova-annotated-plugin-android: ^1.0.4
   cordova-plugin-purchases: ^2.4.0
   cordova-res: ^0.15.3
@@ -81,10 +81,10 @@ dependencies:
   '@ionic/vue': 6.0.0-rc.2
   '@ionic/vue-router': 6.0.0-rc.2
   canvas-confetti: 1.4.0
-  capacitor-crisp: 1.0.9_@capacitor+core@3.3.1
+  capacitor-crisp: 1.0.14_@capacitor+core@3.3.1
   capacitor-native-audio: 3.0.2_@capacitor+core@3.3.1
   capacitor-rate-app: 2.0.0_@capacitor+core@3.3.1
-  capacitor-updater: 1.0.10_@capacitor+core@3.3.1
+  capacitor-updater: 1.0.16_@capacitor+core@3.3.1
   cordova-annotated-plugin-android: 1.0.4
   cordova-plugin-purchases: 2.4.0
   faker: github.com/riderx/faker.js/57815a44709ebba6ed4c51389c4fcf10f46da555
@@ -2576,8 +2576,8 @@ packages:
     resolution: {integrity: sha512-S18o4Y9PqI/uabdlT/jI3MY7XBJjNxnfapFIkjkMwpz6qNxLFZOm2b22OMf4ZYDL9lpNWI+Ih4fEMVPwO1KHFQ==}
     dev: false
 
-  /capacitor-crisp/1.0.9_@capacitor+core@3.3.1:
-    resolution: {integrity: sha512-s/4lbAra4L+5rzrejOFU4kYl/UGUwdoW1uTt/EsD9l+wIX4O/SDllv94dU5G2GrGAAU6aGiipVlz7pMYv5f3JQ==}
+  /capacitor-crisp/1.0.14_@capacitor+core@3.3.1:
+    resolution: {integrity: sha512-PExSe9PSsCeAcQF5qFYMPnWtnRqdI6V/sgzXzSctXxVOGDQQo5WieakDjm53CIqUfso5S7keoxbOAEPzecypwQ==}
     peerDependencies:
       '@capacitor/core': ^3.0.0
     dependencies:
@@ -2600,8 +2600,8 @@ packages:
       '@capacitor/core': 3.3.1
     dev: false
 
-  /capacitor-updater/1.0.10_@capacitor+core@3.3.1:
-    resolution: {integrity: sha512-qXvPlj4+vfrcMjhKkJ2HTCmgkpRAolQTPn6WUfcadDLoys8sdYJQWzZWL75rZfa1S64OgbQYcCRJ+wz4ksQaIA==}
+  /capacitor-updater/1.0.16_@capacitor+core@3.3.1:
+    resolution: {integrity: sha512-uzxUMVfmqOI3lrav1Yuv0LJqbRF6WeM9AfnF+vkpQnrGHEqSx7eiVwWDX/8lUx/mXu4FtL45uF7Bf9tmqC2f6Q==}
     peerDependencies:
       '@capacitor/core': ^3.0.0
     dependencies:
