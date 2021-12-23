@@ -29,6 +29,7 @@ export const useMainStore = defineStore('main', {
   // other options...
   state: () => ({
     error: false,
+    isActive: true,
     loading: false,
     lastVersion: {
       updated: true,
@@ -96,6 +97,12 @@ export const useMainStore = defineStore('main', {
     },
     async getLastVersion() {
       const newVersion = await getLastVersion()
+      // console.log('getLastVersion')
+      // const newVersion = {
+      //   version: '0.0.1',
+      //   versionPath:
+      //     'https://github.com/Forgr-ee/Mimesis/releases/download/0.0.1/dist.zip',
+      // }
       if (newVersion.version !== this.lastVersion.version) {
         this.lastVersion.version = newVersion.version
         this.lastVersion.path = newVersion.versionPath

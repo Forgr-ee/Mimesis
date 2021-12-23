@@ -523,8 +523,8 @@
         await game.save()
       }
     })
-    appStateChange.value = App.addListener('appStateChange', (state) => {
-      if (!state.isActive) {
+    watchEffect(() => {
+      if (!main.isActive) {
         timer.pause()
       } else {
         timer.resume()

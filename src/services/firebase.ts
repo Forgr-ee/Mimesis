@@ -177,7 +177,6 @@ export const useFirebase = (): Usefirebase => {
           pList.push(Promise.resolve(theme))
         }
       })
-      console.log('toyoy')
       values = await Promise.all(pList)
       console.log('getThemes', values)
     } catch (err: any) {

@@ -406,6 +406,7 @@
     ExclamationIcon,
   } from '@heroicons/vue/outline'
   import { openChat } from '~/services/crips'
+  import { CapacitorUpdater } from 'capacitor-updater'
 
   const modals = reactive({
     inequal: false,
@@ -444,6 +445,14 @@
           handler: () => {
             if (isPlatform('capacitor')) {
               RateApp.requestReview()
+            }
+          },
+        },
+        {
+          text: 'reset update',
+          handler: () => {
+            if (isPlatform('capacitor')) {
+              CapacitorUpdater.reset()
             }
           },
         },
