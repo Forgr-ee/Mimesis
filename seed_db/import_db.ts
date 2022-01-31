@@ -37,7 +37,7 @@ const downloadImage = async (url: string) => {
           .on('error', () => reject(`error ${url}`))
       })
     })
-  } catch (err: any) {
+  } catch (err) {
     console.error('downloadImage', err)
   }
   return path
@@ -70,7 +70,7 @@ const parseAndUpload = async (folder: string, kind: string) => {
         // console.log('publicUrl', publicUrl)
         data.cover = publicUrl
         allPaths.push(path)
-      } catch (err: any) {
+      } catch (err) {
         console.error(err, path)
       }
     }

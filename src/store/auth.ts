@@ -9,7 +9,7 @@ export const useAuthStore = defineStore('auth', {
     userId: '',
     user: {} as null | firebase.default.User,
     loading: true,
-    error: null as Error | null,
+    error: null as never | null,
     initialized: false,
   }),
   actions: {
@@ -19,8 +19,8 @@ export const useAuthStore = defineStore('auth', {
         this.user = await login()
         this.error = null
         this.loading = false
-      } catch (err: any) {
-        this.error = err
+      } catch (err) {
+        this.error = err as never
         this.loading = false
       }
     },
@@ -31,8 +31,8 @@ export const useAuthStore = defineStore('auth', {
         this.error = null
         this.loading = false
         this.initialized = false
-      } catch (err: any) {
-        this.error = err
+      } catch (err) {
+        this.error = err as never
         this.loading = false
       }
     },
@@ -47,8 +47,8 @@ export const useAuthStore = defineStore('auth', {
         this.error = null
         this.loading = false
         this.initialized = true
-      } catch (err: any) {
-        this.error = err
+      } catch (err) {
+        this.error = err as never
         this.loading = false
       }
     },

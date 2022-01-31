@@ -6,6 +6,9 @@
 	"plugins": {
 		"SplashScreen": {
 			"launchAutoHide": false
+		},
+		"CapacitorUpdater": {
+			"autoUpdateUrl": "https://capgo.app/api/latest?appid=ee.forgr.mimesis&channel=production"
 		}
 	}
 }

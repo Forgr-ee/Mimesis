@@ -1,9 +1,9 @@
-name: Build Docker Image
+name: Build source code and send to Capgo
 
 on:
   push:
-    branches:
-      - main
+    tags:
+      - '*'
       
 jobs:
   deploy:
@@ -25,7 +25,11 @@ jobs:
           - pnpm lint:script
       - name: Build
         id: build_code
-        run: 
-          - pnpm run build
+        run: pnpm run build
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        run:
+          - npx capgo upload -a ${{ secrets.CAPGO_TOKEN }} -c production
       
 

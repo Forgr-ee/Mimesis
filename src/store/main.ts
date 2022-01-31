@@ -1,4 +1,3 @@
-import { CapacitorUpdater } from 'capacitor-updater'
 import { randomSelect } from '../services/random'
 import { defineStore } from 'pinia'
 
@@ -11,8 +10,7 @@ import {
 } from '../services/firebase'
 import { useGameStore } from './game'
 
-const { getLangMessages, getThemes, getGuessesDb, getLastVersion } =
-  useFirebase()
+const { getLangMessages, getThemes, getGuessesDb } = useFirebase()
 
 const filterListByTitle = (list: Guess[], past: string[]) => {
   const filtered = list.filter((n) => !past.includes(n.title))
@@ -81,38 +79,15 @@ export const useMainStore = defineStore('main', {
         return
       this.loading = true
       try {
-        await Promise.all([
-          this.initLangMessages(),
-          this.initThemes(),
-          this.getLastVersion(),
-        ])
+        await Promise.all([this.initLangMessages(), this.initThemes()])
         await this.initGuessTheme()
         this.initialized = true
-      } catch (err: any) {
-        this.error = err
+      } catch (err) {
+        this.error = !!err
         console.log('err initialise', err)
       }
       this.lastUpdate = new Date().toISOString()
       this.loading = false
-    },
-    async getLastVersion() {
-      const newVersion = await getLastVersion()
-      // console.log('getLastVersion')
-      // const newVersion = {
-      //   version: '0.0.1',
-      //   versionPath:
-      //     'https://github.com/Forgr-ee/Mimesis/releases/download/0.0.1/dist.zip',
-      // }
-      if (newVersion.version !== this.lastVersion.version) {
-        this.lastVersion.version = newVersion.version
-        this.lastVersion.path = newVersion.versionPath
-        const newFolder = await CapacitorUpdater.download({
-          url: this.lastVersion.path,
-        })
-        this.lastVersion.folder = newFolder.version
-        this.lastVersion.updated = false
-        this.versions.push(this.lastVersion)
-      }
     },
     async initGuessTheme() {
       this.guessDb = await getGuessesDb(this.themes, this.lang)

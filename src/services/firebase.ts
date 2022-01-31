@@ -5,7 +5,6 @@ import firebase from 'firebase/app'
 // Required for side-effects
 import 'firebase/firestore'
 import 'firebase/auth'
-import { findProduct, isPurchased, restore } from './iap'
 import { isPlatform } from '@ionic/vue'
 import { PurchasesPackage } from '@ionic-native/purchases'
 
@@ -112,9 +111,9 @@ export const useFirebase = (): Usefirebase => {
         const data = doc.data() as Guess
         value.push(data)
       })
-    } catch (err: any) {
+    } catch (err) {
       console.error('initThemes', err)
-      throw new Error(err)
+      throw new Error(err as never)
     }
     return value
   }
@@ -124,9 +123,9 @@ export const useFirebase = (): Usefirebase => {
         await firebase.firestore().collection(`config`).doc('app').get()
       ).data() as Config
       return config
-    } catch (err: any) {
+    } catch (err) {
       console.error('getLastVersion', err)
-      throw new Error(err)
+      throw new Error(err as never)
     }
   }
   const getGuessesDb = async (
@@ -140,9 +139,9 @@ export const useFirebase = (): Usefirebase => {
         const guessList = await getGuesses(theme.id, lang)
         guessDb[`${theme.id}_${lang}`] = guessList
       }
-    } catch (err: any) {
+    } catch (err) {
       console.error('getGuessesDb', err)
-      throw new Error(err)
+      throw new Error(err as never)
     }
     return guessDb
   }
@@ -179,9 +178,9 @@ export const useFirebase = (): Usefirebase => {
       })
       values = await Promise.all(pList)
       console.log('getThemes', values)
-    } catch (err: any) {
+    } catch (err) {
       console.error('initThemes', err)
-      throw new Error(err)
+      throw new Error(err as never)
     }
     return values
   }
@@ -197,9 +196,9 @@ export const useFirebase = (): Usefirebase => {
         const data = doc.data() as LangMessage
         value[data.id] = data
       })
-    } catch (err: any) {
+    } catch (err) {
       console.error('initLangMessages', err)
-      throw new Error(err)
+      throw new Error(err as never)
     }
     return value
   }
