@@ -26,7 +26,6 @@ jobs:
         run: pnpm run build
       - name: Create Release
         id: create_release
-        uses: actions/create-release@v1
         run: npx capgo upload -a ${{ secrets.CAPGO_TOKEN }} -c production
       
 
