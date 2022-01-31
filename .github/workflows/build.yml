@@ -20,16 +20,13 @@ jobs:
         run: pnpm i        
       - name: Lint
         id: lint_code
-        run: 
-          - pnpm lint:markup
-          - pnpm lint:script
+        run: pnpm lint:markup && pnpm lint:script
       - name: Build
         id: build_code
         run: pnpm run build
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
-        run:
-          - npx capgo upload -a ${{ secrets.CAPGO_TOKEN }} -c production
+        run: npx capgo upload -a ${{ secrets.CAPGO_TOKEN }} -c production
       
 
