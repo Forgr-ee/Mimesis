@@ -1,23 +1,18 @@
+import Plausible from 'plausible-tracker'
 import { isPlatform } from '@ionic/vue'
 
-declare global {
-  interface HTMLScriptElement {
-    'data-domain': string
-  }
+export const trackEvent = (eventName: string, eventData: any = {}) => {
+  const { trackEvent } = Plausible({
+    trackLocalhost: isPlatform('capacitor'),
+    domain: import.meta.env.domain as string,
+  })
+  trackEvent(eventName, { props: eventData })
 }
 
 export const initPlausible = (): void => {
-  try {
-    const s = document.createElement('script')
-    s.src = 'https://plausible.io/js/plausible.js'
-    s.async = true
-    s.defer = true
-    s['data-domain'] = 'mimesis.fun'
-    if (isPlatform('capacitor')) {
-      s.src = 'https://plausible.io/js/plausible.local.js'
-    }
-    document.getElementsByTagName('head')[0].appendChild(s)
-  } catch (e) {
-    console.error('Plausible cannot be init', e)
-  }
+  const { enableAutoPageviews } = Plausible({
+    trackLocalhost: isPlatform('capacitor'),
+    domain: import.meta.env.domain as string,
+  })
+  enableAutoPageviews()
 }

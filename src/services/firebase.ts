@@ -1,12 +1,11 @@
 // import { IAPProductCustom, registerProduct, restore } from './iap'
-import FIREBASE_CONFIG from './.env.firebase'
-
 import firebase from 'firebase/app'
 // Required for side-effects
 import 'firebase/firestore'
 import 'firebase/auth'
 import { isPlatform } from '@ionic/vue'
-import { PurchasesPackage } from '@ionic-native/purchases'
+import { Package } from 'capacitor-purchases'
+import { findPackage, isPurchased, restore } from './iap'
 
 export interface Player {
   uuid: string
@@ -29,7 +28,7 @@ export type Theme = {
   lang: {
     [key: string]: string
   }
-  package?: PurchasesPackage | null
+  package?: Package | null
   icon: string
   id_ios: string
   id_android: string
@@ -85,7 +84,9 @@ type Usefirebase = {
 
 export const useFirebase = (): Usefirebase => {
   if (firebase.apps.length === 0) {
-    firebase.initializeApp(FIREBASE_CONFIG)
+    firebase.initializeApp(
+      JSON.parse(import.meta.env.FIREBASE_CONFIG as string)
+    )
   }
   const getUser = (): Promise<firebase.User | null> => {
     return new Promise<firebase.User | null>((resolve, reject) => {
@@ -155,22 +156,23 @@ export const useFirebase = (): Usefirebase => {
         .orderBy('order', 'asc')
         .get()
       const pList: Promise<Theme>[] = []
-      // const pInfo = isPlatform('capacitor') ? await restore() : null
+      const pInfo = isPlatform('capacitor') ? await restore() : null
       console.log('getThemes')
       snapshot.docs.map((doc) => {
         const theme = doc.data() as Theme
         if (isPlatform('capacitor')) {
-          // const productId = isPlatform('ios') ? theme.id_ios : theme.id_android
+          const productId = isPlatform('ios') ? theme.id_ios : theme.id_android
           pList.push(
-            Promise.resolve(theme)
-            // findProduct(productId).then((product) => {
-            //   theme.package = product
-            //   const owned = isPurchased(product?.identifier, pInfo)
-            //   if (product && owned) {
-            //     theme.status = 'purchased'
-            //   }
-            //   return theme
-            // })
+            // Promise.resolve(theme)
+            findPackage(productId).then((product) => {
+              if (!product) return theme
+              theme.package = product
+              const owned = isPurchased(product.identifier, pInfo)
+              if (product && owned) {
+                theme.status = 'purchased'
+              }
+              return theme
+            })
           )
         } else {
           pList.push(Promise.resolve(theme))

@@ -6,7 +6,7 @@ import { useAuthStore } from './auth'
 import { useMainStore } from './main'
 import { v4 as uuidv4 } from 'uuid'
 import { Entity, Player, Team, useFirebase } from '../services/firebase'
-import faker from 'faker'
+import faker from '@faker-js/faker'
 
 faker.locale = 'fr'
 

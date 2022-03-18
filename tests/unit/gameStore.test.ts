@@ -1,3 +1,4 @@
+import { describe, expect, test, beforeEach } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import { useGameStore, randomPlayer } from '../../src/store/game'
 import { mockRandom, resetMockRandom } from 'jest-mock-random'

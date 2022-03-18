@@ -32,12 +32,12 @@
 		"classpath": "com.capacitorjs.plugins.storage.StoragePlugin"
 	},
 	{
-		"pkg": "capacitor-crisp",
-		"classpath": "ee.forgr.plugin.crisp.CapacitorCrispPlugin"
-	},
-	{
 		"pkg": "capacitor-native-audio",
 		"classpath": "com.getcapacitor.community.audio.NativeAudio"
+	},
+	{
+		"pkg": "capacitor-purchases",
+		"classpath": "ee.forgr.plugin.capacitor_purchases.CapacitorPurchasesPlugin"
 	},
 	{
 		"pkg": "capacitor-rate-app",

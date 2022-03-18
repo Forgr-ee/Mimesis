@@ -269,7 +269,7 @@
   }
   const presentActionSheet = async () => {
     const actionSheet = await actionSheetController.create({
-      header: t('more'),
+      header: `${t('more')} V${import.meta.env.VITE_APP_VERSION}`,
       buttons: [
         {
           text: t('openSource'),

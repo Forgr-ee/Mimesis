@@ -1,3 +1,4 @@
+import { describe, expect, test, beforeEach } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import { useGameStore } from '../../src/store/game'
 import { useMainStore } from '../../src/store/main'
