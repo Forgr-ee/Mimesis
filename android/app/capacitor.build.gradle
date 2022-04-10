@@ -21,10 +21,9 @@ dependencies {
     implementation project(':capacitor-purchases')
     implementation project(':capacitor-rate-app')
     implementation project(':capacitor-updater')
-    implementation "com.revenuecat.purchases:purchases-hybrid-common:1.10.0"
-    implementation "androidx.annotation:annotation:[1.2.0]"
+
 }
-apply from: "../../node_modules/.pnpm/cordova-annotated-plugin-android@1.0.4/node_modules/cordova-annotated-plugin-android/build.gradle"
+
 
 if (hasProperty('postBuildExtras')) {
   postBuildExtras()

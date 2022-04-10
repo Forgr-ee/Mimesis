@@ -1,12 +1,19 @@
+import { CapacitorUpdater } from 'capacitor-updater'
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
-import { IonicVue } from '@ionic/vue'
+import { IonicVue, isPlatform } from '@ionic/vue'
 // import VueFeather from 'vue-feather';
 import { createI18n } from 'vue-i18n'
 import { useAuthStore } from './store/auth'
 import { useMainStore } from './store/main'
-import { initCrisp, setUserId } from './services/crips'
+import { App as capApp } from '@capacitor/app'
+import {
+  initCrisp,
+  setDeviceInfo,
+  setUserId,
+  setVersion,
+} from './services/crips'
 import pinia from './services/pinia'
 import { initCapacitor } from './services/capacitor'
 import { initPlausible } from './services/plausible'
@@ -62,15 +69,34 @@ const init = async (isRecall = false) => {
   const main = useMainStore()
   const auth = useAuthStore()
   try {
-    console.log('authCheck')
-    await auth.authCheck()
     console.log('initCrisp')
     initCrisp()
+    console.log('authCheck')
+    await auth.authCheck()
+    if (isPlatform('capacitor')) {
+      const info = await Device.getId()
+      const infoApp = await capApp.getInfo()
+      const device = await Device.getInfo()
+      // console.log('info', info)
+      setUserId(info.uuid)
+      setDeviceInfo(
+        device.model,
+        device.platform,
+        device.operatingSystem,
+        device.osVersion,
+        infoApp.version,
+        device.manufacturer
+      )
+    }
+    setVersion(import.meta.env.VITE_APP_VERSION as string)
+    CapacitorUpdater.notifyAppReady()
+    if (isPlatform('ios')) {
+      initIap('appl_bWYDPHWhWAGWQFUIQGIoiXzrTlW')
+    } else if (isPlatform('android')) {
+      initIap('goog_TqZUIbsisEecUcyOkqTPaHPKEVH')
+    }
     console.log('main.initialize')
     await main.initialize()
-    const info = await Device.getId()
-    console.log('info', info)
-    setUserId(info.uuid)
     console.log('initI18n')
     await initI18n(main.langsMessages)
     initIap('lwSBejyKtyLhBghkjWZmsBKKTykuHxfQ')

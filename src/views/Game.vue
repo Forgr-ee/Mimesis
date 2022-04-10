@@ -192,7 +192,6 @@
   } from 'vue'
   import { create as createConfetti, CreateTypes } from 'canvas-confetti'
   import { KeepAwake } from '@capacitor-community/keep-awake'
-  import { NativeAudio } from 'capacitor-native-audio'
   import { useTimer } from 'vue-timer-hook'
   import { useMainStore } from '~/store/main'
   import { useGameStore } from '~/store/game'
@@ -202,45 +201,11 @@
     ExclamationIcon,
     ArrowLeftIcon,
   } from '@heroicons/vue/outline'
-
-  interface Sound {
-    [key: string]: { play: () => void }
-  }
-  const audios: Sound = {}
+  import { playSound } from '~/services/sound'
 
   const gameLenght = 60
   const { t } = useI18n()
 
-  if (isPlatform('capacitor')) {
-    audios['tada'] = {
-      play: () => {
-        NativeAudio.play({
-          assetId: 'tada',
-          time: 0,
-        })
-      },
-    }
-    audios['horn'] = {
-      play: () => {
-        NativeAudio.play({
-          assetId: 'horn',
-          time: 0,
-        })
-      },
-    }
-    KeepAwake.keepAwake()
-  } else {
-    audios['tada'] = new Audio('assets/tada.mp3')
-    audios['horn'] = new Audio('assets/horn.mp3')
-  }
-
-  const makeSound = (name: string) => {
-    if (isPlatform('capacitor')) {
-      audios[name].play()
-    } else {
-      audios[name].play()
-    }
-  }
   const pause = () => {
     modals.pause = true
     timer.pause()
@@ -327,11 +292,17 @@
   onBeforeUnmount(() => {
     modals.changePlayer = true
     timer.pause()
+    if (isPlatform('capacitor')) {
+      KeepAwake.allowSleep()
+    }
   })
   onMounted(() => {
+    if (isPlatform('capacitor')) {
+      KeepAwake.keepAwake()
+    }
     watchEffect(async () => {
       if (timer.isExpired.value) {
-        makeSound('horn')
+        await playSound('horn')
         await game.nextTeam()
         modals.changePlayer = true
       }
@@ -341,7 +312,7 @@
         playConfetti()
         timer.pause()
         modals.winner = true
-        makeSound('tada')
+        await playSound('tada')
         await game.save()
       }
     })
