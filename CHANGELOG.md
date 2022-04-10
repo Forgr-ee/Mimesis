@@ -1,3 +1,9 @@
+## 2.3.0 (2022-04-10)
+
+### Fix
+
+- upgrade package and sync js to native version
+
 ## 0.3.0 (2022-03-18)
 
 ### Feat
