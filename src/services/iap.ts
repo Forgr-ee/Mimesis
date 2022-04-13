@@ -26,7 +26,7 @@ export const restore = async (): Promise<PurchaserInfo | null> => {
   if (!isPlatform('capacitor')) return null
   const res = await CapacitorPurchases.restoreTransactions()
   const purchaserInfo = res.purchaserInfo
-  // console.log('restore', purchaserInfo)
+  // console.log('restore', res)
   const ids: string[] = []
   const idsOld: string[] = []
   purchaserInfo.activeSubscriptions.forEach((id) => {
@@ -68,6 +68,21 @@ export const getCurrentOfferings = async (): Promise<Offering | null> => {
   return offerings ? offerings.current : null
 }
 
+export const getCurrentPrice = (p: Package) => {
+  if (p.product?.introductoryPrice?.price) {
+    return p.product.introductoryPrice.price
+  } else {
+    return p?.product?.price || 0
+  }
+}
+
+export const showCurrentPrice = (p: Package) => {
+  if (p.product?.introductoryPrice?.priceString) {
+    return p.product.introductoryPrice.priceString
+  } else {
+    return p?.product?.priceString || ''
+  }
+}
 export const findPackage = async (
   productId: string
 ): Promise<Package | null> => {

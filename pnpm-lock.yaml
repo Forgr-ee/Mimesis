@@ -30,7 +30,7 @@ specifiers:
   '@vue/test-utils': 2.0.0-rc.19
   canvas-confetti: 1.5.1
   capacitor-native-audio: ^3.0.2
-  capacitor-purchases: 1.0.8
+  capacitor-purchases: 1.1.3
   capacitor-rate-app: ^2.0.0
   capacitor-updater: 3.0.0-beta.15
   csvtojson: ^2.0.10
@@ -81,7 +81,7 @@ dependencies:
   '@ionic/vue-router': 6.0.16
   canvas-confetti: 1.5.1
   capacitor-native-audio: 3.0.2_@capacitor+core@3.4.3
-  capacitor-purchases: 1.0.8_@capacitor+core@3.4.3
+  capacitor-purchases: 1.1.3_@capacitor+core@3.4.3
   capacitor-rate-app: 2.0.0_@capacitor+core@3.4.3
   capacitor-updater: 3.0.0-beta.15_@capacitor+core@3.4.3
   firebase: 8.10.1
@@ -2552,8 +2552,8 @@ packages:
       '@capacitor/core': 3.4.3
     dev: false
 
-  /capacitor-purchases/1.0.8_@capacitor+core@3.4.3:
-    resolution: {integrity: sha512-6p4JCeAukZZgn5pQJH7EoFbKO1kkXlArvRI9L37OdEGN8D7fz0JpM8OC33CxC4zyYF7N389Vn6zPl+EiRTyDKw==}
+  /capacitor-purchases/1.1.3_@capacitor+core@3.4.3:
+    resolution: {integrity: sha512-jJ0EqvbuMJ39P80MW1xI6MpIgq6kZZo3RsyG+fxS57F4Kbesp/BZEWFiV6BCgPs78kl6oOeX1H4URxj4BC1oMQ==}
     peerDependencies:
       '@capacitor/core': ^3.0.0
     dependencies:
