@@ -1,23 +1,23 @@
 <template>
-  <ion-page>
-    <ion-header mode="ios">
-      <ion-toolbar color="secondary">
+  <IonPage>
+    <IonHeader mode="ios">
+      <IonToolbar color="secondary">
         <ArrowLeftIcon
           slot="start"
           class="w-1/12 mr-3 text-rose-500"
           @click="router.push('/')"
         />
-        <button
-          v-if="isIos()"
-          slot="end"
-          class="px-3 py-1 mx-auto mt-1 text-sm border xs:mt-2 md:w-1/4 bg-lavender-500 border-rose-500 text-rose-500 rounded-xl first-letter:uppercase"
-          @click="restore()"
-        >
-          {{ t('restore') }}
-        </button>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content :fullscreen="true" :scroll-y="false">
+        <IonButtons v-if="isIos()" slot="end">
+          <IonButton
+            class="px-3 py-1 mx-auto w-50 mt-1 text-sm border xs:mt-2 bg-lavender-500 border-rose-500 text-rose-500 rounded-xl first-letter:uppercase"
+            @click="restore()"
+          >
+            {{ t('restore') }}
+          </IonButton>
+        </IonButtons>
+      </IonToolbar>
+    </IonHeader>
+    <IonContent :fullscreen="true" :scroll-y="false">
       <div class="flex flex-col justify-start h-screen p-10 bg-pizazz-500">
         <h1
           class="mb-5 text-5xl font-bold text-center xs:mb-10 text-rose-500 first-letter:uppercase"
@@ -63,8 +63,8 @@
         </div>
       </div>
       <PageLoader :show="loading" />
-    </ion-content>
-  </ion-page>
+    </IonContent>
+  </IonPage>
 </template>
 
 <script setup lang="ts">
@@ -74,6 +74,8 @@
     IonPage,
     isPlatform,
     IonToolbar,
+    IonButtons,
+    IonButton,
     IonHeader,
   } from '@ionic/vue'
   import { LockClosedIcon, ArrowLeftIcon } from '@heroicons/vue/outline'

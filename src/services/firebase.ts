@@ -179,7 +179,7 @@ export const useFirebase = (): Usefirebase => {
         }
       })
       values = await Promise.all(pList)
-      console.log('getThemes', values)
+      // console.log('getThemes', values)
     } catch (err) {
       console.error('initThemes', err)
       throw new Error(err as never)

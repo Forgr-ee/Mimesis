@@ -79,8 +79,8 @@ export const useMainStore = defineStore('main', {
         return
       this.loading = true
       try {
-        await Promise.all([this.initLangMessages(), this.initThemes()])
-        await this.initGuessTheme()
+        await this.initLangMessages()
+        this.initThemes().then(this.initGuessTheme)
         this.initialized = true
       } catch (err) {
         this.error = !!err

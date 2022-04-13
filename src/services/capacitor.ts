@@ -10,7 +10,7 @@ export const initCapacitor = (): void => {
     const main = useMainStore()
     App.addListener('appStateChange', (state) => {
       main.isActive = state.isActive
-      console.log('appStateChange', state)
+      // console.log('appStateChange', state)
     })
     initSound()
     StatusBar.hide()

@@ -69,10 +69,33 @@ const init = async (isRecall = false) => {
   const main = useMainStore()
   const auth = useAuthStore()
   try {
-    console.log('initCrisp')
-    initCrisp()
     console.log('authCheck')
     await auth.authCheck()
+    CapacitorUpdater.notifyAppReady()
+    if (isPlatform('ios')) {
+      initIap('appl_bWYDPHWhWAGWQFUIQGIoiXzrTlW')
+    } else if (isPlatform('android')) {
+      initIap('goog_TqZUIbsisEecUcyOkqTPaHPKEVH')
+    }
+    console.log('main.initialize')
+    await main.initialize()
+    console.log('initI18n')
+    await initI18n(main.langsMessages)
+    console.log('initCapacitor')
+    initCapacitor()
+    // save currentPath
+    router.afterEach((to) => {
+      const main = useMainStore()
+      main.currentPath = to.fullPath
+    })
+    console.log('use.router')
+    app.use(router)
+    console.log('router.isReady')
+    await router.isReady()
+    console.log('mount')
+    app.mount('#app')
+    console.log('initCrisp')
+    initCrisp()
     if (isPlatform('capacitor')) {
       const info = await Device.getId()
       const infoApp = await capApp.getInfo()
@@ -89,30 +112,6 @@ const init = async (isRecall = false) => {
       )
     }
     setVersion(import.meta.env.VITE_APP_VERSION as string)
-    CapacitorUpdater.notifyAppReady()
-    if (isPlatform('ios')) {
-      initIap('appl_bWYDPHWhWAGWQFUIQGIoiXzrTlW')
-    } else if (isPlatform('android')) {
-      initIap('goog_TqZUIbsisEecUcyOkqTPaHPKEVH')
-    }
-    console.log('main.initialize')
-    await main.initialize()
-    console.log('initI18n')
-    await initI18n(main.langsMessages)
-    initIap('lwSBejyKtyLhBghkjWZmsBKKTykuHxfQ')
-    // save currentPath
-    router.afterEach((to) => {
-      const main = useMainStore()
-      main.currentPath = to.fullPath
-    })
-    console.log('use.router')
-    app.use(router)
-    console.log('router.isReady')
-    await router.isReady()
-    console.log('mount')
-    app.mount('#app')
-    console.log('initCapacitor')
-    initCapacitor()
   } catch (err) {
     console.error('init', err)
     if (!isRecall) {
