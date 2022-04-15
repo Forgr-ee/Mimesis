@@ -1,3 +1,9 @@
+## 2.3.3 (2022-04-15)
+
+### Fix
+
+- :boom: fix issue with natie audio and loading
+
 ## 2.3.2 (2022-04-13)
 
 ### Fix
