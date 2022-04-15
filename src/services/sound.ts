@@ -1,4 +1,4 @@
-import { NativeAudio } from 'capacitor-native-audio'
+import { NativeAudio } from '@forgr/native-audio'
 import { isPlatform } from '@ionic/vue'
 
 const sounds: { [key: string]: HTMLAudioElement } = {
