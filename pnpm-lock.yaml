@@ -32,7 +32,7 @@ specifiers:
   canvas-confetti: 1.5.1
   capacitor-purchases: 1.1.4
   capacitor-rate-app: ^2.0.0
-  capacitor-updater: 3.0.0-beta.15
+  capacitor-updater: 3.0.0-beta.16
   csvtojson: ^2.0.10
   eslint: 8.13.0
   eslint-plugin-prettier: ^4.0.0
@@ -83,7 +83,7 @@ dependencies:
   canvas-confetti: 1.5.1
   capacitor-purchases: 1.1.4_@capacitor+core@3.4.3
   capacitor-rate-app: 2.0.0_@capacitor+core@3.4.3
-  capacitor-updater: 3.0.0-beta.15_@capacitor+core@3.4.3
+  capacitor-updater: 3.0.0-beta.16_@capacitor+core@3.4.3
   firebase: 8.10.1
   pinia: 2.0.13_typescript@4.6.3+vue@3.2.33
   plausible-tracker: 0.3.5
@@ -2538,8 +2538,8 @@ packages:
       '@capacitor/core': 3.4.3
     dev: false
 
-  /capacitor-updater/3.0.0-beta.15_@capacitor+core@3.4.3:
-    resolution: {integrity: sha512-BCI1GwgunW/7bz6J2NNVZ1rVmk4/KWJHnEspw/pssBx9+G5AiWBmli4s2tSjXTx2kKt3tzH3mvltCV1yA2eYfQ==}
+  /capacitor-updater/3.0.0-beta.16_@capacitor+core@3.4.3:
+    resolution: {integrity: sha512-FtPAtvO9tVEH/HZVu9aDB3+m8PZ5s3q7klC6PB6HDWlQIZPk3LB4z3yzz6Y74i1CJIEpxmY3z833VvWThvd+Cw==}
     peerDependencies:
       '@capacitor/core': ^3.0.0
     dependencies:

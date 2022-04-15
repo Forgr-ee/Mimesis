@@ -20,7 +20,7 @@ def capacitor_pods
   pod 'ForgrNativeAudio', :path => '../../node_modules/.pnpm/@forgr+native-audio@3.1.1_@capacitor+core@3.4.3/node_modules/@forgr/native-audio'
   pod 'CapacitorPurchases', :path => '../../node_modules/.pnpm/capacitor-purchases@1.1.4_@capacitor+core@3.4.3/node_modules/capacitor-purchases'
   pod 'CapacitorRateApp', :path => '../../node_modules/.pnpm/capacitor-rate-app@2.0.0_@capacitor+core@3.4.3/node_modules/capacitor-rate-app'
-  pod 'CapacitorUpdater', :path => '../../node_modules/.pnpm/capacitor-updater@3.0.0-beta.15_@capacitor+core@3.4.3/node_modules/capacitor-updater'
+  pod 'CapacitorUpdater', :path => '../../node_modules/.pnpm/capacitor-updater@3.0.0-beta.16_@capacitor+core@3.4.3/node_modules/capacitor-updater'
 end
 
 target 'App' do
