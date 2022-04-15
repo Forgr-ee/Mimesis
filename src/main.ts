@@ -70,6 +70,7 @@ const init = async (isRecall = false) => {
   const auth = useAuthStore()
   try {
     console.log('authCheck')
+    initCrisp()
     await auth.authCheck()
     CapacitorUpdater.notifyAppReady()
     if (isPlatform('ios')) {
@@ -95,7 +96,6 @@ const init = async (isRecall = false) => {
     console.log('mount')
     app.mount('#app')
     console.log('initCrisp')
-    initCrisp()
     if (isPlatform('capacitor')) {
       const info = await Device.getId()
       const infoApp = await capApp.getInfo()

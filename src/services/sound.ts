@@ -68,6 +68,7 @@ export const playSound = async (sound: string): Promise<void> => {
 
 export const initSound = (): void => {
   if (isPlatform('capacitor')) {
+    NativeAudio.configure({ focus: false })
     Object.keys(sounds).forEach((key) => {
       NativeAudio.preload({
         assetId: key,

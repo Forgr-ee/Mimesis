@@ -2,14 +2,15 @@
   <IonPage>
     <IonHeader mode="ios">
       <IonToolbar color="secondary">
-        <ArrowLeftIcon
-          slot="start"
-          class="w-1/12 mr-3 text-rose-500"
-          @click="router.push('/')"
-        />
+        <IonButtons v-if="isIos()" slot="start">
+          <IonButton @click="router.go(-1)">
+            <ArrowLeftIcon slot="start" class="w-10 md:w-15 text-rose-500" />
+          </IonButton>
+        </IonButtons>
+        <IonTitle></IonTitle>
         <IonButtons v-if="isIos()" slot="end">
           <IonButton
-            class="px-3 py-1 mx-auto w-50 mt-1 text-sm border xs:mt-2 bg-lavender-500 border-rose-500 text-rose-500 rounded-xl first-letter:uppercase"
+            class="px-3 py-1 mx-auto w-30 mt-1 text-sm border xs:mt-2 bg-lavender-500 border-rose-500 text-rose-500 rounded-xl first-letter:uppercase"
             @click="restore()"
           >
             {{ t('restore') }}
@@ -72,6 +73,7 @@
   import {
     IonContent,
     IonPage,
+    IonTitle,
     isPlatform,
     IonToolbar,
     IonButtons,
