@@ -1,14 +1,12 @@
 import { randomSelect } from '../services/random'
-import { isPlatform } from '@ionic/vue'
-import { RateApp } from 'capacitor-rate-app'
 import { defineStore } from 'pinia'
 import { useAuthStore } from './auth'
 import { useMainStore } from './main'
 import { v4 as uuidv4 } from 'uuid'
 import { Entity, Player, Team, useFirebase } from '../services/firebase'
-import faker from '@faker-js/faker'
+import { faker } from '@faker-js/faker'
 
-faker.locale = 'fr'
+faker.setLocale('fr')
 
 const { addGame } = useFirebase()
 
@@ -18,7 +16,7 @@ export const randomPlayer = (): Player => ({
   uuid: uuidv4(),
 })
 
-export const randomTeamName = (): string => faker.commerce.color()
+export const randomTeamName = (): string => faker.color.human()
 
 export const randomTeam = (): Team => ({
   uuid: uuidv4(),
@@ -55,6 +53,7 @@ export const useGameStore = defineStore('game', {
   state: () => ({
     winned: false,
     loading: true,
+    games: 0,
     uuid: uuidv4(),
     createdAt: new Date().toISOString(),
     theme: 'improbable',
@@ -204,14 +203,11 @@ export const useGameStore = defineStore('game', {
         await authStore.authCheck()
       }
       try {
-        const games = await addGame(
+        this.games = await addGame(
           authStore?.user?.uid,
           mainStore.lang,
           this.$state
         )
-        if (isPlatform('capacitor') && games > 2) {
-          RateApp.requestReview()
-        }
       } catch (e) {
         console.error('Error adding document: ', e)
       }

@@ -9,9 +9,8 @@ import {
   useFirebase,
 } from '../services/firebase'
 import { useGameStore } from './game'
-import { loadingController } from '@ionic/vue'
 
-const { getLangMessages, getThemes, getGuessesDb } = useFirebase()
+const { getThemes, getGuessesDb } = useFirebase()
 
 const filterListByTitle = (list: Guess[], past: string[]) => {
   const filtered = list.filter((n) => !past.includes(n.title))
@@ -75,21 +74,15 @@ export const useMainStore = defineStore('main', {
   actions: {
     async initialize(force = false) {
       console.log('initialize', force)
-      const loading = await loadingController.create({
-        message: 'chargement...',
-      })
       this.offline = !window.navigator.onLine
       if (!force && (this.offline || this.initialized || !this.needUpdate))
         return
       this.loading = true
-      await loading.present()
       try {
-        await this.initLangMessages()
-        this.initThemes().then(this.initGuessTheme).then(loading.dismiss)
+        await this.initThemes().then(this.initGuessTheme)
         this.initialized = true
       } catch (err) {
         this.error = !!err
-        await loading.dismiss()
         console.log('err initialise', err)
       }
       this.lastUpdate = new Date().toISOString()
@@ -100,9 +93,6 @@ export const useMainStore = defineStore('main', {
     },
     async initThemes() {
       this.themes = await getThemes()
-    },
-    async initLangMessages() {
-      this.langsMessages = await getLangMessages()
     },
     nextGuess(found = false) {
       const game = useGameStore()

@@ -3,7 +3,7 @@ import {
   PurchaserInfo,
   Offering,
   Package,
-} from 'capacitor-purchases'
+} from '@capgo/capacitor-purchases'
 
 import { isPlatform } from '@ionic/vue'
 import { setPaidOldPlan, setPaidPlan } from './crips'

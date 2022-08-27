@@ -1,8 +1,8 @@
-import { CapacitorUpdater } from 'capacitor-updater'
+import { CapacitorUpdater } from '@capgo/capacitor-updater'
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
-import { IonicVue, isPlatform } from '@ionic/vue'
+import { IonicVue, isPlatform, loadingController } from '@ionic/vue'
 // import VueFeather from 'vue-feather';
 import { createI18n } from 'vue-i18n'
 import { useAuthStore } from './store/auth'
@@ -40,7 +40,6 @@ import '@ionic/vue/css/display.css'
 
 /* Theme variables */
 import './theme/variables.css'
-import { LangMessages } from './services/firebase'
 import { initIap } from './services/iap'
 
 initPlausible()
@@ -49,14 +48,25 @@ const app = createApp(App).use(IonicVue).use(pinia())
 
 // app.component(VueFeather.name || 'VueFeather', VueFeather);
 
-const initI18n = async (langsMessages: LangMessages) => {
+const messages = Object.fromEntries(
+  Object.entries(
+    import.meta.glob<{ default: any }>('../../locales/*.y(a)?ml', {
+      eager: true,
+    })
+  ).map(([key, value]) => {
+    const yaml = key.endsWith('.yaml')
+    return [key.slice(14, yaml ? -5 : -4), value.default]
+  })
+)
+
+const initI18n = async () => {
   try {
     const i18n = createI18n({
       legacy: false,
       globalInjection: false,
       locale: 'fr',
       fallbackLocale: 'fr',
-      messages: langsMessages,
+      messages: messages,
     })
     app.use(i18n)
   } catch (err) {
@@ -66,22 +76,27 @@ const initI18n = async (langsMessages: LangMessages) => {
 
 const init = async (isRecall = false) => {
   console.log('init')
+  CapacitorUpdater.notifyAppReady()
   const main = useMainStore()
   const auth = useAuthStore()
   try {
     console.log('authCheck')
     initCrisp()
+    console.log('initI18n')
+    await initI18n()
     await auth.authCheck()
-    CapacitorUpdater.notifyAppReady()
     if (isPlatform('ios')) {
       initIap('appl_bWYDPHWhWAGWQFUIQGIoiXzrTlW')
     } else if (isPlatform('android')) {
       initIap('goog_TqZUIbsisEecUcyOkqTPaHPKEVH')
     }
     console.log('main.initialize')
+    const loading = await loadingController.create({
+      message: 'chargement...',
+    })
+    await loading.present()
     await main.initialize()
-    console.log('initI18n')
-    await initI18n(main.langsMessages)
+    await loading.dismiss()
     console.log('initCapacitor')
     initCapacitor()
     // save currentPath

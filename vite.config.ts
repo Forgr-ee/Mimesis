@@ -12,6 +12,8 @@ export default defineConfig({
     alias: {
       '~': resolve(__dirname, 'src'),
     },
+    // Workaround to fix inline dependency of a dependency, which is the case in @ionic/react
+    mainFields: ['module'],
   },
   plugins: [
     vue(),
@@ -38,7 +40,7 @@ export default defineConfig({
     include: ['tests/**/*.test.ts'],
     environment: 'jsdom',
     deps: {
-      inline: ['@vue', '@ionic/core'],
+      inline: ['@vue', 'plausible', 'plausible-tracker'],
     },
   },
 })

@@ -1,10 +1,10 @@
-import { Storage } from '@capacitor/storage'
+import { Preferences } from '@capacitor/preferences'
 
 export const setStorage = async <Type>(
   key: string,
   value: Type
 ): Promise<void> => {
-  await Storage.set({
+  await Preferences.set({
     key,
     value: typeof value === 'string' ? value : JSON.stringify(value),
   })
@@ -14,7 +14,7 @@ export const getStorage = async <Type>(
   key: string,
   defaultValue: Type | null = null
 ): Promise<Type | null> => {
-  const res = await Storage.get({ key })
+  const res = await Preferences.get({ key })
   try {
     return res.value ? (JSON.parse(res.value) as Type) : defaultValue
   } catch {

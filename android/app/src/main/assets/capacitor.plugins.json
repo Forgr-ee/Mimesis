@@ -20,6 +20,10 @@
 		"classpath": "com.capacitorjs.plugins.keyboard.KeyboardPlugin"
 	},
 	{
+		"pkg": "@capacitor/preferences",
+		"classpath": "com.capacitorjs.plugins.preferences.PreferencesPlugin"
+	},
+	{
 		"pkg": "@capacitor/splash-screen",
 		"classpath": "com.capacitorjs.plugins.splashscreen.SplashScreenPlugin"
 	},
@@ -28,23 +32,19 @@
 		"classpath": "com.capacitorjs.plugins.statusbar.StatusBarPlugin"
 	},
 	{
-		"pkg": "@capacitor/storage",
-		"classpath": "com.capacitorjs.plugins.storage.StoragePlugin"
+		"pkg": "@capgo/capacitor-purchases",
+		"classpath": "ee.forgr.plugin.capacitor_purchases.CapacitorPurchasesPlugin"
+	},
+	{
+		"pkg": "@capgo/capacitor-updater",
+		"classpath": "ee.forgr.capacitor_updater.CapacitorUpdaterPlugin"
 	},
 	{
 		"pkg": "@forgr/native-audio",
 		"classpath": "com.getcapacitor.community.audio.NativeAudio"
 	},
 	{
-		"pkg": "capacitor-purchases",
-		"classpath": "ee.forgr.plugin.capacitor_purchases.CapacitorPurchasesPlugin"
-	},
-	{
 		"pkg": "capacitor-rate-app",
 		"classpath": "com.capacitor.rateapp.CapacitorRateAppPlugin"
-	},
-	{
-		"pkg": "capacitor-updater",
-		"classpath": "ee.forgr.capacitor_updater.CapacitorUpdaterPlugin"
 	}
 ]

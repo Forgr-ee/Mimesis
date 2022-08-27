@@ -21,6 +21,9 @@ jobs:
       - name: Lint
         id: lint_code
         run: pnpm lint:markup && pnpm lint:script
+      - name: Test
+        id: test_code
+        run: pnpm test:run
       - name: Build
         id: build_code
         run: pnpm run build

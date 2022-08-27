@@ -7,7 +7,7 @@ export default (): Pinia => {
   pinia.use(async (context) => {
     // Set the whole store from Storage
     const newState = await getStorage(
-      `state_${context.store.$id}`,
+      `p_state_${context.store.$id}`,
       context.store.$state
     )
     context.store.$patch(newState as never)
@@ -15,7 +15,7 @@ export default (): Pinia => {
     watch(
       context.store.$state,
       (state) => {
-        setStorage(`state_${context.store.$id}`, state)
+        setStorage(`p_state_${context.store.$id}`, state)
       },
       { deep: true }
     )

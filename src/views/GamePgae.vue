@@ -182,6 +182,7 @@
     IonToolbar,
     IonHeader,
   } from '@ionic/vue'
+  import { RateApp } from 'capacitor-rate-app'
   import {
     computed,
     onBeforeUnmount,
@@ -314,6 +315,9 @@
         modals.winner = true
         await playSound('tada')
         await game.save()
+        if (isPlatform('capacitor') && game.games > 2) {
+          RateApp.requestReview()
+        }
       }
     })
     watchEffect(() => {
