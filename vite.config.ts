@@ -6,6 +6,8 @@ import { resolve } from 'path'
 import WindiCSS from 'vite-plugin-windicss'
 import EnvironmentPlugin from 'vite-plugin-environment'
 import pack from './package.json'
+import path from 'path'
+import VueI18n from '@intlify/vite-plugin-vue-i18n'
 
 export default defineConfig({
   resolve: {
@@ -35,6 +37,11 @@ export default defineConfig({
       },
       { defineOn: 'import.meta.env' }
     ),
+    VueI18n({
+      runtimeOnly: true,
+      compositionOnly: true,
+      include: [path.resolve(__dirname, 'locales/**')],
+    }),
   ],
   test: {
     include: ['tests/**/*.test.ts'],

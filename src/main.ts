@@ -50,12 +50,12 @@ const app = createApp(App).use(IonicVue).use(pinia())
 
 const messages = Object.fromEntries(
   Object.entries(
-    import.meta.glob<{ default: any }>('../../locales/*.y(a)?ml', {
+    import.meta.glob<{ default: any }>('../locales/*.y(a)?ml', {
       eager: true,
     })
   ).map(([key, value]) => {
     const yaml = key.endsWith('.yaml')
-    return [key.slice(14, yaml ? -5 : -4), value.default]
+    return [key.slice(11, yaml ? -5 : -4), value.default]
   })
 )
 
@@ -80,10 +80,11 @@ const init = async (isRecall = false) => {
   const main = useMainStore()
   const auth = useAuthStore()
   try {
-    console.log('authCheck')
+    console.log('initCrisp')
     initCrisp()
     console.log('initI18n')
     await initI18n()
+    console.log('authCheck')
     await auth.authCheck()
     if (isPlatform('ios')) {
       initIap('appl_bWYDPHWhWAGWQFUIQGIoiXzrTlW')
@@ -110,7 +111,6 @@ const init = async (isRecall = false) => {
     await router.isReady()
     console.log('mount')
     app.mount('#app')
-    console.log('initCrisp')
     if (isPlatform('capacitor')) {
       const info = await Device.getId()
       const infoApp = await capApp.getInfo()
