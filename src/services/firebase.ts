@@ -4,7 +4,7 @@ import firebase from 'firebase/app'
 import 'firebase/firestore'
 import 'firebase/auth'
 import { isPlatform } from '@ionic/vue'
-import { Package } from '@capgo/capacitor-purchases'
+import { Package, PurchaserInfo } from '@capgo/capacitor-purchases'
 import { findPackage, isPurchased, restore } from './iap'
 
 export interface Player {
@@ -138,7 +138,6 @@ export const useFirebase = (): Usefirebase => {
       })
     } catch (err) {
       console.error('initThemes', err)
-      throw new Error(err as never)
     }
     return value
   }
@@ -182,7 +181,14 @@ export const useFirebase = (): Usefirebase => {
         .orderBy('order', 'asc')
         .get()
       const pList: Promise<Theme>[] = []
-      const pInfo = isPlatform('capacitor') ? await restore() : null
+      let pInfo: PurchaserInfo | null = null
+      if (isPlatform('capacitor')) {
+        try {
+          pInfo = await restore()
+        } catch (err) {
+          console.log('cannot get restore', err)
+        }
+      }
       console.log('getThemes')
       snapshot.docs.map((doc) => {
         const theme = doc.data() as Theme
@@ -208,7 +214,6 @@ export const useFirebase = (): Usefirebase => {
       // console.log('getThemes', values)
     } catch (err) {
       console.error('initThemes', err)
-      throw new Error(err as never)
     }
     return values
   }
