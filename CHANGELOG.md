@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.4.6](https://github.com/Forgr-ee/Mimesis/compare/2.4.5...2.4.6) (2022-08-27)
+
+
+### Bug Fixes
+
+* android ([ce619ca](https://github.com/Forgr-ee/Mimesis/commit/ce619ca7534bccf52a4e5107d8265441e1f8e510))
+
 ### [2.4.5](https://github.com/Forgr-ee/Mimesis/compare/2.4.4...2.4.5) (2022-08-27)
 
 
