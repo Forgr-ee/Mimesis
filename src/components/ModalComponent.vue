@@ -1,3 +1,22 @@
+<script setup lang="ts">
+import {
+  Dialog,
+  DialogOverlay,
+  DialogTitle,
+  TransitionChild,
+  TransitionRoot,
+} from '@headlessui/vue'
+
+defineProps({
+  open: {
+    type: Boolean,
+    require: true,
+  },
+})
+
+defineEmits(['close'])
+</script>
+
 <template>
   <TransitionRoot as="template" :show="open">
     <Dialog
@@ -27,8 +46,7 @@
         <span
           class="hidden sm:inline-block sm:align-middle sm:h-screen"
           aria-hidden="true"
-          >&#8203;</span
-        >
+        >&#8203;</span>
         <TransitionChild
           as="template"
           enter="ease-out duration-300"
@@ -45,24 +63,24 @@
               <div
                 class="flex items-center justify-center w-12 h-12 mx-auto bg-green-100 rounded-full"
               >
-                <slot name="icon"></slot>
+                <slot name="icon" />
               </div>
               <div class="mt-3 text-center sm:mt-5">
                 <DialogTitle
                   as="h3"
                   class="text-4xl font-semibold text-gray-50 first-letter:uppercase"
                 >
-                  <slot name="title"></slot>
+                  <slot name="title" />
                 </DialogTitle>
                 <div class="mt-2">
                   <p class="pt-5 text-sm text-yellow-200">
-                    <slot name="content"></slot>
+                    <slot name="content" />
                   </p>
                 </div>
               </div>
             </div>
             <div name="buttons" class="flex mt-5 justify-items-center">
-              <slot name="buttons"></slot>
+              <slot name="buttons" />
             </div>
           </div>
         </TransitionChild>
@@ -70,23 +88,3 @@
     </Dialog>
   </TransitionRoot>
 </template>
-
-<script setup lang="ts">
-  import {
-    Dialog,
-    DialogOverlay,
-    DialogTitle,
-    TransitionChild,
-    TransitionRoot,
-  } from '@headlessui/vue'
-
-  // eslint-disable-next-line no-undef
-  defineEmits(['close'])
-  // eslint-disable-next-line no-undef
-  defineProps({
-    open: {
-      type: Boolean,
-      require: true,
-    },
-  })
-</script>

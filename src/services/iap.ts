@@ -1,8 +1,10 @@
-import {
-  CapacitorPurchases,
-  PurchaserInfo,
+import type {
   Offering,
   Package,
+  PurchaserInfo,
+} from '@capgo/capacitor-purchases'
+import {
+  CapacitorPurchases,
 } from '@capgo/capacitor-purchases'
 
 import { isPlatform } from '@ionic/vue'
@@ -23,7 +25,8 @@ export const initIap = (id: string) => {
 }
 
 export const restore = async (): Promise<PurchaserInfo | null> => {
-  if (!isPlatform('capacitor')) return null
+  if (!isPlatform('capacitor'))
+    return null
   const res = await CapacitorPurchases.restoreTransactions()
   const purchaserInfo = res.purchaserInfo
   // console.log('restore', res)
@@ -56,7 +59,8 @@ export const purchase = async (p: Package): Promise<PurchaserInfo | null> => {
       })
     }
     return purchaserInfo
-  } catch (e) {
+  }
+  catch (e) {
     console.error('listenBuy error', e)
   }
   return null
@@ -69,51 +73,51 @@ export const getCurrentOfferings = async (): Promise<Offering | null> => {
 }
 
 export const getCurrentPrice = (p: Package) => {
-  if (p.product?.introductoryPrice?.price) {
+  if (p.product?.introductoryPrice?.price)
     return p.product.introductoryPrice.price
-  } else {
+
+  else
     return p?.product?.price || 0
-  }
 }
 
 export const showCurrentPrice = (p: Package) => {
-  if (p.product?.introductoryPrice?.priceString) {
+  if (p.product?.introductoryPrice?.priceString)
     return p.product.introductoryPrice.priceString
-  } else {
+
+  else
     return p?.product?.priceString || ''
-  }
 }
 export const findPackage = async (
-  productId: string
+  productId: string,
 ): Promise<Package | null> => {
   const offering = await getCurrentOfferings()
-  if (!offering) return null
+  if (!offering)
+    return null
   for await (const p of offering.availablePackages) {
-    if (p.product.identifier === productId) {
+    if (p.product.identifier === productId)
       return p
-    }
   }
   return null
 }
 export const isAnyActiveSub = (
   productIds: string[],
-  pInfo: PurchaserInfo | null
+  pInfo: PurchaserInfo | null,
 ): boolean => {
   let activeSub = false
-  if (pInfo && pInfo.activeSubscriptions.length && productIds) {
-    activeSub = pInfo.activeSubscriptions.some((id) => productIds.includes(id))
-  }
+  if (pInfo && pInfo.activeSubscriptions.length && productIds)
+    activeSub = pInfo.activeSubscriptions.some(id => productIds.includes(id))
+
   // console.log('isPurchased', productIds, pInfo, activeSub)
   return activeSub
 }
 export const isPurchased = (
   productId: string,
-  pInfo: PurchaserInfo | null
+  pInfo: PurchaserInfo | null,
 ): boolean => {
   let purchased = false
   if (pInfo && productId) {
-    purchased = pInfo.allPurchasedProductIdentifiers.some(
-      (id) => productId === id
+    purchased = pInfo.allPurchasedProductIdentifiers.includes(
+      productId,
     )
   }
   // console.log('isPurchased', productId, pInfo, purchased)

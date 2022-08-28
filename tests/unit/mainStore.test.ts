@@ -1,13 +1,13 @@
-import { describe, expect, test, beforeEach } from 'vitest'
-import { setActivePinia, createPinia } from 'pinia'
+import { beforeEach, describe, expect, test } from 'vitest'
+import { createPinia, setActivePinia } from 'pinia'
+import { mockRandom, resetMockRandom } from 'jest-mock-random'
 import { useGameStore } from '../../src/store/game'
 import { useMainStore } from '../../src/store/main'
-import { mockRandom, resetMockRandom } from 'jest-mock-random'
-import {
-  LangMessages,
-  LangMessage,
-  Theme,
+import type {
   GuessDb,
+  LangMessage,
+  LangMessages,
+  Theme,
 } from '../../src/services/firebase'
 
 const langs: LangMessages = {

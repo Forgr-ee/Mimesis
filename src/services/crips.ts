@@ -14,7 +14,7 @@ export const setDeviceInfo = (
   operatingSystem: string,
   osVersion: string,
   webVersion: string,
-  manufacturer: string
+  manufacturer: string,
 ): void => {
   CapacitorCrisp.setString({ key: 'model', value: model })
   CapacitorCrisp.setString({ key: 'platform', value: platform })
@@ -40,7 +40,8 @@ export const initCrisp = (): void => {
     CapacitorCrisp.configure({
       websiteID: import.meta.env.crisp as string,
     })
-  } catch (e) {
+  }
+  catch (e) {
     console.error('Crips cannot be init', e)
   }
 }

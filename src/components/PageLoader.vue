@@ -1,3 +1,12 @@
+<script setup lang="ts">
+defineProps({
+  show: {
+    type: Boolean,
+    require: true,
+  },
+})
+</script>
+
 <template>
   <div
     v-if="show"
@@ -16,8 +25,7 @@
       <span
         class="hidden sm:inline-block sm:align-middle sm:h-screen"
         aria-hidden="true"
-        >&#8203;</span
-      >
+      >&#8203;</span>
       <div
         class="inline-block px-6 pt-5 pb-6 overflow-hidden text-left align-bottom transition-all transform rounded-lg shadow-xl bg-rose-500 sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6"
       >
@@ -47,12 +55,3 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-  defineProps({
-    show: {
-      type: Boolean,
-      require: true,
-    },
-  })
-</script>

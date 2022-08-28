@@ -4,7 +4,7 @@ import firebase from 'firebase/app'
 import 'firebase/firestore'
 import 'firebase/auth'
 import { isPlatform } from '@ionic/vue'
-import { Package, PurchaserInfo } from '@capgo/capacitor-purchases'
+import type { Package, PurchaserInfo } from '@capgo/capacitor-purchases'
 import { findPackage, isPurchased, restore } from './iap'
 
 export interface Player {
@@ -23,7 +23,7 @@ export interface Team extends Entity {
   pastPlayers: string[]
 }
 
-export type Theme = {
+export interface Theme {
   active: boolean
   lang: {
     [key: string]: string
@@ -37,7 +37,7 @@ export type Theme = {
   status: 'paid' | 'free' | 'purchased'
 }
 
-export type GuessDb = {
+export interface GuessDb {
   [key: string]: Guess[]
 }
 
@@ -46,14 +46,14 @@ export interface Config {
   versionPath: string
 }
 
-export type Guess = {
+export interface Guess {
   title: string
   cover?: string
   author?: string
   type?: string
 }
 
-type Message = {
+interface Message {
   [key: string]: string
 }
 
@@ -62,11 +62,11 @@ export type LangMessage = Message & {
   active: boolean
 }
 
-export type LangMessages = {
+export interface LangMessages {
   [key: string]: LangMessage
 }
 
-type Usefirebase = {
+interface Usefirebase {
   firebase: typeof firebase
   getGuessesDb: (themes: Theme[], lang: string) => Promise<GuessDb>
   getThemes: () => Promise<Theme[]>
@@ -105,57 +105,64 @@ const fakeThemes: Theme[] = [
 export const useFirebase = (): Usefirebase => {
   if (firebase.apps.length === 0 && import.meta.env.FIREBASE_CONFIG) {
     firebase.initializeApp(
-      JSON.parse(import.meta.env.FIREBASE_CONFIG as string)
+      JSON.parse(import.meta.env.FIREBASE_CONFIG as string),
     )
   }
   const getUser = (): Promise<firebase.User | null> => {
     return new Promise<firebase.User | null>((resolve, reject) => {
-      if (!import.meta.env.FIREBASE_CONFIG) return resolve(null)
+      if (!import.meta.env.FIREBASE_CONFIG)
+        return resolve(null)
       firebase.auth().onAuthStateChanged(resolve, reject)
     })
   }
   const login = async () => {
-    if (!import.meta.env.FIREBASE_CONFIG) return null
+    if (!import.meta.env.FIREBASE_CONFIG)
+      return null
     await firebase.auth().signInAnonymously()
     return firebase.auth().currentUser
   }
   const logout = async (): Promise<null> => {
-    if (!import.meta.env.FIREBASE_CONFIG) return Promise.resolve(null)
+    if (!import.meta.env.FIREBASE_CONFIG)
+      return Promise.resolve(null)
     await firebase.auth().signOut()
     return null
   }
   const getGuesses = async (category: string, lang: string) => {
-    if (!import.meta.env.FIREBASE_CONFIG) return getFakeGuesses(category, lang)
-    const value: Guess[] = []
+    if (!import.meta.env.FIREBASE_CONFIG)
+      return getFakeGuesses(category, lang)
+    let value: Guess[] = []
     try {
       const snapshot = await firebase
         .firestore()
         .collection(`mode/${category}/${lang}`)
         .get()
-      snapshot.docs.map((doc) => {
+      value = snapshot.docs.map((doc) => {
         const data = doc.data() as Guess
-        value.push(data)
+        return data
       })
-    } catch (err) {
+    }
+    catch (err) {
       console.error('initThemes', err)
     }
     return value
   }
   const getLastVersion = async (): Promise<Config> => {
-    if (!import.meta.env.FIREBASE_CONFIG) return fakeConfig
+    if (!import.meta.env.FIREBASE_CONFIG)
+      return fakeConfig
     try {
       const config = (
-        await firebase.firestore().collection(`config`).doc('app').get()
+        await firebase.firestore().collection('config').doc('app').get()
       ).data() as Config
       return config
-    } catch (err) {
+    }
+    catch (err) {
       console.error('getLastVersion', err)
       throw new Error(err as never)
     }
   }
   const getGuessesDb = async (
     themes: Theme[],
-    lang: string
+    lang: string,
   ): Promise<GuessDb> => {
     const guessDb = {} as GuessDb
     try {
@@ -164,14 +171,16 @@ export const useFirebase = (): Usefirebase => {
         const guessList = await getGuesses(theme.id, lang)
         guessDb[`${theme.id}_${lang}`] = guessList
       }
-    } catch (err) {
+    }
+    catch (err) {
       console.error('getGuessesDb', err)
       throw new Error(err as never)
     }
     return guessDb
   }
   const getThemes = async () => {
-    if (!import.meta.env.FIREBASE_CONFIG) return fakeThemes
+    if (!import.meta.env.FIREBASE_CONFIG)
+      return fakeThemes
     let values: Theme[] = []
     try {
       const snapshot = await firebase
@@ -180,39 +189,36 @@ export const useFirebase = (): Usefirebase => {
         .where('active', '==', true)
         .orderBy('order', 'asc')
         .get()
-      const pList: Promise<Theme>[] = []
+      let pList: Promise<Theme>[] = []
       let pInfo: PurchaserInfo | null = null
       if (isPlatform('capacitor')) {
         try {
           pInfo = await restore()
-        } catch (err) {
+        }
+        catch (err) {
           console.log('cannot get restore', err)
         }
       }
       console.log('getThemes')
-      snapshot.docs.map((doc) => {
+      pList = await snapshot.docs.map(async (doc) => {
         const theme = doc.data() as Theme
         if (isPlatform('capacitor')) {
           const productId = isPlatform('ios') ? theme.id_ios : theme.id_android
-          pList.push(
-            // Promise.resolve(theme)
-            findPackage(productId).then((product) => {
-              if (!product) return theme
-              theme.package = product
-              const owned = isPurchased(product.identifier, pInfo)
-              if (product && owned) {
-                theme.status = 'purchased'
-              }
-              return theme
-            })
-          )
-        } else {
-          pList.push(Promise.resolve(theme))
+          // Promise.resolve(theme)
+          const product = await findPackage(productId)
+          if (!product)
+            return theme
+          theme.package = product
+          const owned = isPurchased(product.identifier, pInfo)
+          if (product && owned)
+            theme.status = 'purchased'
         }
+        return theme
       })
       values = await Promise.all(pList)
       // console.log('getThemes', values)
-    } catch (err) {
+    }
+    catch (err) {
       console.error('initThemes', err)
     }
     return values
@@ -220,11 +226,12 @@ export const useFirebase = (): Usefirebase => {
   const addGame = async (
     uid: string | undefined,
     lang: string,
-    game: unknown
+    game: unknown,
   ): Promise<number> => {
-    if (!uid) return 0
+    if (!uid)
+      return 0
     const refGames = firebase.firestore().collection(`users/${uid}/games`)
-    const refUser = firebase.firestore().collection(`users`).doc(uid)
+    const refUser = firebase.firestore().collection('users').doc(uid)
     await refGames.add({ lang, game, doneAt: new Date().toISOString() })
     const gamesRef = await refGames.get()
     const games = gamesRef.docs.length

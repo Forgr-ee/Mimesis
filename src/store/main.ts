@@ -1,11 +1,13 @@
-import { randomSelect } from '../services/random'
 import { defineStore } from 'pinia'
+import { randomSelect } from '../services/random'
 
-import {
+import type {
   Guess,
   GuessDb,
   LangMessages,
   Theme,
+} from '../services/firebase'
+import {
   useFirebase,
 } from '../services/firebase'
 import { useGameStore } from './game'
@@ -13,7 +15,7 @@ import { useGameStore } from './game'
 const { getThemes, getGuessesDb } = useFirebase()
 
 const filterListByTitle = (list: Guess[], past: string[]) => {
-  const filtered = list.filter((n) => !past.includes(n.title))
+  const filtered = list.filter(n => !past.includes(n.title))
   return filtered
 }
 interface Version {
@@ -61,9 +63,9 @@ export const useMainStore = defineStore('main', {
       const lastUpdate = new Date(this.lastUpdate)
       const today = new Date()
       return (
-        lastUpdate.getDate() !== today.getDate() ||
-        lastUpdate.getMonth() !== today.getMonth() ||
-        lastUpdate.getFullYear() !== today.getFullYear()
+        lastUpdate.getDate() !== today.getDate()
+        || lastUpdate.getMonth() !== today.getMonth()
+        || lastUpdate.getFullYear() !== today.getFullYear()
       )
     },
     nextGuesses(): Guess[] {
@@ -81,7 +83,8 @@ export const useMainStore = defineStore('main', {
       try {
         await this.initThemes().then(this.initGuessTheme)
         this.initialized = true
-      } catch (err) {
+      }
+      catch (err) {
         this.error = !!err
         console.log('err initialise', err)
       }
@@ -97,20 +100,20 @@ export const useMainStore = defineStore('main', {
     nextGuess(found = false) {
       const game = useGameStore()
       if (this.guess && this.guess.title !== '') {
-        if (found) {
+        if (found)
           game.foundGuess.push(this.guess.title)
-        } else {
+
+        else
           game.skipGuess.push(this.guess.title)
-        }
       }
       if (game.pastGuess.length === this.guesses.length) {
-        game.skipGuess =
-          game.skipGuess.length > 1
+        game.skipGuess
+          = game.skipGuess.length > 1
             ? [game.skipGuess[game.skipGuess.length - 1]]
             : []
       }
       const result = randomSelect<Guess>(this.nextGuesses)
-      this.guess = result ? result : { title: 'Error' }
+      this.guess = result || { title: 'Error' }
     },
   },
 })

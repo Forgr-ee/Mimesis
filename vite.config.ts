@@ -1,13 +1,12 @@
 /// <reference types="vitest" />
 
+import path, { resolve } from 'path'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import { resolve } from 'path'
 import WindiCSS from 'vite-plugin-windicss'
 import EnvironmentPlugin from 'vite-plugin-environment'
-import pack from './package.json'
-import path from 'path'
 import VueI18n from '@intlify/vite-plugin-vue-i18n'
+import pack from './package.json'
 
 export default defineConfig({
   resolve: {
@@ -35,7 +34,7 @@ export default defineConfig({
           appId: '1:647378290909:web:52e286507b0e9847ecb334',
         }),
       },
-      { defineOn: 'import.meta.env' }
+      { defineOn: 'import.meta.env' },
     ),
     VueI18n({
       runtimeOnly: true,

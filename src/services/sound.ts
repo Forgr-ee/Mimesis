@@ -26,7 +26,8 @@ export const pauseSound = async (sound: string): Promise<void> => {
     await NativeAudio.stop({
       assetId: sound,
     })
-  } else {
+  }
+  else {
     sounds[sound].pause()
   }
 }
@@ -44,7 +45,8 @@ export const loopSound = async (sound: string): Promise<void> => {
     await NativeAudio.loop({
       assetId: sound,
     })
-  } else {
+  }
+  else {
     sounds[sound].loop = true
     sounds[sound].play()
   }
@@ -58,10 +60,12 @@ export const playSound = async (sound: string): Promise<void> => {
         assetId: sound,
         time: 0,
       })
-    } catch {
+    }
+    catch {
       await sounds[sound].play()
     }
-  } else {
+  }
+  else {
     await sounds[sound].play()
   }
 }

@@ -1,4 +1,5 @@
-import { createPinia, Pinia } from 'pinia'
+import type { Pinia } from 'pinia'
+import { createPinia } from 'pinia'
 import { watch } from 'vue'
 import { getStorage, setStorage } from './storage'
 
@@ -8,7 +9,7 @@ export default (): Pinia => {
     // Set the whole store from Storage
     const newState = await getStorage(
       `p_state_${context.store.$id}`,
-      context.store.$state
+      context.store.$state,
     )
     context.store.$patch(newState as never)
     // Save the whole store to storage to persist app state
@@ -17,7 +18,7 @@ export default (): Pinia => {
       (state) => {
         setStorage(`p_state_${context.store.$id}`, state)
       },
-      { deep: true }
+      { deep: true },
     )
   })
   return pinia

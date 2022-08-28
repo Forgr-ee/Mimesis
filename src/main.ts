@@ -1,13 +1,14 @@
 import { CapacitorUpdater } from '@capgo/capacitor-updater'
 import { createApp } from 'vue'
+import { IonicVue, isPlatform, loadingController } from '@ionic/vue'
+import { createI18n } from 'vue-i18n'
+import { App as capApp } from '@capacitor/app'
+import { Device } from '@capacitor/device'
 import App from './App.vue'
 import router from './router'
-import { IonicVue, isPlatform, loadingController } from '@ionic/vue'
 // import VueFeather from 'vue-feather';
-import { createI18n } from 'vue-i18n'
 import { useAuthStore } from './store/auth'
 import { useMainStore } from './store/main'
-import { App as capApp } from '@capacitor/app'
 import {
   initCrisp,
   setDeviceInfo,
@@ -17,7 +18,6 @@ import {
 import pinia from './services/pinia'
 import { initCapacitor } from './services/capacitor'
 import { initPlausible } from './services/plausible'
-import { Device } from '@capacitor/device'
 
 import 'virtual:windi.css'
 import 'virtual:windi-devtools'
@@ -50,13 +50,14 @@ const app = createApp(App).use(IonicVue).use(pinia())
 
 const messages = Object.fromEntries(
   Object.entries(
+
     import.meta.glob<{ default: any }>('../locales/*.y(a)?ml', {
       eager: true,
-    })
+    }),
   ).map(([key, value]) => {
     const yaml = key.endsWith('.yaml')
     return [key.slice(11, yaml ? -5 : -4), value.default]
-  })
+  }),
 )
 
 const initI18n = async () => {
@@ -66,10 +67,11 @@ const initI18n = async () => {
       globalInjection: false,
       locale: 'fr',
       fallbackLocale: 'fr',
-      messages: messages,
+      messages,
     })
     app.use(i18n)
-  } catch (err) {
+  }
+  catch (err) {
     console.error('initI18n', err)
   }
 }
@@ -86,11 +88,12 @@ const init = async (isRecall = false) => {
     await initI18n()
     console.log('authCheck')
     await auth.authCheck()
-    if (isPlatform('ios')) {
+    if (isPlatform('ios'))
       initIap('appl_bWYDPHWhWAGWQFUIQGIoiXzrTlW')
-    } else if (isPlatform('android')) {
+
+    else if (isPlatform('android'))
       initIap('goog_TqZUIbsisEecUcyOkqTPaHPKEVH')
-    }
+
     console.log('main.initialize')
     const loading = await loadingController.create({
       message: 'chargement...',
@@ -123,11 +126,12 @@ const init = async (isRecall = false) => {
         device.operatingSystem,
         device.osVersion,
         infoApp.version,
-        device.manufacturer
+        device.manufacturer,
       )
     }
     setVersion(import.meta.env.VITE_APP_VERSION as string)
-  } catch (err) {
+  }
+  catch (err) {
     console.error('init', err)
     if (!isRecall) {
       console.error('isRecall')

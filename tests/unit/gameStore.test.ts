@@ -1,7 +1,7 @@
-import { describe, expect, test, beforeEach } from 'vitest'
-import { setActivePinia, createPinia } from 'pinia'
-import { useGameStore, randomPlayer } from '../../src/store/game'
+import { beforeEach, describe, expect, test } from 'vitest'
+import { createPinia, setActivePinia } from 'pinia'
 import { mockRandom, resetMockRandom } from 'jest-mock-random'
+import { randomPlayer, useGameStore } from '../../src/store/game'
 
 describe('GameStore', () => {
   beforeEach(() => {
@@ -23,9 +23,9 @@ describe('GameStore', () => {
     game.addScore()
     expect(game.team?.score).toBe(1)
     game.addScore()
-    for (let index = 0; index < 9; index++) {
+    for (let index = 0; index < 9; index++)
       game.addScore()
-    }
+
     expect(game.team?.score).toBe(10)
     expect(game.winned).toBe(true)
     expect(game.ladder[0].uuid).toBe(game.team?.uuid)

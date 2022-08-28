@@ -1,23 +1,182 @@
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+import {
+  IonContent,
+  IonHeader,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+  isPlatform,
+} from '@ionic/vue'
+import { RateApp } from 'capacitor-rate-app'
+import type { StyleValue } from 'vue'
+import {
+  computed,
+  onBeforeUnmount,
+  onMounted,
+  reactive,
+  watchEffect,
+} from 'vue'
+import type { CreateTypes } from 'canvas-confetti'
+import { create as createConfetti } from 'canvas-confetti'
+import { KeepAwake } from '@capacitor-community/keep-awake'
+import { useTimer } from 'vue-timer-hook'
+import {
+  ArrowLeftIcon,
+  CheckIcon,
+  ExclamationIcon,
+} from '@heroicons/vue/outline'
+import { useMainStore } from '~/store/main'
+import { useGameStore } from '~/store/game'
+import Modal from '~/components/ModalComponent.vue'
+import { playSound } from '~/services/sound'
+
+const gameLenght = 60
+const { t } = useI18n()
+
+const modals = reactive({
+  changePlayer: true,
+  winner: false,
+  pause: false,
+})
+const game = useGameStore()
+const main = useMainStore()
+const timer = useTimer(gameLenght, false)
+let confetti: CreateTypes
+
+const pause = () => {
+  modals.pause = true
+  timer.pause()
+}
+const resume = () => {
+  modals.pause = false
+  timer.resume()
+}
+
+const bgColor = computed<StyleValue[]>(
+  () =>
+    [
+      {
+        backgroundImage: main.guess.cover
+          ? `url('${main.guess.cover}')`
+          : 'none',
+        // backgroundBlendMode: 'screen',
+        backgroundBlendMode: 'multiply',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
+      },
+    ] as StyleValue[],
+)
+const createTime = () => {
+  const expiryTimestamp = new Date()
+  expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + gameLenght)
+  return expiryTimestamp.getTime()
+}
+
+const skipGuess = () => {
+  main.nextGuess()
+}
+
+const nextRound = () => {
+  skipGuess()
+  timer.restart(createTime())
+  modals.changePlayer = false
+}
+
+const playConfetti = () => {
+  return confetti({
+    angle: 90,
+    spread: 60,
+    particleCount: 350,
+    ticks: 400,
+  })
+}
+
+const validGuess = () => {
+  main.nextGuess(true)
+  game.addScore()
+}
+
+const setupCanvas = () => {
+  const options = {
+    useWorker: true,
+    resize: !isPlatform('android'),
+  }
+  confetti = createConfetti(null as unknown as HTMLCanvasElement, options)
+}
+
+const initGameLoop = () => {
+  setTimeout(() => {
+    game.reset()
+    main.nextGuess()
+    game.nextTeam()
+    modals.changePlayer = true
+    modals.winner = false
+  }, 10)
+  return true
+}
+
+onBeforeUnmount(() => {
+  modals.changePlayer = true
+  timer.pause()
+  if (isPlatform('capacitor'))
+    KeepAwake.allowSleep()
+})
+onMounted(() => {
+  if (isPlatform('capacitor'))
+    KeepAwake.keepAwake()
+
+  watchEffect(async () => {
+    if (timer.isExpired.value) {
+      await playSound('horn')
+      await game.nextTeam()
+      modals.changePlayer = true
+    }
+  })
+  watchEffect(async () => {
+    if (game.winned) {
+      playConfetti()
+      timer.pause()
+      modals.winner = true
+      await playSound('tada')
+      await game.save()
+      if (isPlatform('capacitor') && game.games > 2)
+        RateApp.requestReview()
+    }
+  })
+  watchEffect(() => {
+    if (!main.isActive)
+      timer.pause()
+    else
+      timer.resume()
+  })
+  setupCanvas()
+})
+</script>
+
 <template>
-  <ion-page>
-    <ion-header mode="ios">
-      <ion-toolbar color="secondary">
+  <IonPage>
+    <IonHeader mode="ios">
+      <IonToolbar color="secondary">
         <ArrowLeftIcon class="w-1/12 mr-3 text-rose-500" @click="pause()" />
-        <ion-title>
-          <img class="h-10 mx-auto" src="/assets/icon/icon.png" alt="logo" />
-        </ion-title>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content :fullscreen="true" :scroll-y="false">
+        <IonTitle>
+          <img class="h-10 mx-auto" src="/assets/icon/icon.png" alt="logo">
+        </IonTitle>
+      </IonToolbar>
+    </IonHeader>
+    <IonContent :fullscreen="true" :scroll-y="false">
       <div
         class="relative flex flex-col justify-between h-full px-5 pb-10 xs:px-10 bg-pizazz-500"
         :style="bgColor"
       >
         <Modal :open="main.currentPath === '/game' && modals.changePlayer">
-          <template #icon
-            ><CheckIcon class="w-6 h-6 text-green-600" aria-hidden="true"
-          /></template>
-          <template #title>{{ t('ready') }} ?</template>
+          <template #icon>
+            <CheckIcon class="w-6 h-6 text-green-600" aria-hidden="true" />
+          </template>
+          <template #title>
+            {{ t('ready') }} ?
+          </template>
           <template #content>
             <p
               class="px-5 mt-4 mb-2 text-xl leading-relaxed text-center md:text-2xl"
@@ -39,13 +198,17 @@
           </template>
         </Modal>
         <Modal :open="modals.pause">
-          <template #icon
-            ><ExclamationIcon class="w-6 h-6 text-red-600" aria-hidden="true"
-          /></template>
-          <template #title>{{ t('beCarefull') }}</template>
-          <template #content
-            ><p class="py-10 md:text-2xl">{{ t('leave') }}</p></template
-          >
+          <template #icon>
+            <ExclamationIcon class="w-6 h-6 text-red-600" aria-hidden="true" />
+          </template>
+          <template #title>
+            {{ t('beCarefull') }}
+          </template>
+          <template #content>
+            <p class="py-10 md:text-2xl">
+              {{ t('leave') }}
+            </p>
+          </template>
           <template #buttons>
             <router-link
               to="/home"
@@ -67,10 +230,12 @@
           </template>
         </Modal>
         <Modal :open="modals.winner">
-          <template #icon
-            ><CheckIcon class="w-6 h-6 text-red-600" aria-hidden="true"
-          /></template>
-          <template #title>{{ t('gameWin') }}</template>
+          <template #icon>
+            <CheckIcon class="w-6 h-6 text-red-600" aria-hidden="true" />
+          </template>
+          <template #title>
+            {{ t('gameWin') }}
+          </template>
           <template #content>
             <div
               v-for="(w, index) in game.ladder"
@@ -79,10 +244,8 @@
             >
               {{ t('team') }} {{ w.name }}
               <strong v-if="index === 0">{{ t('win') }}</strong>
-              <strong v-else
-                >{{ t('is') }} {{ index + 1 }} {{ t('rankWith') }}
-                {{ w.score }} !</strong
-              >
+              <strong v-else>{{ t('is') }} {{ index + 1 }} {{ t('rankWith') }}
+                {{ w.score }} !</strong>
               !
             </div>
           </template>
@@ -105,7 +268,9 @@
         </Modal>
         <div class="flex items-center justify-between pt-3 md:pt-10 safe-pt">
           <div class="p-2 bg-pizazz-500 rounded-xl">
-            <p class="text-md md:text-xl text-rose-500">{{ t('team') }} :</p>
+            <p class="text-md md:text-xl text-rose-500">
+              {{ t('team') }} :
+            </p>
             <h2 class="text-xl font-bold md:text-2xl text-rose-500">
               {{ game.teamName }}
             </h2>
@@ -168,168 +333,10 @@
           </div>
         </div>
       </div>
-    </ion-content>
-  </ion-page>
+    </IonContent>
+  </IonPage>
 </template>
 
-<script setup lang="ts">
-  import { useI18n } from 'vue-i18n'
-  import {
-    IonContent,
-    IonTitle,
-    IonPage,
-    isPlatform,
-    IonToolbar,
-    IonHeader,
-  } from '@ionic/vue'
-  import { RateApp } from 'capacitor-rate-app'
-  import {
-    computed,
-    onBeforeUnmount,
-    onMounted,
-    reactive,
-    StyleValue,
-    watchEffect,
-  } from 'vue'
-  import { create as createConfetti, CreateTypes } from 'canvas-confetti'
-  import { KeepAwake } from '@capacitor-community/keep-awake'
-  import { useTimer } from 'vue-timer-hook'
-  import { useMainStore } from '~/store/main'
-  import { useGameStore } from '~/store/game'
-  import Modal from '~/components/Modal.vue'
-  import {
-    CheckIcon,
-    ExclamationIcon,
-    ArrowLeftIcon,
-  } from '@heroicons/vue/outline'
-  import { playSound } from '~/services/sound'
-
-  const gameLenght = 60
-  const { t } = useI18n()
-
-  const pause = () => {
-    modals.pause = true
-    timer.pause()
-  }
-  const resume = () => {
-    modals.pause = false
-    timer.resume()
-  }
-
-  const modals = reactive({
-    changePlayer: true,
-    winner: false,
-    pause: false,
-  })
-  const game = useGameStore()
-  const main = useMainStore()
-  const timer = useTimer(gameLenght, false)
-  let confetti: CreateTypes
-
-  const bgColor = computed<StyleValue[]>(
-    () =>
-      [
-        {
-          backgroundImage: main.guess.cover
-            ? `url('${main.guess.cover}')`
-            : 'none',
-          // backgroundBlendMode: 'screen',
-          backgroundBlendMode: 'multiply',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          backgroundSize: 'cover',
-        },
-      ] as StyleValue[]
-  )
-  const createTime = () => {
-    const expiryTimestamp = new Date()
-    expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + gameLenght)
-    return expiryTimestamp.getTime()
-  }
-
-  const skipGuess = () => {
-    main.nextGuess()
-  }
-
-  const nextRound = () => {
-    skipGuess()
-    timer.restart(createTime())
-    modals.changePlayer = false
-  }
-
-  const playConfetti = () => {
-    return confetti({
-      angle: 90,
-      spread: 60,
-      particleCount: 350,
-      ticks: 400,
-    })
-  }
-
-  const validGuess = () => {
-    main.nextGuess(true)
-    game.addScore()
-  }
-
-  const setupCanvas = () => {
-    const options = {
-      useWorker: true,
-      resize: !isPlatform('android'),
-    }
-    confetti = createConfetti(null as unknown as HTMLCanvasElement, options)
-  }
-
-  const initGameLoop = () => {
-    setTimeout(() => {
-      game.reset()
-      main.nextGuess()
-      game.nextTeam()
-      modals.changePlayer = true
-      modals.winner = false
-    }, 10)
-    return true
-  }
-
-  onBeforeUnmount(() => {
-    modals.changePlayer = true
-    timer.pause()
-    if (isPlatform('capacitor')) {
-      KeepAwake.allowSleep()
-    }
-  })
-  onMounted(() => {
-    if (isPlatform('capacitor')) {
-      KeepAwake.keepAwake()
-    }
-    watchEffect(async () => {
-      if (timer.isExpired.value) {
-        await playSound('horn')
-        await game.nextTeam()
-        modals.changePlayer = true
-      }
-    })
-    watchEffect(async () => {
-      if (game.winned) {
-        playConfetti()
-        timer.pause()
-        modals.winner = true
-        await playSound('tada')
-        await game.save()
-        if (isPlatform('capacitor') && game.games > 2) {
-          RateApp.requestReview()
-        }
-      }
-    })
-    watchEffect(() => {
-      if (!main.isActive) {
-        timer.pause()
-      } else {
-        timer.resume()
-      }
-    })
-    setupCanvas()
-  })
-</script>
 <style scoped>
   ion-toolbar {
     --border-style: none;

@@ -1,10 +1,11 @@
-import { randomSelect } from '../services/random'
 import { defineStore } from 'pinia'
+import { v4 as uuidv4 } from 'uuid'
+import { faker } from '@faker-js/faker'
+import { randomSelect } from '../services/random'
+import type { Entity, Player, Team } from '../services/firebase'
+import { useFirebase } from '../services/firebase'
 import { useAuthStore } from './auth'
 import { useMainStore } from './main'
-import { v4 as uuidv4 } from 'uuid'
-import { Entity, Player, Team, useFirebase } from '../services/firebase'
-import { faker } from '@faker-js/faker'
 
 faker.setLocale('fr')
 
@@ -29,19 +30,20 @@ export const randomTeam = (): Team => ({
 // function find by uuid in array
 const findByUUID = <Type extends Entity>(
   list: Type[] | undefined,
-  uuid: string
+  uuid: string,
 ): Type | undefined => {
-  if (!list) return undefined
-  return list.find((item) => item.uuid === uuid)
+  if (!list)
+    return undefined
+  return list.find(item => item.uuid === uuid)
 }
 
 const filterListByUUID = (
   list: Player[] | Team[],
-  past: string[]
+  past: string[],
 ): Player[] | Team[] => {
   const filtered = list.filter((n) => {
-    const index =
-      past.findIndex((b) => {
+    const index
+      = past.findIndex((b) => {
         return b === n.uuid
       }) === -1
     return index
@@ -69,9 +71,9 @@ export const useGameStore = defineStore('game', {
       return this.teamUUID !== '-1'
     },
     nextTeams(): Team[] {
-      if (this.teams.length === this.pastTeams.length) {
+      if (this.teams.length === this.pastTeams.length)
         return filterListByUUID(this.teams, [this.teamUUID]) as Team[]
-      }
+
       return filterListByUUID(this.teams, this.pastTeams) as Team[]
     },
     ladder(): Team[] {
@@ -81,7 +83,8 @@ export const useGameStore = defineStore('game', {
       return sorted
     },
     nextPlayers(): Player[] {
-      if (!this.team) return []
+      if (!this.team)
+        return []
       if (this.team.players.length === this.team.pastPlayers.length) {
         return filterListByUUID(this.team.players, [
           this.playerUUID,
@@ -89,7 +92,7 @@ export const useGameStore = defineStore('game', {
       }
       return filterListByUUID(
         this.team.players,
-        this.team.pastPlayers
+        this.team.pastPlayers,
       ) as Player[]
     },
     team(): Team | undefined {
@@ -104,14 +107,16 @@ export const useGameStore = defineStore('game', {
     teamScore(): number {
       try {
         return this.team ? this.team.score : 0
-      } catch (err) {
+      }
+      catch (err) {
         return 0
       }
     },
     teamName(): string {
       try {
         return this.team ? this.team.name : ''
-      } catch (err) {
+      }
+      catch (err) {
         return ''
       }
     },
@@ -119,32 +124,35 @@ export const useGameStore = defineStore('game', {
       const teamLength = this.teams[0].players.length
       let inequal = false
       this.teams.forEach((t: Team) => {
-        inequal = inequal || teamLength !== t.players.length ? true : false
+        inequal = !!(inequal || teamLength !== t.players.length)
       })
       return inequal ? 1 : 0
     },
     playerName(): string {
       try {
         return this.player ? this.player.name : ''
-      } catch (err) {
+      }
+      catch (err) {
         return ''
       }
     },
   },
   actions: {
     nextPlayer(setLoading = true) {
-      if (!this.team) return
+      if (!this.team)
+        return
       this.loading = setLoading ? true : this.loading
       let plr
-      if (this.mode === 1) {
+      if (this.mode === 1)
         plr = randomSelect<Player>(this.nextPlayers)
-      } else {
+
+      else
         plr = this.nextPlayers.pop() as Player
-      }
+
       this.playerUUID = plr.uuid
-      if (this.team.players.length === this.team.pastPlayers.length) {
+      if (this.team.players.length === this.team.pastPlayers.length)
         this.team.pastPlayers.length = 0
-      }
+
       this.team.pastPlayers.push(plr.uuid)
       this.loading = setLoading ? false : this.loading
     },
@@ -152,23 +160,23 @@ export const useGameStore = defineStore('game', {
       if (this.team && this.player && this.team.score < 10) {
         this.team.score += 1
         this.player.score++
-        if (this.team.score >= 10) {
+        if (this.team.score >= 10)
           this.winned = true
-        }
       }
     },
     nextTeam() {
       this.loading = true
       let newTeam: Team
-      if (this.mode === 1) {
+      if (this.mode === 1)
         newTeam = randomSelect<Team>(this.nextTeams)
-      } else {
+
+      else
         newTeam = this.nextTeams.pop() as Team
-      }
+
       this.teamUUID = newTeam.uuid
-      if (this.pastTeams.length === this.teams.length) {
+      if (this.pastTeams.length === this.teams.length)
         this.pastTeams.length = 0
-      }
+
       this.pastTeams.push(this.teamUUID)
       this.nextPlayer(false)
       this.loading = false
@@ -199,16 +207,17 @@ export const useGameStore = defineStore('game', {
     async save() {
       const authStore = useAuthStore()
       const mainStore = useMainStore()
-      if (!authStore.initialized) {
+      if (!authStore.initialized)
         await authStore.authCheck()
-      }
+
       try {
         this.games = await addGame(
           authStore?.user?.uid,
           mainStore.lang,
-          this.$state
+          this.$state,
         )
-      } catch (e) {
+      }
+      catch (e) {
         console.error('Error adding document: ', e)
       }
     },

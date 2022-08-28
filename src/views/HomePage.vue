@@ -1,6 +1,93 @@
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+import { RateApp } from 'capacitor-rate-app'
+import {
+  IonContent,
+  IonInput,
+  IonPage,
+  actionSheetController,
+  isPlatform,
+} from '@ionic/vue'
+import { computed, reactive } from 'vue'
+import { useRouter } from 'vue-router'
+import {
+  ChatIcon,
+  ClipboardListIcon,
+  DotsVerticalIcon,
+  ExclamationIcon,
+  FlagIcon,
+  InformationCircleIcon,
+  PlayIcon,
+  PlusCircleIcon,
+  PlusIcon,
+  TranslateIcon,
+  TrashIcon,
+} from '@heroicons/vue/outline'
+import { useMainStore } from '~/store/main'
+import Modal from '~/components/ModalComponent.vue'
+import { randomPlayer, randomTeam, useGameStore } from '~/store/game'
+import { openChat } from '~/services/crips'
+
+const modals = reactive({
+  inequal: false,
+  lang: false,
+  rules: false,
+})
+const router = useRouter()
+const game = useGameStore()
+const main = useMainStore()
+const { t, locale } = useI18n()
+
+const setLang = (l: string) => {
+  main.lang = l
+  locale.value = l
+}
+const lenghtLangs = computed(() => Object.keys(main.langs).length)
+const saveTeam = () => {
+  if (game.mode === 1)
+    modals.inequal = true
+  else
+    router.push('/theme')
+}
+const presentActionSheet = async () => {
+  const actionSheet = await actionSheetController.create({
+    header: `${t('more')} V${import.meta.env.VITE_APP_VERSION}`,
+    buttons: [
+      {
+        text: t('openSource'),
+        handler: () => {
+          window.open('https://github.com/Forgr-ee/Mimesis', '_blank')
+        },
+      },
+      {
+        text: t('rate'),
+        handler: () => {
+          if (isPlatform('capacitor'))
+            RateApp.requestReview()
+        },
+      },
+      {
+        text: `${t('by')} Martin DONADIEU`,
+        handler: () => {
+          window.open('https://msha.ke/martindonadieu', '_blank')
+        },
+      },
+      {
+        text: t('close'),
+        role: 'cancel',
+      },
+    ],
+  })
+  await actionSheet.present()
+
+  const { role } = await actionSheet.onDidDismiss()
+  console.log('onDidDismiss resolved with role', role)
+}
+</script>
+
 <template>
-  <ion-page>
-    <ion-content :fullscreen="true" :scroll-y="false">
+  <IonPage>
+    <IonContent :fullscreen="true" :scroll-y="false">
       <div
         class="flex flex-col justify-center h-screen bg-pizazz-500 item-center"
       >
@@ -8,7 +95,7 @@
           class="object-contain h-20 xsheight:h-32"
           src="/assets/icon/icon.png"
           alt="logo"
-        />
+        >
         <div
           class="mx-auto text-4xl font-semibold leading-6 text-center text-gray-50 first-letter:uppercase"
         >
@@ -18,7 +105,9 @@
           <template #icon>
             <TranslateIcon class="w-6 h-6 text-red-600" aria-hidden="true" />
           </template>
-          <template #title>{{ t('langTitle') }}</template>
+          <template #title>
+            {{ t('langTitle') }}
+          </template>
           <template #content>
             <div>
               <button
@@ -49,7 +138,9 @@
               aria-hidden="true"
             />
           </template>
-          <template #title>{{ t('ruleTitle') }}</template>
+          <template #title>
+            {{ t('ruleTitle') }}
+          </template>
           <template #content>
             <div class="text-left">
               <p class="my-1">
@@ -58,11 +149,14 @@
                 {{ t('rule012') }}
               </p>
               <p class="my-1">
-                - {{ t('rule020') }} <strong>{{ t('rule021') }}</strong
-                >.
+                - {{ t('rule020') }} <strong>{{ t('rule021') }}</strong>.
               </p>
-              <p class="my-1">- {{ t('rule030') }}</p>
-              <p class="my-1">- {{ t('rule040') }}</p>
+              <p class="my-1">
+                - {{ t('rule030') }}
+              </p>
+              <p class="my-1">
+                - {{ t('rule040') }}
+              </p>
               <p class="pt-5 my-1">
                 <strong>{{ t('rule050') }}:</strong>
                 {{ t('rule051') }}
@@ -83,10 +177,12 @@
           <template #icon>
             <ExclamationIcon class="w-6 h-6 text-red-600" aria-hidden="true" />
           </template>
-          <template #title>{{ t('beCarefull') }}</template>
+          <template #title>
+            {{ t('beCarefull') }}
+          </template>
           <template #content>
             {{ t('inequal') }}
-            <br />
+            <br>
             <strong>{{ t('fairRule') }}</strong>
           </template>
           <template #buttons>
@@ -122,7 +218,7 @@
               >
                 {{ t('team') }} {{ index + 1 }}
               </p>
-              <ion-input
+              <IonInput
                 class="w-2/3 mx-auto mb-6 text-5xl text-center border-b-2 bg-lavender-500 border-rose-500 text-rose-500"
                 :value="team.name"
               />
@@ -133,7 +229,7 @@
                     :key="player.uuid"
                     class="flex items-center"
                   >
-                    <ion-input
+                    <IonInput
                       v-model="player.name"
                       class="my-1 text-lg text-center border rounded-lg text-rose-500 bg-lavender-500 border-rose-500"
                     />
@@ -210,96 +306,6 @@
           </button>
         </div>
       </div>
-    </ion-content>
-  </ion-page>
+    </IonContent>
+  </IonPage>
 </template>
-
-<script setup lang="ts">
-  import { useI18n } from 'vue-i18n'
-  import { randomPlayer, randomTeam } from '~/store/game'
-  import { RateApp } from 'capacitor-rate-app'
-  import {
-    IonContent,
-    isPlatform,
-    IonPage,
-    IonInput,
-    actionSheetController,
-  } from '@ionic/vue'
-  import { computed, reactive } from 'vue'
-  import { useRouter } from 'vue-router'
-  import { useGameStore } from '~/store/game'
-  import { useMainStore } from '~/store/main'
-  import Modal from '~/components/Modal.vue'
-  import {
-    TranslateIcon,
-    PlayIcon,
-    PlusCircleIcon,
-    PlusIcon,
-    FlagIcon,
-    TrashIcon,
-    InformationCircleIcon,
-    DotsVerticalIcon,
-    ChatIcon,
-    ClipboardListIcon,
-    ExclamationIcon,
-  } from '@heroicons/vue/outline'
-  import { openChat } from '~/services/crips'
-
-  const modals = reactive({
-    inequal: false,
-    lang: false,
-    rules: false,
-  })
-  const router = useRouter()
-  const game = useGameStore()
-  const main = useMainStore()
-  const { t, locale } = useI18n()
-
-  const setLang = (l: string) => {
-    main.lang = l
-    locale.value = l
-  }
-  const lenghtLangs = computed(() => Object.keys(main.langs).length)
-  const saveTeam = () => {
-    if (game.mode === 1) {
-      modals.inequal = true
-    } else {
-      router.push('/theme')
-    }
-  }
-  const presentActionSheet = async () => {
-    const actionSheet = await actionSheetController.create({
-      header: `${t('more')} V${import.meta.env.VITE_APP_VERSION}`,
-      buttons: [
-        {
-          text: t('openSource'),
-          handler: () => {
-            window.open('https://github.com/Forgr-ee/Mimesis', '_blank')
-          },
-        },
-        {
-          text: t('rate'),
-          handler: () => {
-            if (isPlatform('capacitor')) {
-              RateApp.requestReview()
-            }
-          },
-        },
-        {
-          text: `${t('by')} Martin DONADIEU`,
-          handler: () => {
-            window.open('https://msha.ke/martindonadieu', '_blank')
-          },
-        },
-        {
-          text: t('close'),
-          role: 'cancel',
-        },
-      ],
-    })
-    await actionSheet.present()
-
-    const { role } = await actionSheet.onDidDismiss()
-    console.log('onDidDismiss resolved with role', role)
-  }
-</script>

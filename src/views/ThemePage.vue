@@ -1,3 +1,64 @@
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+import {
+  IonButton,
+  IonButtons,
+  IonContent,
+  IonHeader,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+  isPlatform,
+} from '@ionic/vue'
+import { ArrowLeftIcon, LockClosedIcon } from '@heroicons/vue/outline'
+import { useRouter } from 'vue-router'
+import { ref } from 'vue'
+import { useMainStore } from '~/store/main'
+import { useGameStore } from '~/store/game'
+import type { Theme } from '~/services/firebase'
+import { purchase, restore } from '~/services/iap'
+import PageLoader from '~/components/PageLoader.vue'
+
+const { t, locale } = useI18n()
+const main = useMainStore()
+const game = useGameStore()
+const router = useRouter()
+const loading = ref(false)
+
+const isIos = () => {
+  return isPlatform('ios')
+}
+
+const langName = (theme: Theme): string => {
+  return (theme as never)[locale.value]
+}
+
+const buy = async (theme: Theme) => {
+  if (theme.status !== 'paid' || !theme.package)
+    return
+  try {
+    loading.value = true
+    await purchase(theme.package)
+    theme.status = 'purchased'
+  }
+  catch (e) {
+    loading.value = false
+    return console.error(e)
+  }
+}
+
+const saveTheme = async (theme: Theme) => {
+  if (theme.status === 'paid' && theme.package)
+    return buy(theme)
+
+  game.theme = theme.id
+  game.reset()
+  main.nextGuess()
+  game.nextTeam()
+  router.push({ path: '/game' })
+}
+</script>
+
 <template>
   <IonPage>
     <IonHeader mode="ios">
@@ -7,7 +68,7 @@
             <ArrowLeftIcon slot="start" class="w-10 md:w-15 text-rose-500" />
           </IonButton>
         </IonButtons>
-        <IonTitle></IonTitle>
+        <IonTitle />
         <IonButtons v-if="isIos()" slot="end">
           <IonButton
             class="px-3 py-1 mx-auto w-30 mt-1 text-sm border xs:mt-2 bg-lavender-500 border-rose-500 text-rose-500 rounded-xl first-letter:uppercase"
@@ -57,9 +118,11 @@
                 alt="test"
                 class="w-full h-full mt-2 fill-current stroke-current text-pizazz-500 svg_icon"
                 :src="theme.icon"
-              />
+              >
             </div>
-            <p class="xs:text-2xl text-rose-500">{{ langName(theme) }}</p>
+            <p class="xs:text-2xl text-rose-500">
+              {{ langName(theme) }}
+            </p>
           </div>
         </div>
       </div>
@@ -68,64 +131,6 @@
   </IonPage>
 </template>
 
-<script setup lang="ts">
-  import { useI18n } from 'vue-i18n'
-  import {
-    IonContent,
-    IonPage,
-    IonTitle,
-    isPlatform,
-    IonToolbar,
-    IonButtons,
-    IonButton,
-    IonHeader,
-  } from '@ionic/vue'
-  import { LockClosedIcon, ArrowLeftIcon } from '@heroicons/vue/outline'
-  import { useRouter } from 'vue-router'
-  import { useMainStore } from '~/store/main'
-  import { useGameStore } from '~/store/game'
-  import { Theme } from '~/services/firebase'
-  import { purchase, restore } from '~/services/iap'
-  import PageLoader from '~/components/PageLoader.vue'
-  import { ref } from 'vue'
-
-  const { t, locale } = useI18n()
-  const main = useMainStore()
-  const game = useGameStore()
-  const router = useRouter()
-  const loading = ref(false)
-
-  const isIos = () => {
-    return isPlatform('ios')
-  }
-
-  const langName = (theme: Theme): string => {
-    return (theme as never)[locale.value]
-  }
-
-  const buy = async (theme: Theme) => {
-    if (theme.status !== 'paid' || !theme.package) return
-    try {
-      loading.value = true
-      await purchase(theme.package)
-      theme.status = 'purchased'
-    } catch (e) {
-      loading.value = false
-      return console.error(e)
-    }
-  }
-
-  const saveTheme = async (theme: Theme) => {
-    if (theme.status === 'paid' && theme.package) {
-      return buy(theme)
-    }
-    game.theme = theme.id
-    game.reset()
-    main.nextGuess()
-    game.nextTeam()
-    router.push({ path: '/game' })
-  }
-</script>
 <style scoped>
   ion-toolbar {
     --border-style: none;
