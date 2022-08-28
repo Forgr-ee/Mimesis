@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.4.8](https://github.com/Forgr-ee/Mimesis/compare/2.4.7...2.4.8) (2022-08-28)
+
+
+### Bug Fixes
+
+* ci script for capgo ([4d02055](https://github.com/Forgr-ee/Mimesis/commit/4d0205554fe30b34efd79ed358ab5041fbfdd720))
+
 ### [2.4.7](https://github.com/Forgr-ee/Mimesis/compare/2.4.6...2.4.7) (2022-08-28)
 
 
