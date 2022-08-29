@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.4.9](https://github.com/Forgr-ee/Mimesis/compare/2.4.8...2.4.9) (2022-08-29)
+
+
+### Bug Fixes
+
+* isssue ios privacy ([7fca652](https://github.com/Forgr-ee/Mimesis/commit/7fca652d0a289f0b113f5d8ceb12da4e8b3a0b9d))
+
 ### [2.4.8](https://github.com/Forgr-ee/Mimesis/compare/2.4.7...2.4.8) (2022-08-28)
 
 
