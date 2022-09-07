@@ -26,6 +26,8 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>Allow camera to send picture to support</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Allow microphone to send video to support</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Allow photo library to send picture to support</string>
 	<key>UILaunchStoryboardName</key>
