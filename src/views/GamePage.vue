@@ -119,7 +119,8 @@ const initGameLoop = () => {
 
 onBeforeUnmount(() => {
   modals.changePlayer = true
-  timer.pause()
+  if (timer.isRunning)
+    timer.pause()
   if (isPlatform('capacitor'))
     KeepAwake.allowSleep()
 })
@@ -137,19 +138,18 @@ onMounted(() => {
   watchEffect(async () => {
     if (game.winned) {
       playConfetti()
-      timer.pause()
+      if (timer.isRunning)
+        timer.pause()
       modals.winner = true
       await playSound('tada')
-      await game.save()
+      await game.save(main.lang)
       if (isPlatform('capacitor') && game.games > 2)
         RateApp.requestReview()
     }
   })
   watchEffect(() => {
-    if (!main.isActive)
+    if (!main.isActive && timer.isRunning)
       timer.pause()
-    else
-      timer.resume()
   })
   setupCanvas()
 })
@@ -296,7 +296,7 @@ onMounted(() => {
             class="flex flex-col items-center my-auto overflow-y-scroll text-3xl border text-rose-500 drop-shadow border-rose-500 bg-lavender-500 rounded-xl max-h-48"
           >
             <!-- <img v-if="main.guess.cover" :src="main.guess.cover"/> -->
-            <div class="px-5 py-8 md:p-14">
+            <div class="p5 md:p-14 m-3">
               <p v-if="main.guess.type" class="text-2xl">
                 {{ main.guess.type }}
               </p>

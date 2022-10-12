@@ -15,11 +15,12 @@ import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 import { useMainStore } from '~/store/main'
 import { useGameStore } from '~/store/game'
-import type { Theme } from '~/services/firebase'
 import { purchase, restore } from '~/services/iap'
 import PageLoader from '~/components/PageLoader.vue'
+import type { definitions } from '~/types/supabase'
+import type { Mode } from '~/services/database'
 
-const { t, locale } = useI18n()
+const { t } = useI18n()
 const main = useMainStore()
 const game = useGameStore()
 const router = useRouter()
@@ -29,11 +30,11 @@ const isIos = () => {
   return isPlatform('ios')
 }
 
-const langName = (theme: Theme): string => {
-  return (theme as never)[locale.value]
+const langName = (theme: (definitions['mimesis_modes'] & Mode)): string => {
+  return t(theme.name)
 }
 
-const buy = async (theme: Theme) => {
+const buy = async (theme: (definitions['mimesis_modes'] & Mode)) => {
   if (theme.status !== 'paid' || !theme.package)
     return
   try {
@@ -47,7 +48,7 @@ const buy = async (theme: Theme) => {
   }
 }
 
-const saveTheme = async (theme: Theme) => {
+const saveTheme = async (theme: (definitions['mimesis_modes'] & Mode)) => {
   if (theme.status === 'paid' && theme.package)
     return buy(theme)
 

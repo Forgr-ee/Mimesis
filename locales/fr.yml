@@ -49,3 +49,11 @@ update: modifier
 validate: valider
 win: gagne
 winner: à gagné !
+fun.mimesis.rebus: Rebus
+fun.mimesis.rebus_plus: Rebus Plus
+fun.mimesis.expression: Expressions
+fun.mimesis.expression_plus: Expressions Plus
+fun.mimesis.improbable: Improbable
+fun.mimesis.improbable_plus: Improbable Plus
+fun.mimesis.art: Art
+fun.mimesis.art_plus: Art Plus

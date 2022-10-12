@@ -3,12 +3,8 @@ import { createPinia, setActivePinia } from 'pinia'
 import { mockRandom, resetMockRandom } from 'jest-mock-random'
 import { useGameStore } from '../../src/store/game'
 import { useMainStore } from '../../src/store/main'
-import type {
-  GuessDb,
-  LangMessage,
-  LangMessages,
-  Theme,
-} from '../../src/services/firebase'
+import type { GuessDb, LangMessage, LangMessages, Mode } from '../../src/services/database'
+import type { definitions } from './../../src/types/supabase'
 
 const langs: LangMessages = {
   fr: {
@@ -24,18 +20,15 @@ const langs: LangMessages = {
 }
 
 const gGuess = (title: string) => {
-  return { title }
+  return { lang: 1, id: Number(title), title }
 }
 
-const themes: Theme[] = [
+const themes: (definitions['mimesis_modes'] & Mode)[] = [
   {
     active: true,
-    lang: {
-      fr: 't1',
-      en: 't1',
-    },
+    name: '',
     icon: 'data',
-    id: 't1',
+    id: 1,
     id_ios: 't1.ios',
     id_android: 't1.android',
     order: 1,
@@ -68,7 +61,7 @@ describe('MainStore', () => {
     main.guessDb = guessDb
     main.langsMessages = langs
     const game = useGameStore()
-    game.theme = 't2'
+    game.theme = 2
     expect(main.guess).toStrictEqual({ title: '' })
     expect(game.skipGuess).toStrictEqual([])
     expect(game.foundGuess).toStrictEqual([])

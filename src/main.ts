@@ -7,7 +7,6 @@ import { Device } from '@capacitor/device'
 import App from './App.vue'
 import router from './router'
 // import VueFeather from 'vue-feather';
-import { useAuthStore } from './store/auth'
 import { useMainStore } from './store/main'
 import {
   initCrisp,
@@ -80,14 +79,11 @@ const init = async (isRecall = false) => {
   console.log('init')
   CapacitorUpdater.notifyAppReady()
   const main = useMainStore()
-  const auth = useAuthStore()
   try {
     console.log('initCrisp')
     initCrisp()
     console.log('initI18n')
     await initI18n()
-    console.log('authCheck')
-    await auth.authCheck()
     if (isPlatform('ios'))
       initIap('appl_bWYDPHWhWAGWQFUIQGIoiXzrTlW')
 

@@ -1,119 +1,124 @@
-import { defineStore } from 'pinia'
+import { acceptHMRUpdate, defineStore } from 'pinia'
+import { computed, ref } from 'vue'
 import { randomSelect } from '../services/random'
 
 import type {
-  Guess,
   GuessDb,
   LangMessages,
-  Theme,
-} from '../services/firebase'
+  Mode,
+} from '../services/database'
 import {
-  useFirebase,
-} from '../services/firebase'
+  useDb,
+} from '../services/database'
+import type { definitions } from '../types/supabase'
 import { useGameStore } from './game'
 
-const { getThemes, getGuessesDb } = useFirebase()
+const { getThemes, getGuessesDb } = useDb()
 
-const filterListByTitle = (list: Guess[], past: string[]) => {
-  const filtered = list.filter(n => !past.includes(n.title))
+const filterListById = (list: definitions['mimesis_guesses'][], past: number[]) => {
+  const filtered = list.filter(n => !past.includes(n.id))
   return filtered
 }
-interface Version {
-  updated: boolean
-  version: string
-  path: string
-  folder: string
-}
 
-export const useMainStore = defineStore('main', {
-  // other options...
-  state: () => ({
-    error: false,
-    isActive: true,
-    loading: false,
-    lastVersion: {
-      updated: true,
-      version: '',
-      path: '',
-      folder: '',
-    } as Version,
-    versions: [] as Version[],
-    lastUpdate: '',
-    initialized: false,
-    currentPath: '/home',
-    themes: [] as Theme[],
-    offline: false,
-    langsMessages: {} as LangMessages,
-    lang: 'fr',
-    guessDb: {} as GuessDb,
-    guess: { title: '' } as Guess,
-  }),
-  getters: {
-    langs(): string[] {
-      return Object.keys(this.langsMessages).map((key) => {
-        const lang = this.langsMessages[key]
-        return lang.id
-      })
-    },
-    guesses(): Guess[] {
-      const game = useGameStore()
-      return this.guessDb[`${game.theme}_${this.lang}`]
-    },
-    needUpdate(): boolean {
-      const lastUpdate = new Date(this.lastUpdate)
-      const today = new Date()
-      return (
-        lastUpdate.getDate() !== today.getDate()
-        || lastUpdate.getMonth() !== today.getMonth()
-        || lastUpdate.getFullYear() !== today.getFullYear()
-      )
-    },
-    nextGuesses(): Guess[] {
-      const game = useGameStore()
-      return filterListByTitle(this.guesses, game.pastGuess)
-    },
-  },
-  actions: {
-    async initialize(force = false) {
-      console.log('initialize', force)
-      this.offline = !window.navigator.onLine
-      if (!force && (this.offline || this.initialized || !this.needUpdate))
-        return
-      this.loading = true
-      try {
-        await this.initThemes().then(this.initGuessTheme)
-        this.initialized = true
-      }
-      catch (err) {
-        this.error = !!err
-        console.log('err initialise', err)
-      }
-      this.lastUpdate = new Date().toISOString()
-      this.loading = false
-    },
-    async initGuessTheme() {
-      this.guessDb = await getGuessesDb(this.themes, this.lang)
-    },
-    async initThemes() {
-      this.themes = await getThemes()
-    },
-    nextGuess(found = false) {
-      const game = useGameStore()
-      if (this.guess && this.guess.title !== '') {
-        if (found)
-          game.foundGuess.push(this.guess.title)
-
-        else
-          game.skipGuess.push(this.guess.title)
-      }
-      if (game.pastGuess.length === this.guesses.length) {
-        game.skipGuess
-          = game.skipGuess.length > 1
-            ? [game.skipGuess[game.skipGuess.length - 1]]
-            : []
-      }
-      const result = randomSelect<Guess>(this.nextGuesses)
-      this.guess = result || { title: 'Error' }
-    },
-  },
+export const useMainStore = defineStore('main', () => {
+  const error = ref(false)
+  const isActive = ref(true)
+  const loading = ref(false)
+  const lastUpdate = ref('')
+  const initialized = ref(false)
+  const currentPath = ref('/home')
+  const themes = ref([] as (definitions['mimesis_modes'] & Mode)[])
+  const offline = ref(false)
+  const langsMessages = ref({} as LangMessages)
+  const lang = ref('fr')
+  const guessDb = ref({} as GuessDb)
+  const guess = ref({ title: '' } as definitions['mimesis_guesses'])
+  const langs = computed((): string[] => {
+    return Object.keys(langsMessages.value).map((key) => {
+      const lang = langsMessages.value[key]
+      return lang.id
+    })
+  })
+  const guesses = computed((): definitions['mimesis_guesses'][] => {
+    const game = useGameStore()
+    return guessDb.value[`${game.theme}_${lang.value}`] || []
+  })
+  const needUpdate = computed((): boolean => {
+    const lastUpdateDate = new Date(lastUpdate.value)
+    const today = new Date()
+    return (
+      lastUpdateDate.getDate() !== today.getDate()
+      || lastUpdateDate.getMonth() !== today.getMonth()
+      || lastUpdateDate.getFullYear() !== today.getFullYear()
+    )
+  })
+  const nextGuesses = computed((): definitions['mimesis_guesses'][] => {
+    const game = useGameStore()
+    return filterListById(guesses.value, game.pastGuess)
+  })
+  const initGuessTheme = async () => {
+    guessDb.value = await getGuessesDb(themes.value, lang.value)
+  }
+  const initThemes = async () => {
+    themes.value = await getThemes()
+  }
+  const initialize = async (force = false) => {
+    console.log('initialize', force)
+    offline.value = !window.navigator.onLine
+    if (!force && (offline.value || initialized.value || !needUpdate.value))
+      return
+    loading.value = true
+    try {
+      await initThemes().then(initGuessTheme)
+      initialized.value = true
+    }
+    catch (err) {
+      error.value = !!err
+      console.log('err initialise', err)
+    }
+    lastUpdate.value = new Date().toISOString()
+    loading.value = false
+  }
+  const nextGuess = (found = false) => {
+    const game = useGameStore()
+    if (guess.value && guess.value.title !== '') {
+      if (found)
+        game.foundGuess.push(guess.value.id)
+      else
+        game.skipGuess.push(guess.value.id)
+    }
+    if (game.pastGuess.length === guesses.value.length) {
+      game.skipGuess
+        = game.skipGuess.length > 1
+          ? [game.skipGuess[game.skipGuess.length - 1]]
+          : []
+    }
+    const result = randomSelect<definitions['mimesis_guesses']>(nextGuesses.value)
+    guess.value = result || { title: 'Error' }
+  }
+  return {
+    error,
+    isActive,
+    loading,
+    lastUpdate,
+    initialized,
+    currentPath,
+    themes,
+    offline,
+    langsMessages,
+    lang,
+    guessDb,
+    guess,
+    langs,
+    guesses,
+    needUpdate,
+    nextGuesses,
+    initGuessTheme,
+    initThemes,
+    initialize,
+    nextGuess,
+  }
 })
+
+if (import.meta.hot)
+  import.meta.hot.accept(acceptHMRUpdate(useMainStore, import.meta.hot))

@@ -1,0 +1,17 @@
+{
+    "base_domain": {
+      "prod": "mimesis.love",
+      "development": "development.mimesis.app",
+      "local": "localhost:3332"
+    },
+    "supa_anon": {
+      "prod": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYyODE2NzY5NywiZXhwIjoxOTQzNzQzNjk3fQ.MVB0cJmvL-QcxTEBR_7UEj8WBjdhksTwD_FLAiqo_1Q",
+      "development": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYyODE2NzY5NywiZXhwIjoxOTQzNzQzNjk3fQ.MVB0cJmvL-QcxTEBR_7UEj8WBjdhksTwD_FLAiqo_1Q",
+      "local": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24ifQ.625_WdcF3KHqz5amU0x2X5WWHP-OEs_4qj0ssLNHzTs"
+    },
+    "supa_url": {
+      "prod": "https://asavjwzyvjjyjdmsjlhv.supabase.co",
+      "development": "https://asavjwzyvjjyjdmsjlhv.supabase.co",
+      "local": "http://localhost:54321"
+    }
+  }
