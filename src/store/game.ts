@@ -8,8 +8,6 @@ import { useDb } from '../services/database'
 
 faker.setLocale('fr')
 
-const { addGame } = useDb()
-
 export const randomPlayer = (): Player => ({
   score: 0,
   name: faker.name.firstName(),
@@ -178,6 +176,7 @@ export const useGameStore = defineStore('game', () => {
   }
   const save = async (lang: string) => {
     try {
+      const { addGame } = useDb()
       games.value = await addGame(
         lang,
         foundGuess.value,

@@ -13,8 +13,6 @@ import {
 import type { definitions } from '../types/supabase'
 import { useGameStore } from './game'
 
-const { getThemes, getGuessesDb } = useDb()
-
 const filterListById = (list: definitions['mimesis_guesses'][], past: number[]) => {
   const filtered = list.filter(n => !past.includes(n.id))
   return filtered
@@ -57,10 +55,10 @@ export const useMainStore = defineStore('main', () => {
     return filterListById(guesses.value, game.pastGuess)
   })
   const initGuessTheme = async () => {
-    guessDb.value = await getGuessesDb(themes.value, lang.value)
+    guessDb.value = await useDb().getGuessesDb(themes.value, lang.value)
   }
   const initThemes = async () => {
-    themes.value = await getThemes()
+    themes.value = await useDb().getThemes()
   }
   const initialize = async (force = false) => {
     console.log('initialize', force)
