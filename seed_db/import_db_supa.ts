@@ -3,7 +3,7 @@ import csvtojson from 'csvtojson'
 import { createClient } from '@supabase/supabase-js'
 
 const supabaseUrl = 'https://asavjwzyvjjyjdmsjlhv.supabase.co'
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoic2VydmljZV9yb2xlIiwiaWF0IjoxNjI4MTY3Njk3LCJleHAiOjE5NDM3NDM2OTd9.LQ5PTu_kQjjaVEQgMZxkMWklWbSCh_rYZiogtkJkRgU'
+const supabaseAnonKey = '***'
 
 export const useSupabase = () => {
   return createClient(supabaseUrl, supabaseAnonKey)
