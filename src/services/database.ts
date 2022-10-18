@@ -6,8 +6,8 @@ import type { definitions } from '../types/supabase'
 import { findPackage, isPurchased, restore } from './iap'
 import { GetDeviceId } from './capacitor'
 
-const supabaseUrl = 'https://asavjwzyvjjyjdmsjlhv.supabase.co'
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYyODE2NzY5NywiZXhwIjoxOTQzNzQzNjk3fQ.MVB0cJmvL-QcxTEBR_7UEj8WBjdhksTwD_FLAiqo_1Q'
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string
 
 const useSupabase = () => {
   return createClient(supabaseUrl, supabaseAnonKey)
@@ -89,7 +89,7 @@ const fakeThemes: definitions['mimesis_modes'][] = [
 export const useDb = (): UseDatabase => {
   const db = useSupabase()
   const getGuesses = async (mode: number, lang: number) => {
-    if (!import.meta.env.FIREBASE_CONFIG)
+    if (!import.meta.env.VITE_SUPABASE_URL)
       return getFakeGuesses(mode, lang)
     let value: definitions['mimesis_guesses'][] = []
     try {
@@ -126,7 +126,7 @@ export const useDb = (): UseDatabase => {
     return guessDb
   }
   const getThemes = async () => {
-    if (!import.meta.env.FIREBASE_CONFIG)
+    if (!import.meta.env.VITE_SUPABASE_URL)
       return fakeThemes
     let values: (definitions['mimesis_modes'] & Mode)[] = []
     try {
