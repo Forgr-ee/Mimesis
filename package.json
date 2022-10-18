@@ -1,6 +1,6 @@
 {
   "name": "mimesis",
-  "version": "2.5.3",
+  "version": "2.5.4",
   "license": "AGPL-3.0-only",
   "scripts": {
     "prepare": "husky install",

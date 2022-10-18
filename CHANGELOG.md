@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.5.4](https://github.com/Forgr-ee/Mimesis/compare/2.5.3...2.5.4) (2022-10-18)
+
+
+### Bug Fixes
+
+* url supabase ([7807a26](https://github.com/Forgr-ee/Mimesis/commit/7807a263b438521e67c4189c6b18fee6603a1a95))
+
 ### [2.5.3](https://github.com/Forgr-ee/Mimesis/compare/2.5.2...2.5.3) (2022-10-18)
 
 
