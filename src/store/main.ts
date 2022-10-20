@@ -60,7 +60,7 @@ export const useMainStore = defineStore('main', () => {
   const initThemes = async () => {
     themes.value = await useDb().getThemes()
   }
-  const initialize = async (force = false) => {
+  const initialize = async (force = true) => {
     console.log('initialize', force)
     offline.value = !window.navigator.onLine
     if (!force && (offline.value || initialized.value || !needUpdate.value))
