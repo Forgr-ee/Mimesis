@@ -2,7 +2,7 @@
 import { createClient } from '@supabase/supabase-js'
 import { isPlatform } from '@ionic/vue'
 import type { Package, PurchaserInfo } from '@capgo/capacitor-purchases'
-import type { definitions } from '../types/supabase'
+import type { Database } from '../types/database.types'
 import { findPackage, isPurchased, restore } from './iap'
 import { GetDeviceId } from './capacitor'
 
@@ -10,7 +10,7 @@ const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string
 
 const useSupabase = () => {
-  return createClient(supabaseUrl, supabaseAnonKey)
+  return createClient<Database>(supabaseUrl, supabaseAnonKey)
 }
 
 export interface Player {
@@ -33,7 +33,7 @@ export interface Team extends Entity {
 }
 
 export interface GuessDb {
-  [key: string]: definitions['mimesis_guesses'][]
+  [key: string]: Database['public']['Tables']['mimesis_guesses']['Row'][]
 }
 
 export interface Config {
@@ -55,8 +55,8 @@ export interface LangMessages {
 }
 
 interface UseDatabase {
-  getGuessesDb: (themes: definitions['mimesis_modes'][], lang: string) => Promise<GuessDb>
-  getThemes: () => Promise<definitions['mimesis_modes'][]>
+  getGuessesDb: (themes: Database['public']['Tables']['mimesis_modes']['Row'][], lang: string) => Promise<GuessDb>
+  getThemes: () => Promise<Database['public']['Tables']['mimesis_modes']['Row'][]>
   addGame: (
     lang: string,
     foundGuess: number[],
@@ -68,14 +68,15 @@ interface UseDatabase {
 
 const getFakeGuesses = (category: number, lang: number) => {
   return [
-    { title: `${lang}_${category}_1` },
-    { title: `${lang}_${category}_2` },
-    { title: `${lang}_${category}_3` },
-  ] as definitions['mimesis_guesses'][]
+    { title: `${lang}_${category}_1`, lang: 1, id: 0 },
+    { title: `${lang}_${category}_2`, lang: 1, id: 1 },
+    { title: `${lang}_${category}_3`, lang: 1, id: 2 },
+  ] as Database['public']['Tables']['mimesis_guesses']['Row'][]
 }
-const fakeThemes: definitions['mimesis_modes'][] = [
+const fakeThemes: Database['public']['Tables']['mimesis_modes']['Row'][] = [
   {
     active: true,
+    created_at: '',
     name: 'fake',
     icon: 'data',
     id_ios: 't1.ios',
@@ -91,10 +92,10 @@ export const useDb = (): UseDatabase => {
   const getGuesses = async (mode: number, lang: number) => {
     if (!import.meta.env.VITE_SUPABASE_URL)
       return getFakeGuesses(mode, lang)
-    let value: definitions['mimesis_guesses'][] = []
+    let value: Database['public']['Tables']['mimesis_guesses']['Row'][] = []
     try {
       const snapshot = await db
-        .from<definitions['mimesis_guesses']>('mimesis_guesses')
+        .from('mimesis_guesses')
         .select()
         .eq('mode', mode)
         .eq('lang', lang)
@@ -108,7 +109,7 @@ export const useDb = (): UseDatabase => {
     return value
   }
   const getGuessesDb = async (
-    themes: (definitions['mimesis_modes'] & Mode)[],
+    themes: (Database['public']['Tables']['mimesis_modes']['Row'] & Mode)[],
     lang: string,
   ): Promise<GuessDb> => {
     const guessDb = {} as GuessDb
@@ -128,14 +129,14 @@ export const useDb = (): UseDatabase => {
   const getThemes = async () => {
     if (!import.meta.env.VITE_SUPABASE_URL)
       return fakeThemes
-    let values: (definitions['mimesis_modes'] & Mode)[] = []
+    let values: (Database['public']['Tables']['mimesis_modes']['Row'] & Mode)[] = []
     try {
       const snapshot = await db
-        .from<definitions['mimesis_modes'] & Mode>('mimesis_modes')
+        .from('mimesis_modes')
         .select()
         .eq('active', true)
         .order('order', { ascending: true })
-      let pList: Promise<definitions['mimesis_modes'] & Mode>[] = []
+      let pList: Promise<Database['public']['Tables']['mimesis_modes']['Row'] & Mode>[] = []
       let pInfo: PurchaserInfo | null = null
       if (isPlatform('capacitor')) {
         try {
@@ -148,7 +149,7 @@ export const useDb = (): UseDatabase => {
       if (snapshot.error)
         throw new Error(snapshot.error.message)
       console.log('getThemes')
-      pList = await snapshot.data.map(async (theme) => {
+      pList = await snapshot.data.map(async (theme: (Database['public']['Tables']['mimesis_modes']['Row'] & Mode)) => {
         if (isPlatform('capacitor')) {
           const productId = isPlatform('ios') ? theme.id_ios : theme.id_android
           if (!productId)
@@ -182,20 +183,20 @@ export const useDb = (): UseDatabase => {
     const deviceId = await GetDeviceId()
     // find user
     const { data: user, error } = await db
-      .from<definitions['mimesis_users']>('mimesis_users')
+      .from('mimesis_users')
       .select()
       .eq('id', deviceId)
       .single()
     if (!user || error)
-      await db.from<definitions['mimesis_users']>('mimesis_users').insert({ id: deviceId, games: 1 })
+      await db.from('mimesis_users').insert({ id: deviceId, games: 1 })
     else
-      await db.from<definitions['mimesis_users']>('mimesis_users').update({ id: deviceId, games: user.games + 1 }).eq('id', deviceId)
-    await db.from<definitions['mimesis_games']>('mimesis_games').insert({
+      await db.from('mimesis_users').update({ id: deviceId, games: user.games + 1 }).eq('id', deviceId)
+    await db.from('mimesis_games').insert({
       lang: 1,
       mode,
       found_guess: foundGuess,
       skip_guess: skipGuess,
-      team: teams,
+      team: teams as any,
       user_id: deviceId,
     })
     return !user ? 1 : user.games + 1

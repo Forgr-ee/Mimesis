@@ -1,10 +1,23 @@
 import { NativeAudio } from '@forgr/native-audio'
 import { isPlatform } from '@ionic/vue'
 
-const sounds: { [key: string]: HTMLAudioElement } = {
-  horn: new Audio('assets/sounds/horn.mp3'),
-  tada: new Audio('assets/sounds/tada.mp3'),
+const audioGenrator = (
+  names: string[],
+): { [key: string]: HTMLAudioElement } => {
+  const suit: { [key: string]: HTMLAudioElement } = {}
+  names.forEach((name) => {
+    suit[name] = new Audio(`assets/sounds/${name}.mp3`)
+  })
+  return suit
 }
+
+const soundName = [
+  'horn',
+  'tada',
+]
+const sounds: { [key: string]: HTMLAudioElement } = audioGenrator([
+  ...soundName,
+])
 
 export const setVolume = (volume: number): void => {
   if (isPlatform('capacitor')) {
