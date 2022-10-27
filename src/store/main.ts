@@ -10,10 +10,10 @@ import type {
 import {
   useDb,
 } from '../services/database'
-import type { definitions } from '../types/supabase'
+import type { Database } from './../types/database.types'
 import { useGameStore } from './game'
 
-const filterListById = (list: definitions['mimesis_guesses'][], past: number[]) => {
+const filterListById = (list: Database['public']['Tables']['mimesis_guesses']['Row'][], past: number[]) => {
   const filtered = list.filter(n => !past.includes(n.id))
   return filtered
 }
@@ -25,19 +25,19 @@ export const useMainStore = defineStore('main', () => {
   const lastUpdate = ref('')
   const initialized = ref(false)
   const currentPath = ref('/home')
-  const themes = ref([] as (definitions['mimesis_modes'] & Mode)[])
+  const themes = ref([] as (Database['public']['Tables']['mimesis_modes']['Row'] & Mode)[])
   const offline = ref(false)
   const langsMessages = ref({} as LangMessages)
   const lang = ref('fr')
   const guessDb = ref({} as GuessDb)
-  const guess = ref({ title: '' } as definitions['mimesis_guesses'])
+  const guess = ref({ title: '' } as Database['public']['Tables']['mimesis_guesses']['Row'])
   const langs = computed((): string[] => {
     return Object.keys(langsMessages.value).map((key) => {
       const lang = langsMessages.value[key]
       return lang.id
     })
   })
-  const guesses = computed((): definitions['mimesis_guesses'][] => {
+  const guesses = computed((): Database['public']['Tables']['mimesis_guesses']['Row'][] => {
     const game = useGameStore()
     return guessDb.value[`${game.theme}_${lang.value}`] || []
   })
@@ -50,7 +50,7 @@ export const useMainStore = defineStore('main', () => {
       || lastUpdateDate.getFullYear() !== today.getFullYear()
     )
   })
-  const nextGuesses = computed((): definitions['mimesis_guesses'][] => {
+  const nextGuesses = computed((): Database['public']['Tables']['mimesis_guesses']['Row'][] => {
     const game = useGameStore()
     return filterListById(guesses.value, game.pastGuess)
   })
@@ -91,7 +91,7 @@ export const useMainStore = defineStore('main', () => {
           ? [game.skipGuess[game.skipGuess.length - 1]]
           : []
     }
-    const result = randomSelect<definitions['mimesis_guesses']>(nextGuesses.value)
+    const result = randomSelect<Database['public']['Tables']['mimesis_guesses']['Row']>(nextGuesses.value)
     guess.value = result || { title: 'Error' }
   }
   return {

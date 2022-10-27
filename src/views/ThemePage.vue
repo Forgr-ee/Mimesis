@@ -17,8 +17,8 @@ import { useMainStore } from '~/store/main'
 import { useGameStore } from '~/store/game'
 import { purchase, restore } from '~/services/iap'
 import PageLoader from '~/components/PageLoader.vue'
-import type { definitions } from '~/types/supabase'
 import type { Mode } from '~/services/database'
+import type { Database } from '~/types/database.types'
 
 const { t } = useI18n()
 const main = useMainStore()
@@ -30,11 +30,11 @@ const isIos = () => {
   return isPlatform('ios')
 }
 
-const langName = (theme: (definitions['mimesis_modes'] & Mode)): string => {
+const langName = (theme: (Database['public']['Tables']['mimesis_modes']['Row'] & Mode)): string => {
   return t(theme.name)
 }
 
-const buy = async (theme: (definitions['mimesis_modes'] & Mode)) => {
+const buy = async (theme: (Database['public']['Tables']['mimesis_modes']['Row'] & Mode)) => {
   if (theme.status !== 'paid' || !theme.package)
     return
   try {
@@ -48,7 +48,7 @@ const buy = async (theme: (definitions['mimesis_modes'] & Mode)) => {
   }
 }
 
-const saveTheme = async (theme: (definitions['mimesis_modes'] & Mode)) => {
+const saveTheme = async (theme: (Database['public']['Tables']['mimesis_modes']['Row'] & Mode)) => {
   if (theme.status === 'paid' && theme.package)
     return buy(theme)
 
@@ -118,7 +118,7 @@ const saveTheme = async (theme: (definitions['mimesis_modes'] & Mode)) => {
               <img
                 alt="test"
                 class="w-full h-full mt-2 fill-current stroke-current text-pizazz-500 svg_icon"
-                :src="theme.icon"
+                :src="theme.icon || ''"
               >
             </div>
             <p class="xs:text-2xl text-rose-500">
