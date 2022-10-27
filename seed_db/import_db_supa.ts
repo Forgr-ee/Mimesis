@@ -61,6 +61,27 @@ interface Guesses extends CsvImport {
   mode: number
 }
 
+const autoRetryUpload = async (destination: string, body: Buffer): Promise<string> => {
+  let image = ''
+  while (image !== '') {
+    const res = await supabase
+      .storage
+      .from(storageBucket)
+      .upload(destination, body)
+    if (!res.error) {
+      const res2 = await supabase
+        .storage
+        .from(storageBucket)
+        .getPublicUrl(destination)
+      if (!res2.error && res2.data)
+        image = res2.data.publicURL
+      else
+        console.log('Error destination, retry', destination, res2.error)
+    }
+  }
+  return image
+}
+
 const parseAndUpload = async (folder: string, kind: string) => {
   console.log('Load data csv', folder)
   const datas: Guesses[] = await csvtojson({ delimiter: ';' }).fromFile(
@@ -70,7 +91,9 @@ const parseAndUpload = async (folder: string, kind: string) => {
   console.log('Prepare data', folder)
   // datas.length = 1
 
-  const res = await Promise.all(datas.map(async (data) => {
+  const res = await Promise.all(datas.map(async (data, i) => {
+    console.log(`${kind} ${folder} chunk ${i + 1}/${datas.length}`)
+
     data.lang = langId
     const modeName = `${folder}${kind === 'plus' ? '_plus' : ''}`
     data.mode = modeId[modeName as keyof typeof modeId]
@@ -80,19 +103,8 @@ const parseAndUpload = async (folder: string, kind: string) => {
       try {
         const body = await urlToBuffer(data.cover)
         const randomId = Math.random().toString(36).substring(2, 15)
-        const destination = `${folder}/${randomId}`
-        const res = await supabase
-          .storage
-          .from(storageBucket)
-          .upload(destination, body)
-        if (!res.error) {
-          const res2 = await supabase
-            .storage
-            .from(storageBucket)
-            .getPublicUrl(destination)
-          if (!res2.error && res2.data)
-            data.cover = res2.data.publicURL
-        }
+        const destination = `guesses/${folder}/${randomId}`
+        data.cover = await autoRetryUpload(destination, body)
       }
       catch (err) {
         console.error(err, data.cover)
@@ -101,9 +113,18 @@ const parseAndUpload = async (folder: string, kind: string) => {
     return data
   }))
   console.log('Upload data', folder)
-  await supabase
-    .from ('guesses')
-    .insert(res)
+  // split res in chunks of 100
+  const chunks: Guesses[][] = []
+  const chunkSize = 50
+  for (let i = 0; i < res.length; i += chunkSize)
+    chunks.push(res.slice(i, i + chunkSize))
+
+  await Promise.all(chunks.map(async (chunk, i) => {
+    console.log(`Upload ${folder} chunk ${i + 1}/${chunks.length}`)
+    await supabase
+      .from ('mimesis_guesses')
+      .insert(chunk)
+  }))
   console.log('Data csv uploaded', folder, kind)
 }
 
