@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.7.0](https://github.com/Forgr-ee/Mimesis/compare/2.6.1...2.7.0) (2022-10-31)
+
+
+### Features
+
+* add fastlane build ([a8eabfc](https://github.com/Forgr-ee/Mimesis/commit/a8eabfc2ace4c577ecc4f1c3a0fbe72a56085c8e))
+
 ### [2.6.1](https://github.com/Forgr-ee/Mimesis/compare/2.6.0...2.6.1) (2022-10-27)
 
 
