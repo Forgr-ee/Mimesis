@@ -52,7 +52,7 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Build
         id: build_code
-        run: pnpm mobile
+        run: pnpm build
       - name: Sync
         id: sync_code
         run: npx cap sync
@@ -106,7 +106,7 @@ jobs:
           run: pnpm install --frozen-lockfile
         - name: Build
           id: build_code
-          run: pnpm mobile
+          run: pnpm build
         - name: Sync
           id: sync_code
           run: npx cap sync
