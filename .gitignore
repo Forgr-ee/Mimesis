@@ -41,3 +41,5 @@ seed_db/improbable/plus.csv
 seed_db/rebus/base.csv
 seed_db/rebus/plus.csv
 seed_db/tmp
+fastlane/.env
+fastlane/report.xml
