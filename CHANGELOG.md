@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.7.2](https://github.com/Forgr-ee/Mimesis/compare/2.7.1...2.7.2) (2022-10-31)
+
+
+### Bug Fixes
+
+* build step ([b90d8ce](https://github.com/Forgr-ee/Mimesis/commit/b90d8cec8c1bfc71b7ba59a00a9c30288e1c3eea))
+
 ### [2.7.1](https://github.com/Forgr-ee/Mimesis/compare/2.7.0...2.7.1) (2022-10-31)
 
 
