@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.7.11](https://github.com/Forgr-ee/Mimesis/compare/2.7.10...2.7.11) (2022-11-01)
+
+
+### Bug Fixes
+
+* lockfile issue ([1292297](https://github.com/Forgr-ee/Mimesis/commit/12922974facd8aace0013b0a750aa6efc8e81a66))
+
 ### [2.7.10](https://github.com/Forgr-ee/Mimesis/compare/2.7.9...2.7.10) (2022-11-01)
 
 
