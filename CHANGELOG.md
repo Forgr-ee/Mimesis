@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.7.13](https://github.com/Forgr-ee/Mimesis/compare/2.7.12...2.7.13) (2022-11-01)
+
+
+### Bug Fixes
+
+* lint issue ([eecbc06](https://github.com/Forgr-ee/Mimesis/commit/eecbc06f7502b66282d57341bcab211c20aa85dc))
+
 ### [2.7.12](https://github.com/Forgr-ee/Mimesis/compare/2.7.11...2.7.12) (2022-11-01)
 
 
