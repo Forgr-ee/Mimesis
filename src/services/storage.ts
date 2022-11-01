@@ -1,6 +1,6 @@
 import { Preferences } from '@capacitor/preferences'
 
-export const setStorage = async <Type>(
+export const setStorage = async<Type>(
   key: string,
   value: Type,
 ): Promise<void> => {
@@ -10,7 +10,7 @@ export const setStorage = async <Type>(
   })
 }
 
-export const getStorage = async <Type>(
+export const getStorage = async<Type>(
   key: string,
   defaultValue: Type | null = null,
 ): Promise<Type | null> => {
