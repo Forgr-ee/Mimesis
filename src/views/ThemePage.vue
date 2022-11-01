@@ -15,7 +15,7 @@ import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 import { useMainStore } from '~/store/main'
 import { useGameStore } from '~/store/game'
-import { purchase, restore } from '~/services/iap'
+// import { purchase, restore } from '~/services/iap'
 import PageLoader from '~/components/PageLoader.vue'
 import type { Mode } from '~/services/database'
 import type { Database } from '~/types/database.types'
@@ -39,7 +39,7 @@ const buy = async (theme: (Database['public']['Tables']['mimesis_modes']['Row'] 
     return
   try {
     loading.value = true
-    await purchase(theme.package)
+    // await purchase(theme.package)
     theme.status = 'purchased'
   }
   catch (e) {
@@ -70,14 +70,14 @@ const saveTheme = async (theme: (Database['public']['Tables']['mimesis_modes']['
           </IonButton>
         </IonButtons>
         <IonTitle />
-        <IonButtons v-if="isIos()" slot="end">
+        <!-- <IonButtons v-if="isIos()" slot="end">
           <IonButton
             class="px-3 py-1 mx-auto w-30 mt-1 text-sm border xs:mt-2 bg-lavender-500 border-rose-500 text-rose-500 rounded-xl first-letter:uppercase"
             @click="restore()"
           >
             {{ t('restore') }}
           </IonButton>
-        </IonButtons>
+        </IonButtons> -->
       </IonToolbar>
     </IonHeader>
     <IonContent :fullscreen="true" :scroll-y="false">

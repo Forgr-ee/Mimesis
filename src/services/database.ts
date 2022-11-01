@@ -1,9 +1,9 @@
 // import { IAPProductCustom, registerProduct, restore } from './iap'
 import { createClient } from '@supabase/supabase-js'
-import { isPlatform } from '@ionic/vue'
-import type { Package, PurchaserInfo } from '@capgo/capacitor-purchases'
+// import { isPlatform } from '@ionic/vue'
+import type { Package } from '@capgo/capacitor-purchases'
 import type { Database } from '../types/database.types'
-import { findPackage, isPurchased, restore } from './iap'
+// import { findPackage, isPurchased, restore } from './iap'
 import { GetDeviceId } from './capacitor'
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string
@@ -137,32 +137,32 @@ export const useDb = (): UseDatabase => {
         .eq('active', true)
         .order('order', { ascending: true })
       let pList: Promise<Database['public']['Tables']['mimesis_modes']['Row'] & Mode>[] = []
-      let pInfo: PurchaserInfo | null = null
-      if (isPlatform('capacitor')) {
-        try {
-          pInfo = await restore()
-        }
-        catch (err) {
-          console.log('cannot get restore', err)
-        }
-      }
+      // const pInfo: PurchaserInfo | null = null
+      // if (isPlatform('capacitor')) {
+      //   try {
+      //     pInfo = await restore()
+      //   }
+      //   catch (err) {
+      //     console.log('cannot get restore', err)
+      //   }
+      // }
       if (snapshot.error)
         throw new Error(snapshot.error.message)
       console.log('getThemes')
       pList = await snapshot.data.map(async (theme: (Database['public']['Tables']['mimesis_modes']['Row'] & Mode)) => {
-        if (isPlatform('capacitor')) {
-          const productId = isPlatform('ios') ? theme.id_ios : theme.id_android
-          if (!productId)
-            return theme
-          // Promise.resolve(theme)
-          const product = await findPackage(productId)
-          if (!product)
-            return theme
-          theme.package = product
-          const owned = isPurchased(product.identifier, pInfo)
-          if (product && owned)
-            theme.status = 'purchased'
-        }
+        // if (isPlatform('capacitor')) {
+        //   const productId = isPlatform('ios') ? theme.id_ios : theme.id_android
+        //   if (!productId)
+        //     return theme
+        //   Promise.resolve(theme)
+        //   const product = await findPackage(productId)
+        //   if (!product)
+        //     return theme
+        //   theme.package = product
+        //   const owned = isPurchased(product.identifier, pInfo)
+        //   if (product && owned)
+        //     theme.status = 'purchased'
+        // }
         return theme
       })
       values = await Promise.all(pList)

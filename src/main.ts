@@ -117,11 +117,11 @@ const init = async (isRecall = false) => {
     initCrisp()
     console.log('initI18n')
     await initI18n()
-    if (isPlatform('ios'))
-      initIap('appl_bWYDPHWhWAGWQFUIQGIoiXzrTlW')
+    // if (isPlatform('ios'))
+    //   initIap('appl_bWYDPHWhWAGWQFUIQGIoiXzrTlW')
 
-    else if (isPlatform('android'))
-      initIap('goog_TqZUIbsisEecUcyOkqTPaHPKEVH')
+    // else if (isPlatform('android'))
+    //   initIap('goog_TqZUIbsisEecUcyOkqTPaHPKEVH')
 
     console.log('main.initialize')
     const loading = await loadingController.create({
