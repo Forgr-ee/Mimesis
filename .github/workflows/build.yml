@@ -123,7 +123,7 @@ jobs:
             APPLE_ISSUER_ID: ${{ secrets.APPLE_ISSUER_ID }}
             APPLE_KEY_ID: ${{ secrets.APPLE_KEY_ID }}
             APPLE_KEY_CONTENT: ${{ secrets.APPLE_KEY_CONTENT }}
-            CERTIFICATE_STORE_URL: https://github.com/${{ secrets.CERTIFICATE_STORE_REPO }}.git
+            CERTIFICATE_STORE_URL: ${{ secrets.CERTIFICATE_STORE_URL }}
             GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
             GIT_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
             FASTLANE_APPLE_ID: ${{ secrets.FASTLANE_APPLE_ID }}
