@@ -15,7 +15,7 @@ specifiers:
   '@capacitor/splash-screen': ^4.1.1
   '@capacitor/status-bar': ^4.0.1
   '@capgo/capacitor-purchases': ^1.3.18
-  '@capgo/capacitor-updater': 4.6.0
+  '@capgo/capacitor-updater': 4.6.2
   '@capgo/native-audio': ^4.1.0
   '@faker-js/faker': 7.6.0
   '@headlessui/vue': 1.7.3
@@ -71,7 +71,7 @@ dependencies:
   '@capacitor/splash-screen': 4.1.1_@capacitor+core@4.4.0
   '@capacitor/status-bar': 4.0.1_@capacitor+core@4.4.0
   '@capgo/capacitor-purchases': 1.3.18_@capacitor+core@4.4.0
-  '@capgo/capacitor-updater': 4.6.0_@capacitor+core@4.4.0
+  '@capgo/capacitor-updater': 4.6.2_@capacitor+core@4.4.0
   '@capgo/native-audio': 4.1.0_@capacitor+core@4.4.0
   '@faker-js/faker': 7.6.0
   '@headlessui/vue': 1.7.3_vue@3.2.41
@@ -682,8 +682,8 @@ packages:
       '@capacitor/core': 4.4.0
     dev: false
 
-  /@capgo/capacitor-updater/4.6.0_@capacitor+core@4.4.0:
-    resolution: {integrity: sha512-kUVd4fMzi06wuwlj27XzUaCc1SWSWCdSTqPKDxaSah0E5sVk3LuYmINs0ezJMqYbtAJlomPRaTs92sfLlkPyJA==}
+  /@capgo/capacitor-updater/4.6.2_@capacitor+core@4.4.0:
+    resolution: {integrity: sha512-P9FINId31Owehc4qG6gmVH44iAkuw7luLADqzXjHmYmtty7WguATLtA/Sa0+AoRLGcCOmyHUop0C5ocrxNdICA==}
     peerDependencies:
       '@capacitor/core': ^3.0.0 || ^4.0.0
     dependencies:
