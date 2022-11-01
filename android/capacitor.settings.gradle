@@ -32,8 +32,8 @@ project(':capgo-capacitor-purchases').projectDir = new File('../node_modules/.pn
 include ':capgo-capacitor-updater'
 project(':capgo-capacitor-updater').projectDir = new File('../node_modules/.pnpm/@capgo+capacitor-updater@4.4.9_@capacitor+core@4.4.0/node_modules/@capgo/capacitor-updater/android')
 
-include ':forgr-native-audio'
-project(':forgr-native-audio').projectDir = new File('../node_modules/.pnpm/@forgr+native-audio@3.1.1_@capacitor+core@4.4.0/node_modules/@forgr/native-audio/android')
+include ':capgo-native-audio'
+project(':capgo-native-audio').projectDir = new File('../node_modules/.pnpm/@capgo+native-audio@4.1.0_@capacitor+core@4.4.0/node_modules/@capgo/native-audio/android')
 
 include ':capacitor-rate-app'
 project(':capacitor-rate-app').projectDir = new File('../node_modules/.pnpm/capacitor-rate-app@3.0.0_@capacitor+core@4.4.0/node_modules/capacitor-rate-app/android')

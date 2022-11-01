@@ -1,4 +1,4 @@
-import { NativeAudio } from '@forgr/native-audio'
+import { NativeAudio } from '@capgo/native-audio'
 import { isPlatform } from '@ionic/vue'
 
 const audioGenrator = (

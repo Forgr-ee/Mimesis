@@ -40,8 +40,8 @@
 		"classpath": "ee.forgr.capacitor_updater.CapacitorUpdaterPlugin"
 	},
 	{
-		"pkg": "@forgr/native-audio",
-		"classpath": "com.getcapacitor.community.audio.NativeAudio"
+		"pkg": "@capgo/native-audio",
+		"classpath": "ee.forgr.audio.NativeAudio"
 	},
 	{
 		"pkg": "capacitor-rate-app",
